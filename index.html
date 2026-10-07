@@ -241,6 +241,22 @@ table.st-table td.n{font-variant-numeric:tabular-nums;text-align:end;white-space
 .celebrate{background:linear-gradient(160deg,var(--accent),#b8460f);color:#fff;border-radius:22px;padding:22px;text-align:center}
 .celebrate .k{font-family:var(--f-display);font-size:30px;font-weight:700;margin:6px 0}
 
+
+/* شاشة البداية */
+.onb{position:absolute;inset:0;z-index:25;background:var(--app);display:flex;flex-direction:column;padding:56px 22px 28px;animation:fade .25s}
+.ipad .onb{padding:56px calc(50% - 240px) 36px}
+.onb .dots{display:flex;gap:6px}
+.onb .dots i{flex:1;height:4px;border-radius:3px;background:var(--line)}
+.onb .dots i.on{background:var(--accent)}
+.onb .q{font-family:var(--f-display);font-size:26px;font-weight:700;margin:22px 0 4px;line-height:1.35;text-wrap:balance}
+.onb .grow{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding-bottom:8px}
+.onb .foot{display:flex;gap:10px;padding-top:12px;align-items:center}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choices button{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 12px;text-align:start;display:flex;flex-direction:column;gap:6px;font-weight:600}
+.choices button.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.hint{background:var(--blue-soft);color:var(--blue);border-radius:14px;padding:12px;font-size:13px}
+.welcome-ill{display:grid;place-items:center;margin:30px 0 10px}
+
 /* على الجوال: التطبيق يملأ الشاشة مباشرة بدون إطار جهاز */
 @media (max-width:600px){
   body{background:var(--app)}
@@ -256,6 +272,7 @@ table.st-table td.n{font-variant-numeric:tabular-nums;text-align:end;white-space
   .phone .scroll{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
   .phone .sheet .body{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
   .phone .toast{top:calc(env(safe-area-inset-top,0px) + 12px)}
+  .phone .onb{padding-top:calc(env(safe-area-inset-top,0px) + 22px);padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 }
 </style>
 </head>
@@ -438,7 +455,8 @@ const DIARY=[
 const WARRANTY=[['العزل المائي للسطح','10 سنوات','بعد التسليم'],['السخانات المركزية','5 سنوات','بعد التركيب'],['وحدات التكييف','7 سنوات على الضاغط','بعد التشغيل'],['ضمان الهيكل الإنشائي','10 سنوات','من شهادة الإتمام']];
 
 /* ============ الحالة ============ */
-const S={device:'phone',tab:'home',stack:[],jseg:'diary',week:27,sheet:null,filter:'الكل',checks:{},wall:true,room:0,toast:''};
+let ONB_DONE=false;try{ONB_DONE=localStorage.getItem('db-onb')==='1'}catch(e){}
+const S={onb:null,device:'phone',tab:'home',stack:[],jseg:'diary',week:27,sheet:null,filter:'الكل',checks:{},wall:true,room:0,toast:''};
 const spent=()=>STAGES.reduce((a,s)=>a+s.spent,0);
 const cashIn=()=>P.self+P.finDisbursed;
 
@@ -466,50 +484,32 @@ function qr(seed=7){
 
 /* ============ الشاشات ============ */
 function scrHome(w){
- const sp=spent(),pct=sp/P.budget,rem=P.budget-sp,liq=cashIn()-sp,cur=STAGES.find(s=>s.st==='now');
- const attn=`
- <div class="sect"><span class="h3">يحتاج انتباهك</span><span class="pill p-acc num">4</span></div>
- <div class="list attn">
-  <button class="item" onclick="go('defects')">${icoBox('alert','var(--bad-soft)','var(--bad)')}<div class="grow"><div class="t">عيب مفتوح: تسريب في حمام الأول</div><div class="s">لا تصرف دفعة السبّاك قبل إعادة الاختبار</div></div>${ic('chev',16)}</button>
-  <button class="item" onclick="go('contractor',2)">${icoBox('coin','var(--accent-soft)','var(--accent)')}<div class="grow"><div class="t">دفعة السبّاك الثالثة</div><div class="s">مستحقة بعد اجتياز الفحص</div></div><span class="amt">${sar(7000)}</span></button>
-  <button class="item" onclick="go('finance')">${icoBox('bank','var(--blue-soft)','var(--blue)')}<div class="grow"><div class="t">قسط التمويل</div><div class="s">${greg(D('2026-10-27'),{day:'numeric',month:'long'})} · بعد 20 يومًا</div></div><span class="amt">${sar(4850)}</span></button>
-  <button class="item" onclick="go('gov')">${icoBox('stamp','var(--warn-soft)','var(--warn)')}<div class="grow"><div class="t">عداد المياه ينقصه مستند</div><div class="s">مخطط الموقع العام المعتمد</div></div>${ic('chev',16)}</button>
- </div>`;
- const timer=`
- <div class="sect"><span class="h3">مؤقت الخرسانة</span><span class="small muted">صبة سقف الملحق</span></div>
- <div class="timer">
-  <div class="row between"><div><div class="muted small">مرّ على الصبة</div><div style="font-size:26px;font-weight:700" class="num">5 أيام</div></div>${ic('drop',30,1.6)}</div>
-  <div class="steps"><div>رش اليوم 1–4 ✓</div><div class="now">رش اليوم 5 · 5:00 م</div><div>فك الشدات بعد 9 أيام</div><div>كسر 28 يوم</div></div>
- </div>`;
- const weather=`
- <div class="card row" style="margin-top:12px">${icoBox('sun','var(--warn-soft)','var(--warn)')}<div class="grow" style="flex:1"><div style="font-weight:600">حارس الطقس</div><div class="small muted">الخميس 39° ورياح مثيرة للغبار. يُفضّل تأجيل صبة سور الحديقة إلى السبت.</div></div></div>`;
- const photos=`
- <div class="sect"><span class="h3">آخر الصور</span><button class="link" onclick="tabTo('journal')">اليوميات</button></div>
- <div class="photos"><div class="ph ph-pipe"><span>تمديدات الأول</span></div><div class="ph ph-block"><span>بلوك الملحق</span></div><div class="ph ph-sky"><span>الواجهة الشمالية</span></div></div>`;
- const pulse=`
- <div class="card">
-  <div class="row between" style="margin-bottom:10px"><span class="h3">نبض البيت</span><span class="pill p-good">ضمن الميزانية</span></div>
-  <div class="pulse">
+ const sp=spent(),pct=sp/P.budget,rem=P.budget-sp,liq=cashIn()-sp,cur=STAGES.find(s=>s.st==='now')||STAGES[0];
+ const head=`<div class="greet"><div class="eyebrow">${hijri(TODAY)} · ${greg(TODAY)}</div><p class="h">بيت حي الياسمين</p></div>`;
+ const pulse=`<div class="card"><div class="pulse">
    <div class="ringbox">${ring(pct)}<div class="c"><div><b class="num">${Math.round(pct*100)}%</b><span class="small muted">من الميزانية</span></div></div></div>
    <div class="figs">
-    <div><div class="eyebrow">صرفت حتى اليوم</div><div class="big">${sar(sp)}</div></div>
-    <div><div class="eyebrow">المتبقي من الميزانية</div><div style="font-weight:600">${sar(rem)}</div></div>
-   </div>
-  </div>
-  <div class="minigrid">
-   <div class="kpi"><div class="l">السيولة المتاحة الآن</div><div class="v" style="font-size:17px">${sar(liq)}</div></div>
-   <div class="kpi"><div class="l">تكلفة المتر حتى الآن</div><div class="v" style="font-size:17px">${sar(sp/P.area)}</div></div>
-  </div>
- </div>`;
- const stage=`
- <button class="card" style="width:100%;text-align:start;margin-top:12px;display:block" onclick="go('stage',${cur.id})">
-  <div class="row between"><div><div class="eyebrow">المرحلة الحالية · ${cur.id} من 10</div><div class="h3" style="font-size:18px">${cur.name}</div></div><span class="pill p-acc num">${cur.pct}%</span></div>
+    <div><div class="eyebrow">صرفت</div><div class="big">${sar(sp)}</div></div>
+    <div><div class="eyebrow">باقي من الميزانية</div><div style="font-weight:600">${sar(rem)}</div></div>
+    <div><div class="eyebrow">معك الآن للصرف</div><div style="font-weight:600;color:var(--good)">${sar(liq)}</div></div>
+   </div></div></div>`;
+ const T=[
+  {i:'drop',bg:'var(--blue-soft)',fg:'var(--blue)',t:'رش سقف الملحق بالماء',s:'الساعة 5:00 م · اليوم الخامس بعد الصبة',on:"toast('سجّلت الرش. التذكير القادم بكرة 5:00 م')",end:'<span class="pill p-info">تم؟</span>'},
+  {i:'alert',bg:'var(--bad-soft)',fg:'var(--bad)',t:'لا تدفع للسبّاك الآن',s:'تسريب في حمام الأول، ينتظر إعادة الاختبار',on:"go('defects')"},
+  {i:'bank',bg:'var(--accent-soft)',fg:'var(--accent)',t:'قسط التمويل',s:'بعد 20 يومًا · '+greg(D('2026-10-27'),{day:'numeric',month:'long'}),on:"go('finance')",end:`<span class="amt">${sar(4850)}</span>`},
+  {i:'sun',bg:'var(--warn-soft)',fg:'var(--warn)',t:'أجّل صبة السور للسبت',s:'الخميس 39° مع غبار',on:"toast('حارس الطقس يتابع لك التوقعات')"}
+ ];
+ const today=`<div class="sect"><span class="h3">اليوم</span><span class="small muted num">${T.length} أمور</span></div>
+ <div class="list attn">${T.map(x=>`<button class="item" onclick="${x.on}">${icoBox(x.i,x.bg,x.fg)}<div class="grow"><div class="t">${x.t}</div><div class="s">${x.s}</div></div>${x.end||ic('chev',16)}</button>`).join('')}</div>`;
+ const stage=`<div class="sect"><span class="h3">وين وصل البناء</span><button class="link" onclick="tabTo('stages')">كل المراحل</button></div>
+ <button class="card" style="width:100%;text-align:start;display:block" onclick="go('stage',${cur.id})">
+  <div class="row between"><div><div class="eyebrow">المرحلة ${cur.id} من 10</div><div class="h3" style="font-size:18px">${cur.name}</div></div><span class="pill p-acc num">${cur.pct}%</span></div>
   <div style="margin:10px 0 6px">${bar(cur.pct)}</div>
-  <div class="row between small muted"><span>بدأت ${short(cur.from)}</span><span>متوقع الانتهاء ${short(cur.to)}</span></div>
+  <div class="row between small muted"><span>بدأت ${short(cur.from)}</span><span>تنتهي تقريبًا ${short(cur.to)}</span></div>
+  <div class="photos" style="margin-top:12px"><div class="ph ph-pipe"><span>تمديدات الأول</span></div><div class="ph ph-block"><span>بلوك الملحق</span></div><div class="ph ph-sky"><span>الواجهة</span></div></div>
  </button>`;
- const head=`<div class="greet"><div class="eyebrow">${hijri(TODAY)} · ${greg(TODAY)}</div><p class="h">بيت حي الياسمين</p><div class="small muted">فيلا دورين وملحق · الأسبوع 27 من البناء</div></div>`;
- if(w) return `${nav('الرئيسية')}<div class="scroll">${head}<div class="cols"><div>${pulse}${stage}${weather}</div><div>${timer}${attn.replace('<div class="sect">','<div class="sect" style="margin-top:18px">')}</div></div>${photos}</div>`;
- return `<div style="height:6px"></div><div class="scroll">${head}${pulse}${stage}${attn}${timer}${weather}${photos}</div>`;
+ if(w) return `${nav('الرئيسية')}<div class="scroll">${head}<div class="cols"><div>${pulse}${stage}</div><div>${today.replace('class="sect"','class="sect" style="margin-top:0"')}</div></div></div>`;
+ return `<div style="height:6px"></div><div class="scroll">${head}${pulse}${today}${stage}</div>`;
 }
 
 function catRow(){
@@ -639,10 +639,12 @@ const MODS=[
  ['memory','ذاكرة البيت','shield','الضمانات والصيانة بعد السكن'],
  ['key','لحظة المفتاح','key','تُفتح يوم التسليم']
 ];
+const GROUPS=[['الناس',['contractors','workers']],['الفلوس',['finance']],['الأوراق',['gov','docs','agree','defects']],['البيت',['design','key','memory']]];
 function scrMore(){
- return `${nav('المزيد')}<div class="scroll"><div class="list">${MODS.map(([k,t,i,s])=>`<button class="item" onclick="go('${k}')">${icoBox(i,'var(--stone-soft)','var(--ink)')}<div class="grow"><div class="t">${t}</div><div class="s">${s}</div></div>${ic('chev',16)}</button>`).join('')}</div>
+ const M=Object.fromEntries(MODS.map(m=>[m[0],m]));
+ return `${nav('المزيد')}<div class="scroll">${GROUPS.map(([g,ks],gi)=>`<div class="sect" ${gi===0?'style="margin-top:4px"':''}><span class="h3">${g}</span></div><div class="list">${ks.map(k=>{const [,t,i,s2]=M[k];return `<button class="item" onclick="go('${k}')">${icoBox(i,'var(--stone-soft)','var(--ink)')}<div class="grow"><div class="t">${t}</div><div class="s">${s2}</div></div>${ic('chev',16)}</button>`}).join('')}</div>`).join('')}
  <div class="sect"><span class="h3">الإعدادات</span></div>
- <div class="list"><div class="item">${icoBox('lock','var(--app)','var(--ink)')}<div class="grow"><div class="t">القفل بـ Face ID</div></div><span class="pill p-good">مفعّل</span></div><div class="item">${icoBox('users','var(--app)','var(--ink)')}<div class="grow"><div class="t">المشاركة</div><div class="s">أم عبدالله (إضافة) · م. خالد المشرف (مشاهدة)</div></div></div><div class="item">${icoBox('share','var(--app)','var(--ink)')}<div class="grow"><div class="t">نسخة احتياطية كاملة</div><div class="s">آخر نسخة على iCloud اليوم 6:12 ص</div></div></div></div></div>`;
+ <div class="list"><button class="item" onclick="startOnb()">${icoBox('home','var(--app)','var(--ink)')}<div class="grow"><div class="t">إعداد المشروع</div><div class="s">المساحة، الميزانية، التمويل</div></div>${ic('chev',16)}</button><div class="item">${icoBox('lock','var(--app)','var(--ink)')}<div class="grow"><div class="t">القفل بـ Face ID</div></div><span class="pill p-good">مفعّل</span></div><div class="item">${icoBox('users','var(--app)','var(--ink)')}<div class="grow"><div class="t">المشاركة</div><div class="s">أم عبدالله (إضافة) · م. خالد المشرف (مشاهدة)</div></div></div><div class="item">${icoBox('share','var(--app)','var(--ink)')}<div class="grow"><div class="t">نسخة احتياطية كاملة</div><div class="s">آخر نسخة على iCloud اليوم 6:12 ص</div></div></div></div></div>`;
 }
 
 function contractorBody(c){
@@ -714,7 +716,9 @@ function scrKey(){
 }
 
 /* ============ ورقة إضافة مصروف ============ */
-const BLANK={amount:'',party:'',title:'',stage:5,cat:'مواد',pay:'نقد',src:'ذاتي',mode:null,hot:[]};
+const BLANK={amount:'',party:'',title:'',stage:5,cat:'مواد',pay:'نقد',src:'ذاتي',mode:null,hot:[],more:false,auto:false};
+function recentParties(){const r=[];EXP.forEach(e=>{if(e.p&&e.p!=='—'&&!r.includes(e.p))r.push(e.p)});return r.slice(0,6)}
+function pickParty(i){const p=recentParties()[i];const last=EXP.find(e=>e.p===p);S.sheet.party=p;if(last)Object.assign(S.sheet,{cat:last.cat,stage:last.stage,pay:last.pay,src:last.src,auto:true});S.sheet.hot=S.sheet.hot.filter(h=>h!=='party');render()}
 function sheetHTML(){
  const f=S.sheet;
  const opt=(arr,key)=>`<div class="chips">${arr.map(v=>`<button class="chip ${f[key]===v?'on':''}" onclick="S.sheet.${key}='${v}';render()">${v}</button>`).join('')}</div>`;
@@ -722,41 +726,91 @@ function sheetHTML(){
  if(f.mode==='scan') assist=`<div class="scanbox"><div class="line"></div><b>مؤسسة الصفوة لمواد البناء</b><br>فاتورة ضريبية · الرقم الضريبي 300123456700003<br>مواسير PPR 25 مم × 40 · أكواع × 60<br>الإجمالي شامل الضريبة: 3,967.50</div>`;
  if(f.mode==='voice') assist=`<div class="card" style="text-align:center"><div class="wave">${Array.from({length:14},(_,i)=>`<i style="animation-delay:${i*.06}s"></i>`).join('')}</div><div id="vtxt" style="font-weight:600;margin-top:8px;min-height:22px">${f.vtxt||''}</div></div>`;
  const hot=k=>f.hot.includes(k)?'hot':'';
+ const rp=recentParties();
  return `<div class="dim" onclick="closeSheet()"></div><div class="sheet" role="dialog" aria-label="إضافة مصروف"><div class="grab"></div>
  <div class="row between" style="padding:4px 18px 8px"><button class="link" onclick="closeSheet()">إلغاء</button><b style="font-family:var(--f-display);font-size:17px">مصروف جديد</b><button class="link" style="font-weight:700" onclick="saveExp()">حفظ</button></div>
  <div class="body">
-  <div class="quick"><button onclick="simScan()">${ic('scan',22)}<b>امسح فاتورة</b><span class="small muted">يقرأ المبلغ والمورد والتاريخ</span></button><button onclick="simVoice()">${ic('mic',22)}<b>قلها بصوتك</b><span class="small muted">«دفعت لأبو محمد ألفين كاش»</span></button></div>
+  <div class="quick"><button onclick="simScan()">${ic('scan',22)}<b>امسح فاتورة</b><span class="small muted">يعبّي كل شي عنك</span></button><button onclick="simVoice()">${ic('mic',22)}<b>قلها بصوتك</b><span class="small muted">«دفعت لأبو محمد ألفين كاش»</span></button></div>
   ${assist}
-  <div class="field amtfield ${hot('amount')}"><label for="f-amt">المبلغ (ر.س)</label><input id="f-amt" inputmode="decimal" placeholder="0" value="${f.amount}" oninput="S.sheet.amount=this.value"></div>
-  <div class="field ${hot('party')}"><label for="f-party">الجهة</label><input id="f-party" placeholder="مقاول، مورد، عامل" value="${f.party}" oninput="S.sheet.party=this.value"></div>
+  <div class="field amtfield ${hot('amount')}"><label for="f-amt">كم دفعت؟ (ر.س)</label><input id="f-amt" inputmode="decimal" placeholder="0" value="${f.amount}" oninput="S.sheet.amount=this.value"></div>
+  <div class="field ${hot('party')}"><label for="f-party">لمين؟</label><input id="f-party" placeholder="اكتب الاسم أو اختر من تحت" value="${f.party}" oninput="S.sheet.party=this.value"></div>
+  <div class="chips">${rp.map((p,i)=>`<button class="chip ${f.party===p?'on':''}" onclick="pickParty(${i})">${p}</button>`).join('')}</div>
+  <button class="field" style="width:100%;text-align:start;display:flex;align-items:center;justify-content:space-between;gap:8px" onclick="S.sheet.more=!S.sheet.more;render()">
+   <div style="min-width:0"><label>التفاصيل ${f.auto?'· مقترحة من آخر دفعة له':'· اختيارية'}</label><div style="font-weight:600;font-size:13.5px">${f.cat} · ${STAGES[f.stage].name} · ${f.pay} · ${f.src}</div></div><span class="link" style="flex:none">${f.more?'إخفاء':'تعديل'}</span></button>
+  ${f.more?`
   <div class="field ${hot('title')}"><label for="f-title">البيان</label><input id="f-title" placeholder="مقابل ماذا؟" value="${f.title}" oninput="S.sheet.title=this.value"></div>
-  <div class="field ${hot('stage')}"><label for="f-stage">المرحلة</label><select id="f-stage" onchange="S.sheet.stage=+this.value">${STAGES.map(s=>`<option value="${s.id}" ${s.id===f.stage?'selected':''}>${s.name}</option>`).join('')}</select></div>
+  <div class="field"><label for="f-stage">المرحلة</label><select id="f-stage" onchange="S.sheet.stage=+this.value;render()">${STAGES.map(s=>`<option value="${s.id}" ${s.id===f.stage?'selected':''}>${s.name}</option>`).join('')}</select></div>
   <div><div class="small muted" style="margin:0 4px 6px">التصنيف</div>${opt(['مواد','مقاولات','أجور يومية','رسوم حكومية','نقليات ومعدات','نثريات'],'cat')}</div>
   <div><div class="small muted" style="margin:0 4px 6px">طريقة الدفع</div>${opt(['نقد','تحويل','شيك','بطاقة'],'pay')}</div>
-  <div><div class="small muted" style="margin:0 4px 6px">مصدر المال</div>${opt(['ذاتي','تمويل'],'src')}</div>
+  <div><div class="small muted" style="margin:0 4px 6px">من وين المال؟</div>${opt(['ذاتي','تمويل'],'src')}</div>`:''}
   <button class="btn pri blk" onclick="saveExp()">حفظ المصروف</button>
  </div></div>`;
 }
 function simScan(){
  S.sheet.mode='scan';S.sheet.hot=[];render();
- setTimeout(()=>{if(!S.sheet)return;Object.assign(S.sheet,{amount:'3967.50',party:'مؤسسة الصفوة لمواد البناء',title:'مواسير PPR وأكواع — فاتورة ممسوحة',cat:'مواد',stage:5,pay:'تحويل',hot:['amount','party','title','stage']});render();toast('قرأت الفاتورة. راجع الحقول ثم احفظ')},1600);
+ setTimeout(()=>{if(!S.sheet)return;Object.assign(S.sheet,{amount:'3967.50',party:'مؤسسة الصفوة لمواد البناء',title:'مواسير PPR وأكواع — فاتورة ممسوحة',cat:'مواد',stage:5,pay:'تحويل',auto:true,hot:['amount','party']});render();toast('قرأت الفاتورة. راجع الحقول ثم احفظ')},1600);
 }
 function simVoice(){
  S.sheet.mode='voice';S.sheet.vtxt='';S.sheet.hot=[];render();
  const words='دفعت لأبو محمد السبّاك ألفين كاش'.split(' ');let i=0;
  const t=setInterval(()=>{if(!S.sheet){clearInterval(t);return}S.sheet.vtxt=words.slice(0,++i).join(' ');const el=document.getElementById('vtxt');if(el)el.textContent=S.sheet.vtxt;
-  if(i>=words.length){clearInterval(t);setTimeout(()=>{if(!S.sheet)return;Object.assign(S.sheet,{amount:'2000',party:'أبو محمد السبّاك',title:'دفعة سباكة',cat:'مقاولات',stage:5,pay:'نقد',src:'ذاتي',hot:['amount','party','title','stage']});render();toast('فهمت: 2,000 ر.س نقدًا لأبو محمد')},500)}},260);
+  if(i>=words.length){clearInterval(t);setTimeout(()=>{if(!S.sheet)return;Object.assign(S.sheet,{amount:'2000',party:'أبو محمد السبّاك',title:'دفعة سباكة',cat:'مقاولات',stage:5,pay:'نقد',src:'ذاتي',auto:true,hot:['amount','party']});render();toast('فهمت: 2,000 ر.س نقدًا لأبو محمد')},500)}},260);
 }
 function saveExp(){
  const a=parseFloat(String(S.sheet.amount).replace(/,/g,''));
- if(!a||a<=0){S.sheet.hot=['amount'];render();toast('اكتب المبلغ أولًا');return}
  const f=S.sheet;
- EXP.unshift({d:'2026-10-07',t:f.title||'مصروف',p:f.party||'—',a,cat:f.cat,stage:f.stage,pay:f.pay,src:f.src,inv:f.mode==='scan'});
+ if(!a||a<=0){f.hot=['amount'];render();toast('اكتب المبلغ أولًا');return}
+ if(!String(f.party).trim()){f.hot=['party'];render();toast('اكتب لمين دفعت');return}
+ EXP.unshift({d:'2026-10-07',t:f.title||('دفعة — '+f.cat),p:f.party||'—',a,cat:f.cat,stage:f.stage,pay:f.pay,src:f.src,inv:f.mode==='scan'});
  STAGES[f.stage].spent+=a;const c=CATS.find(x=>x.k===f.cat);if(c)c.v+=a;
  const con=CONTRACTORS.find(x=>x.name===f.party);if(con){con.paid+=a;con.ledger.push(['2026-10-07',f.title||'دفعة',a])}
  S.sheet=null;toast(`حُفظ ${fmt(a)} ر.س في ${STAGES[f.stage].name}`);
 }
 function closeSheet(){S.sheet=null;render()}
+
+
+/* ============ شاشة البداية ============ */
+const W=STAGES.map(s=>s.budget/1100000);
+const PLANS=[['دور وملحق','حتى 350 م²'],['دورين','350 – 500 م²'],['دورين وملحق','450 – 650 م²'],['ثلاثة أدوار','600 م² فأكثر']];
+const ONB0=()=>({step:0,plan:'دورين وملحق',area:550,budget:1100000,hasFin:true,fin:700000});
+function startOnb(){S.onb=ONB0();S.stack=[];render()}
+function onbNum(k,v){S.onb[k]=Math.max(0,parseFloat(String(v).replace(/[^\d.]/g,''))||0)}
+function onbHTML(){
+ const o=S.onb,N=4;
+ const dots=`<div class="dots">${Array.from({length:N},(_,i)=>`<i class="${i<o.step?'on':''}"></i>`).join('')}</div>`;
+ const lo=o.area*1800,hi=o.area*2300;
+ let q='',body='',next='التالي';
+ if(o.step===0){
+  return `<div class="onb"><div class="grow" style="justify-content:center;text-align:center;align-items:center">
+   <div class="welcome-ill"><div class="logo" style="width:88px;height:88px;border-radius:26px">${ic('home',46,1.8)}</div></div>
+   <div class="q" style="margin-top:0">أهلًا بك في دفتر بيتي</div>
+   <div class="muted" style="max-width:300px">أربعة أسئلة وتبدأ. نجهّز لك مراحل البناء وتوزيع الميزانية تلقائيًا، وتقدر تعدّل أي شي بعدين.</div>
+  </div><div class="stack"><button class="btn pri blk" onclick="S.onb.step=1;render()">ابدأ مشروعي</button><button class="link" style="padding:8px" onclick="finishOnb(false)">استعرض ببيانات تجريبية</button></div></div>`;
+ }
+ if(o.step===1){q='وش نوع البيت؟';body=`<div class="choices">${PLANS.map(([t,d])=>`<button class="${o.plan===t?'on':''}" onclick="S.onb.plan='${t}';render()">${ic('home',22)}<span>${t}</span><span class="small muted" style="font-weight:400">${d}</span></button>`).join('')}</div>
+  <div class="field"><label for="o-area">مسطحات البناء تقريبًا (م²)</label><input id="o-area" inputmode="numeric" value="${o.area}" oninput="onbNum('area',this.value)"></div>
+  <div class="small muted">تلقاها في رخصة البناء أو المخطط. التقريب يكفي الآن.</div>`}
+ if(o.step===2){q='كم ميزانيتك للبناء؟';body=`<div class="field amtfield"><label for="o-bud">الميزانية الكاملة (ر.س)</label><input id="o-bud" inputmode="numeric" value="${fmt(o.budget)}" oninput="onbNum('budget',this.value)"></div>
+  <div class="hint">تقدير تقريبي لبيت ${fmt(o.area)} م² بتشطيب متوسط: من ${fmt(lo)} إلى ${fmt(hi)} ر.س. الأسعار تتغير حسب المدينة ومستوى التشطيب.</div>
+  <div class="chips"><button class="chip" onclick="S.onb.budget=${Math.round(lo/10000)*10000};render()">اقتصادي</button><button class="chip" onclick="S.onb.budget=${Math.round((lo+hi)/20000)*10000};render()">متوسط</button><button class="chip" onclick="S.onb.budget=${Math.round(hi/10000)*10000};render()">فاخر</button></div>`}
+ if(o.step===3){q='هل عندك تمويل؟';const self=Math.max(o.budget-(o.hasFin?o.fin:0),0);body=`<div class="choices"><button class="${o.hasFin?'on':''}" onclick="S.onb.hasFin=true;render()">${ic('bank',22)}<span>نعم، تمويل بنكي</span></button><button class="${!o.hasFin?'on':''}" onclick="S.onb.hasFin=false;render()">${ic('coin',22)}<span>لا، من مالي</span></button></div>
+  ${o.hasFin?`<div class="field"><label for="o-fin">مبلغ التمويل المعتمد (ر.س)</label><input id="o-fin" inputmode="numeric" value="${fmt(o.fin)}" oninput="onbNum('fin',this.value)" onchange="render()"></div>`:''}
+  <div class="card row between"><span class="muted">من مالك الخاص</span><b>${sar(self)}</b></div>`}
+ if(o.step===4){q='جهّزنا لك المشروع';next='ابدأ';const cols=['var(--stone)','var(--accent)','var(--blue)','var(--good)','var(--warn)'];
+  body=`<div class="card"><div class="row between"><span class="muted">${o.plan} · ${fmt(o.area)} م²</span><b>${sar(o.budget)}</b></div>
+  <div style="display:flex;height:12px;border-radius:8px;overflow:hidden;gap:2px;margin-top:12px">${W.map((w,i)=>`<i style="flex:${w};background:${cols[i%5]}"></i>`).join('')}</div></div>
+  <div class="list">${STAGES.map((st,i)=>`<div class="item" style="padding:9px 14px"><span class="small muted num" style="width:18px">${st.id}</span><div class="grow"><div class="t" style="font-size:13.5px">${st.name}</div></div><span class="amt small">${sar(Math.round(o.budget*W[i]/500)*500)}</span></div>`).join('')}</div>
+  <div class="small muted">التوزيع مبني على متوسط بيوت مشابهة، وتقدر تعدّل ميزانية أي مرحلة لاحقًا. المصاريف المسجلة في هذا النموذج تجريبية.</div>`}
+ return `<div class="onb">${dots}<div class="q">${q}</div><div class="grow">${body}</div>
+ <div class="foot"><button class="btn" onclick="S.onb.step--;render()">رجوع</button><button class="btn pri" style="flex:1" onclick="${o.step===4?'finishOnb(true)':'S.onb.step++;render()'}">${next}</button></div></div>`;
+}
+function finishOnb(apply){
+ const o=S.onb;
+ if(apply){P.budget=o.budget||1;P.area=o.area||1;P.finApproved=o.hasFin?o.fin:0;P.self=Math.max(o.budget-P.finApproved,0);P.finDisbursed=Math.min(P.finDisbursed,P.finApproved);
+  STAGES.forEach((st,i)=>st.budget=Math.round(o.budget*W[i]/500)*500);}
+ try{localStorage.setItem('db-onb','1')}catch(e){}
+ S.onb=null;S.tab='home';render();if(apply)toast('مشروعك جاهز');
+}
 
 /* ============ التنقل ============ */
 const ROOT={home:scrHome,expenses:scrExpenses,stages:scrStages,journal:scrJournal,more:scrMore,contractors:scrContractors,workers:scrWorkers,finance:scrFinance,gov:scrGov,design:scrDesign,docs:scrDocs,defects:scrDefects,agree:scrAgree,memory:scrMemory,key:scrKey};
@@ -790,33 +844,37 @@ function statusBar(){return `<div class="status"><span class="num">1:29</span><s
 function render(){
  const el=document.getElementById('device');
  const scrollEl=el.querySelector('.scroll');const keep=scrollEl?scrollEl.scrollTop:0;const prevKey=el.dataset.key;
- const key=S.device+S.tab+JSON.stringify(S.stack)+S.jseg+S.room;
+ const key=S.device+S.tab+JSON.stringify(S.stack)+S.jseg+S.room+(S.onb?'o'+S.onb.step:'');
  let html;
  if(S.device==='phone'){
   const isRoot=!S.stack.length;
   html=`<div class="phone"><div class="island"></div><div class="screen">${statusBar()}${current(false)}
   ${isRoot?`<nav class="tabbar">${TABS.map(([k,t,i])=>`<button class="tab ${S.tab===k?'on':''}" onclick="tabTo('${k}')">${ic(i,24,S.tab===k?2.1:1.7)}<span>${t}</span></button>`).join('')}</nav><button class="fab" aria-label="إضافة مصروف" onclick="S.sheet={...BLANK,hot:[]};render()">${ic('plus',30,2.4)}</button>`:''}
-  ${S.sheet?sheetHTML():''}${S.toast?`<div class="toast">${S.toast}</div>`:''}</div></div>`;
+  ${S.sheet?sheetHTML():''}${S.onb?onbHTML():''}${S.toast?`<div class="toast">${S.toast}</div>`:''}</div></div>`;
  }else{
   const grp=(t,arr)=>`<div class="grp">${t}</div>`+arr.map(([k,label,i])=>`<button class="sitem ${S.tab===k&&!S.stack.length?'on':''}" onclick="tabTo('${k}')">${ic(i,19)}<span>${label}</span></button>`).join('');
   html=`<div class="ipad"><div class="screen"><div class="split" style="padding-top:0"><aside class="side"><div style="height:24px"></div><div class="sbrand"><div class="logo" style="width:34px;height:34px;border-radius:9px">${ic('home',18,2)}</div><b>دفتر بيتي</b></div>
   ${grp('المشروع',[['home','الرئيسية','home'],['stages','المراحل','layers'],['journal','اليوميات','camera']])}
-  ${grp('المال',[['expenses','المصروفات','receipt'],['contractors','المقاولون','helmet'],['workers','العمالة اليومية','users'],['finance','التمويل','bank']])}
-  ${grp('التوثيق',[['gov','المعاملات الحكومية','stamp'],['design','اختيارات التصميم','palette'],['docs','المستندات','file'],['defects','العيوب','alert'],['agree','الاتفاقات','hand']])}
-  ${grp('بعد البناء',[['key','لحظة المفتاح','key'],['memory','ذاكرة البيت','shield']])}
+  ${grp('الفلوس',[['expenses','المصروفات','receipt'],['finance','التمويل','bank']])}
+  ${grp('الناس',[['contractors','المقاولون','helmet'],['workers','العمالة اليومية','users']])}
+  ${grp('الأوراق',[['gov','المعاملات الحكومية','stamp'],['docs','المستندات','file'],['agree','الاتفاقات','hand'],['defects','العيوب','alert']])}
+  ${grp('البيت',[['design','اختيارات التصميم','palette'],['key','لحظة المفتاح','key'],['memory','ذاكرة البيت','shield']])}
+  <button class="sitem" onclick="startOnb()" style="margin-top:10px;color:var(--muted)">${ic('home',19)}<span>إعداد المشروع</span></button>
   </aside><div class="main">${statusBar()}${current(true)}<button class="fab" aria-label="إضافة مصروف" onclick="S.sheet={...BLANK,hot:[]};render()">${ic('plus',30,2.4)}</button></div></div>
-  ${S.sheet?sheetHTML():''}${S.toast?`<div class="toast">${S.toast}</div>`:''}</div></div>`;
+  ${S.sheet?sheetHTML():''}${S.onb?onbHTML():''}${S.toast?`<div class="toast">${S.toast}</div>`:''}</div></div>`;
  }
  el.innerHTML=html;el.dataset.key=key;
  if(prevKey===key){const s=el.querySelector('.scroll');if(s)s.scrollTop=keep}
 }
 function setDevice(d){if(MQ.matches)d='phone';S.device=d;S.stack=[];if(d==='phone'&&!TABS.some(t=>t[0]===S.tab))S.tab='more';document.getElementById('dv-phone').classList.toggle('on',d==='phone');document.getElementById('dv-ipad').classList.toggle('on',d==='ipad');render()}
 function setTheme(t){const r=document.documentElement;if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);['auto','light','dark'].forEach(x=>document.getElementById('th-'+x).classList.toggle('on',x===t))}
+if(!ONB_DONE)S.onb=ONB0();
 const MQ=window.matchMedia('(max-width:600px)');
 if(MQ.matches)S.device='phone';
 MQ.addEventListener?.('change',e=>{if(e.matches&&S.device!=='phone')setDevice('phone')});
 render();
 </script>
+
 
 </body>
 </html>
