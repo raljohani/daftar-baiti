@@ -257,23 +257,45 @@ table.st-table td.n{font-variant-numeric:tabular-nums;text-align:end;white-space
 .hint{background:var(--blue-soft);color:var(--blue);border-radius:14px;padding:12px;font-size:13px}
 .welcome-ill{display:grid;place-items:center;margin:30px 0 10px}
 
-/* على الجوال: التطبيق يملأ الشاشة مباشرة بدون إطار جهاز */
-@media (max-width:600px){
-  body{background:var(--app)}
-  .page{padding:0;max-width:none}
-  .top,.guide{display:none}
-  .stage{display:block}
-  .devwrap{overflow:visible;padding:0}
-  .phone{position:fixed;inset:0;width:auto;height:auto;max-width:none;border:0;border-radius:0;box-shadow:none}
-  .island,.phone .status{display:none}
-  .phone .screen{padding-top:calc(env(safe-area-inset-top,0px) + 10px)}
-  .phone .tabbar{height:auto;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
-  .phone .fab{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
-  .phone .scroll{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
-  .phone .sheet .body{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
-  .phone .toast{top:calc(env(safe-area-inset-top,0px) + 12px)}
-  .phone .onb{padding-top:calc(env(safe-area-inset-top,0px) + 22px);padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
-}
+/* وضع التطبيق الكامل: يُفعّل على الآيفون والآيباد والشاشات الضيقة */
+html.full body{background:var(--app)}
+html.full .page{padding:0;max-width:none}
+html.full .top,html.full .guide{display:none}
+html.full .stage{display:block}
+html.full .devwrap{overflow:visible;padding:0}
+html.full .phone,html.full .ipad{position:fixed;inset:0;width:auto;height:auto;max-width:none;border:0;border-radius:0;box-shadow:none}
+html.full .island,html.full .status{display:none}
+html.full .screen{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+html.full-phone .phone .screen{padding-top:calc(env(safe-area-inset-top,0px) + 10px)}
+html.full-phone .scroll{padding-inline:max(16px,calc((100% - 680px) / 2))}
+html.full-phone .navbar{padding-inline:max(16px,calc((100% - 680px) / 2))}
+html.full .tabbar{height:auto;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+html.full-phone .fab{bottom:calc(88px + env(safe-area-inset-bottom,0px));left:max(20px,calc(env(safe-area-inset-left,0px) + 16px))}
+html.full-phone .scroll{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
+html.full .sheet .body,html.full .onb{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+html.full .toast{top:calc(env(safe-area-inset-top,0px) + 12px)}
+html.full-phone .onb{padding-top:calc(env(safe-area-inset-top,0px) + 22px)}
+html.full-phone .sheet{left:max(0px,calc(50% - 360px));right:max(0px,calc(50% - 360px))}
+html.full-ipad .side .side-top{height:calc(env(safe-area-inset-top,0px) + 8px)}
+html.full-ipad .main{padding-top:calc(env(safe-area-inset-top,0px) + 8px)}
+html.full-ipad .fab{bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+/* عناصر الإدخال والصور */
+.side-top{height:24px;flex:none}
+.sheet .body>*,.onb .grow>*,.scroll>*,.stack>*{flex-shrink:0}
+.split{padding-top:0!important}
+.field textarea{width:100%;border:0;background:transparent;font:inherit;font-size:15px;color:var(--ink);resize:vertical;outline:none;padding:2px 0}
+.field input[type=date]{min-height:28px}
+.addphoto{display:flex;align-items:center;gap:8px;justify-content:center;padding:14px;border-radius:14px;border:1.5px dashed var(--line);background:var(--card);color:var(--muted);cursor:pointer;font-size:13.5px}
+.addphoto.sq{flex-direction:column;aspect-ratio:1;padding:6px;gap:4px;font-size:12px}
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pthumb{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;background:var(--app);max-width:100%}
+.pthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.pthumb button{position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;display:grid;place-items:center}
+.ph.mini{width:56px;flex:none}
+.box-btn{flex:none;display:grid;place-items:center}
+a.chip{text-decoration:none;color:inherit}
+.pipe{background:none;border:0;padding:0;cursor:pointer;text-align:start}
+
 </style>
 </head>
 <body>
@@ -304,20 +326,21 @@ table.st-table td.n{font-variant-numeric:tabular-nums;text-align:end;white-space
       <div class="card stack">
         <h2>جرّب بنفسك</h2>
         <ol>
-          <li>اضغط الزر البرتقالي <b>+</b> وجرّب <b>امسح فاتورة</b> أو <b>قلها بصوتك</b>، ثم احفظ وشوف الأرقام تتحدث.</li>
+          <li>كل شي يشتغل فعليًا: <b>أضف، عدّل، احذف</b>، وارفع صور من جهازك. بياناتك تنحفظ على جهازك.</li>
+          <li>اضغط الزر البرتقالي <b>+</b> لتسجيل مصروف، أو اضغط على أي عنصر في أي قائمة لتعديله أو حذفه.</li>
           <li>من <b>المراحل</b> افتح «التمديدات» وجرّب <b>قائمة الفحص قبل الدفع</b>.</li>
           <li>في <b>اليوميات</b> حرّك شريط <b>عدسة الزمن</b> وشوف البيت يكبر أسبوعًا بأسبوع.</li>
           <li>من <b>المزيد</b>: كشف حساب المقاول، تحضير العمال، التمويل، المعاملات الحكومية، بطاقة الغرفة.</li>
           <li>بدّل إلى <b>آيباد</b> لترى العرض المقسّم بالشريط الجانبي.</li>
         </ol>
-        <div class="note">كل الأسماء والمبالغ تجريبية لفيلا دورين وملحق في الرياض، بميزانية 1,100,000 ريال.</div>
+        <div class="note">افتح الرابط من الآيفون أو الآيباد ويشتغل كتطبيق بملء الشاشة. تقدر تبدأ بدفتر فاضي من المزيد ← ابدأ مشروع جديد.</div>
       </div>
     </aside>
   </div>
 </div>
 
 <script>
-/* ============ أيقونات ============ */
+/* ================= أيقونات ================= */
 const IC={
  home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
  receipt:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/>',
@@ -330,6 +353,7 @@ const IC={
  back:'<path d="M9 6l6 6-6 6"/>',
  chev:'<path d="M15 6l-6 6 6 6"/>',
  check:'<path d="M5 12l5 5 9-10"/>',
+ x:'<path d="M6 6l12 12M18 6L6 18"/>',
  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0113 0"/><path d="M16 4.5a3.5 3.5 0 010 7M21.5 20a6.5 6.5 0 00-4-6"/>',
  helmet:'<path d="M3 17h18"/><path d="M5 17a7 7 0 0114 0"/><path d="M10 10V6h4v4"/>',
  bank:'<path d="M3 9l9-5 9 5"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/>',
@@ -343,569 +367,698 @@ const IC={
  drop:'<path d="M12 3s7 7.5 7 12a7 7 0 01-14 0c0-4.5 7-12 7-12z"/>',
  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/>',
  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
- phone:'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/>',
  wall:'<rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 9h18M3 15h18M9 4v5M15 9v6M9 15v5"/>',
- room:'<path d="M4 20V5l10-2v17M14 20h6V8h-6"/><circle cx="11" cy="12" r=".8"/>',
  coin:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3 3 7 3s7-1.3 7-3v-6"/>',
  share:'<path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v7h14v-7"/>',
  lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/>',
  star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
  truck:'<path d="M3 6h11v10H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>',
  cube:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/>',
+ wrench:'<path d="M14.5 6.5a4 4 0 00-5 5L4 17l3 3 5.5-5.5a4 4 0 005-5l-2.5 2.5-2.5-.5-.5-2.5z"/>',
  search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
  spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/>',
  pen:'<path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/>',
- wrench:'<path d="M14.5 6.5a4 4 0 00-5 5L4 17l3 3 5.5-5.5a4 4 0 005-5l-2.5 2.5-2.5-.5-.5-2.5z"/>'
+ edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',
+ trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+ img:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/>',
+ bell:'<path d="M6 16V11a6 6 0 0112 0v5l2 2H4z"/><path d="M10 20a2 2 0 004 0"/>',
+ reset:'<path d="M4 4v6h6"/><path d="M5 15a8 8 0 102-8.5L4 10"/>'
 };
 const ic=(n,s=20,w=1.8)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]||''}</svg>`;
 
-/* ============ أدوات ============ */
-const fmt=n=>Math.round(n).toLocaleString('en-US');
-const sar=n=>`<span class="num">${fmt(n)}</span><span class="cur">ر.س</span>`;
-const TODAY=new Date(2026,9,7);
-function dateFmt(d,cal,opt){try{return new Intl.DateTimeFormat(`ar-SA-u-ca-${cal}-nu-latn`,opt).format(d)}catch(e){return d.toISOString().slice(0,10)}}
+/* ================= أدوات ================= */
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=v=>{const n=parseFloat(String(v??'').replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[^\d.\-]/g,''));return isNaN(n)?0:n};
+const fmt=n=>(Math.round(n*100)/100).toLocaleString('en-US',{maximumFractionDigits:2});
+const sar=n=>`<span class="num">${fmt(Math.round(n))}</span><span class="cur">ر.س</span>`;
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const clone=o=>JSON.parse(JSON.stringify(o));
+const now=new Date();
+const TODAY=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const todayISO=()=>iso(TODAY);
+const addDays=(n)=>iso(new Date(TODAY.getTime()+n*864e5));
+function dateFmt(d,cal,opt){try{return new Intl.DateTimeFormat(`ar-SA-u-ca-${cal}-nu-latn`,opt).format(d)}catch(e){return iso(d)}}
 const hijri=(d,o={day:'numeric',month:'long',year:'numeric'})=>dateFmt(d,'islamic-umalqura',o).replace(/\s?هـ$/,'')+' هـ';
 const greg=(d,o={day:'numeric',month:'long',year:'numeric'})=>dateFmt(d,'gregory',o);
-const D=s=>{const [y,m,dd]=s.split('-').map(Number);return new Date(y,m-1,dd)};
-const short=s=>greg(D(s),{day:'numeric',month:'short'});
+const D=s=>{if(!s)return TODAY;const [y,m,dd]=String(s).split('-').map(Number);return new Date(y,(m||1)-1,dd||1)};
+const short=s=>s?greg(D(s),{day:'numeric',month:'short'}):'—';
+const daysTo=s=>Math.round((D(s)-TODAY)/864e5);
 
-/* ============ البيانات التجريبية ============ */
-const P={budget:1100000, self:400000, finApproved:700000, finDisbursed:420000, area:550};
-const STAGES=[
- {id:0,name:'ما قبل البناء',sub:'الرخصة، المخططات، تقرير التربة',budget:45000,spent:43200,pct:100,st:'done',from:'2026-02-10',to:'2026-04-02'},
- {id:1,name:'الحفر والإحلال والدك',sub:'حفر 2.2 م وإحلال بطبقات مدكوكة',budget:38000,spent:36500,pct:100,st:'done',from:'2026-04-05',to:'2026-04-28'},
- {id:2,name:'الأساسات والعزل والردم',sub:'نظافة، قواعد، رقاب، ميدات، عزل بيتومين',budget:120000,spent:126800,pct:100,st:'done',from:'2026-04-29',to:'2026-05-30'},
- {id:3,name:'الهيكل الخرساني',sub:'الأرضي، الأول، الملحق',budget:260000,spent:251300,pct:100,st:'done',from:'2026-06-01',to:'2026-08-20'},
- {id:4,name:'المباني (البلوك)',sub:'بلوك معزول 20 سم للخارجي',budget:70000,spent:68150,pct:100,st:'done',from:'2026-08-15',to:'2026-09-15'},
- {id:5,name:'التمديدات',sub:'كهرباء، سباكة، تكييف، تيار خفيف',budget:95000,spent:52400,pct:60,st:'now',from:'2026-09-10',to:'2026-10-25'},
- {id:6,name:'اللياسة والعزل',sub:'لياسة داخلية وخارجية، عزل مائي للأسطح',budget:85000,spent:0,pct:0,st:'todo',from:'2026-10-26',to:'2026-12-05'},
- {id:7,name:'التشطيبات',sub:'بلاط، رخام، جبس، دهان، أبواب، مطابخ',budget:260000,spent:34100,pct:0,st:'todo',from:'2026-12-06',to:'2027-03-15',note:'عربون بلاط مدفوع'},
- {id:8,name:'الواجهات والأعمال الخارجية',sub:'حجر، أسوار، حديقة، مظلات',budget:85000,spent:0,pct:0,st:'todo',from:'2027-02-01',to:'2027-03-30'},
- {id:9,name:'العدادات والتشغيل',sub:'كهرباء، مياه، اختبارات الضغط والتكييف',budget:22000,spent:0,pct:0,st:'todo',from:'2027-03-20',to:'2027-04-10'},
- {id:10,name:'الاستلام وتسليم المفتاح',sub:'قائمة العيوب، التنظيف، الاستلام النهائي',budget:20000,spent:0,pct:0,st:'todo',from:'2027-04-10',to:'2027-04-25'}
+/* ================= البيانات التجريبية ================= */
+const CATK=['مقاولات','مواد','أجور يومية','مكتب هندسي','نقليات ومعدات','رسوم حكومية','نثريات'];
+const CATC={'مقاولات':'var(--accent)','مواد':'var(--blue)','أجور يومية':'var(--stone)','مكتب هندسي':'var(--good)','نقليات ومعدات':'var(--warn)','رسوم حكومية':'var(--bad)','نثريات':'var(--muted)'};
+const STAGE_TPL=[
+ ['ما قبل البناء','الرخصة، المخططات، تقرير التربة',.041],['الحفر والإحلال والدك','حفر وإحلال بطبقات مدكوكة',.035],['الأساسات والعزل والردم','قواعد، رقاب، ميدات، عزل',.109],
+ ['الهيكل الخرساني','أعمدة وأسقف لكل دور',.236],['المباني (البلوك)','بلوك معزول للخارجي',.064],['التمديدات','كهرباء، سباكة، تكييف، تيار خفيف',.086],
+ ['اللياسة والعزل','لياسة داخلية وخارجية وعزل الأسطح',.077],['التشطيبات','بلاط، رخام، جبس، دهان، أبواب، مطابخ',.236],['الواجهات والأعمال الخارجية','حجر، أسوار، حديقة، مظلات',.077],
+ ['العدادات والتشغيل','كهرباء، مياه، اختبارات',.02],['الاستلام وتسليم المفتاح','العيوب، التنظيف، الاستلام',.019]
 ];
-const CATS=[
- {k:'مقاولات',v:318600,c:'var(--accent)'},
- {k:'مواد',v:221850,c:'var(--blue)'},
- {k:'أجور يومية',v:24300,c:'var(--stone)'},
- {k:'مكتب هندسي',v:21500,c:'var(--good)'},
- {k:'نقليات ومعدات',v:11400,c:'var(--warn)'},
- {k:'رسوم حكومية',v:9800,c:'var(--bad)'},
- {k:'نثريات',v:5000,c:'var(--muted)'}
-];
-let EXP=[
- {d:'2026-10-06',t:'مواسير PPR وأكواع',p:'مؤسسة الصفوة لمواد البناء',a:4280,cat:'مواد',stage:5,pay:'تحويل',src:'تمويل',inv:true},
- {d:'2026-10-05',t:'أجور العمال — الأسبوع 26',p:'العمالة اليومية',a:3150,cat:'أجور يومية',stage:5,pay:'نقد',src:'ذاتي',inv:false},
- {d:'2026-10-03',t:'دفعة ثانية — تمديد كهرباء الأرضي',p:'أبو فيصل الكهربائي',a:8000,cat:'مقاولات',stage:5,pay:'تحويل',src:'تمويل',inv:false},
- {d:'2026-10-01',t:'كيابل 4 و6 مم ولفائف',p:'مركز النور للكهرباء',a:9640,cat:'مواد',stage:5,pay:'بطاقة',src:'تمويل',inv:true},
- {d:'2026-09-28',t:'عربون بلاط بورسلان 620 م²',p:'معرض الدرّة للبلاط',a:34100,cat:'مواد',stage:7,pay:'تحويل',src:'ذاتي',inv:true},
- {d:'2026-09-24',t:'دفعة أولى — سباكة الأرضي',p:'أبو محمد السبّاك',a:7000,cat:'مقاولات',stage:5,pay:'نقد',src:'ذاتي',inv:false},
- {d:'2026-09-22',t:'نقل مخلفات — 3 قلابات',p:'مؤسسة الرواسي للنقل',a:1350,cat:'نقليات ومعدات',stage:4,pay:'نقد',src:'ذاتي',inv:false},
- {d:'2026-09-20',t:'رسوم طلب عداد الكهرباء',p:'الشركة السعودية للكهرباء',a:6300,cat:'رسوم حكومية',stage:5,pay:'سداد',src:'ذاتي',inv:true},
- {d:'2026-09-15',t:'دفعة المباني والملحق',p:'مؤسسة ركائز البنيان',a:23100,cat:'مقاولات',stage:4,pay:'شيك',src:'تمويل',inv:true}
-];
-const CONTRACTORS=[
- {id:1,progress:100,name:'مؤسسة ركائز البنيان',role:'مقاول العظم',type:'بالمتر',terms:'550 م² × 420 ر.س',value:231000,extras:6500,paid:207900,retention:23100,phone:'0551 234 876',rate:4,status:'منتهٍ — محتجز ضمان',
-  ledger:[['2026-04-01','دفعة مقدمة 20%',46200],['2026-05-30','إنجاز الأساسات',46200],['2026-07-08','صبة سقف الأرضي',46200],['2026-08-05','صبة سقف الأول',46200],['2026-09-15','الملحق والمباني',23100]],
-  changes:[['رفع جدار السور الجنوبي 60 سم','6,500 ر.س','بانتظار الدفع']]},
- {id:2,progress:55,name:'أبو محمد السبّاك',role:'سباكة',type:'مصنعية فقط',terms:'المالك يوفّر المواد',value:28000,extras:0,paid:14000,retention:0,phone:'0504 771 209',rate:0,status:'جارٍ — 55%',
-  ledger:[['2026-09-10','عربون',7000],['2026-09-24','سباكة الأرضي',7000]],changes:[],defect:'تسريب عند اختبار ضغط حمام الدور الأول'},
- {id:3,progress:65,name:'أبو فيصل الكهربائي',role:'كهرباء وتيار خفيف',type:'مصنعية فقط',terms:'المالك يوفّر المواد',value:32000,extras:0,paid:16000,retention:0,phone:'0533 418 562',rate:0,status:'جارٍ — 65%',
-  ledger:[['2026-09-12','عربون',8000],['2026-10-03','تمديد الأرضي',8000]],changes:[]},
- {id:4,progress:0,name:'معرض الدرّة للبلاط',role:'توريد وتركيب بلاط',type:'بالمتر',terms:'620 م² × 38 ر.س تركيب',value:23560,extras:0,paid:0,retention:0,phone:'0112 448 300',rate:0,status:'لم يبدأ',ledger:[],changes:[]},
- {id:5,progress:0,name:'مؤسسة لمسة للجبس',role:'جبس وديكورات',type:'مقطوعية',terms:'كامل الأدوار حسب المخطط',value:45000,extras:0,paid:0,retention:0,phone:'0566 902 114',rate:0,status:'لم يبدأ',ledger:[],changes:[]},
- {id:6,progress:20,name:'شركة برودة للتكييف',role:'تكييف مركزي',type:'شامل مواد ومصنعية',terms:'8 وحدات دكت',value:64000,extras:0,paid:0,retention:0,phone:'0920 004 551',rate:0,status:'تمديد النحاس جارٍ',ledger:[],changes:[]}
-];
-const MATS=[
- {n:'حديد تسليح',u:'طن',need:42,bought:43.5,used:43.5,price:2650,mkt:[2450,2700],sup:[['مصنع الوطنية للحديد',2650],['مؤسسة البناء الحديث',2580],['حديد الخليج',2720]]},
- {n:'خرسانة جاهزة',u:'م³',need:310,bought:318,used:318,price:265,mkt:[240,270],sup:[['خرسانة الرياض',265],['مصنع اليمامة للخرسانة',255]]},
- {n:'بلوك معزول 20 سم',u:'حبة',need:9800,bought:10400,used:9650,price:4.1,mkt:[3.6,4.0],sup:[['مصنع الجزيرة للبلوك',4.1],['بلوك الصفا',3.8]]},
- {n:'أسمنت',u:'كيس',need:620,bought:840,used:840,price:15,mkt:[14,16],leak:true},
- {n:'مواسير PPR',u:'متر',need:900,bought:760,used:610,price:6.5,mkt:[5.5,7]},
- {n:'بلاط بورسلان',u:'م²',need:620,bought:0,used:0,ordered:650,price:58,mkt:[52,70]}
-];
+const DEFAULT_CHECKS={
+ 3:['استلام حديد التسليح من المشرف قبل الصب','نتائج كسر المكعبات 7 و28 يومًا','عدم وجود تعشيش أو شروخ'],
+ 5:['اختبار ضغط مواسير التغذية 10 بار لمدة 24 ساعة','تصوير كل الجدران قبل اللياسة','مطابقة أماكن الأفياش والمفاتيح مع المخطط','تأريض لوحة الكهرباء الرئيسية','ميول مواسير الصرف واختبار الماء','عزل مواسير التكييف'],
+ 6:['استقامة الزوايا وعدم وجود تموجات','تشريب اللياسة بالماء 3 أيام','اختبار غمر السطح 48 ساعة']
+};
 const TIPS={
  1:['اطلب تقرير التربة قبل الحفر، عمق الإحلال يغيّر التكلفة كثيرًا','صوّر قاع الحفر قبل الدك ومعه شريط القياس'],
  2:['احضر يوم صب القواعد بنفسك ولو ساعة','العزل حول الأساسات يُعمل مرة وحدة، لا تقبل الاستعجال'],
  3:['لا تسمح بالصب قبل ما يوقّع المشرف على استلام الحديد','اطلب نتيجة كسر المكعبات بالورق وأرشفها هنا'],
  4:['بلّل البلوك قبل البناء في الصيف','حدد أماكن الفتحات والمكيفات قبل البلوك مو بعده'],
- 5:['صوّر كل جدار بالمتر قبل اللياسة، بتحتاجه بعد سنين','احضر اختبار الضغط بنفسك ولا تكتفي بكلام السبّاك','حط فيش زيادة في كل غرفة، تكلفته الآن قليلة وبعدين غالية'],
+ 5:['صوّر كل جدار بالمتر قبل اللياسة، بتحتاجه بعد سنين','احضر اختبار الضغط بنفسك ولا تكتفي بالكلام','حط فيش زيادة في كل غرفة، تكلفته الآن قليلة'],
  6:['لا تقبل لياسة على بلوك ناشف','اختبار غمر السطح 48 ساعة قبل البلاط إلزامي'],
- 7:['اشترِ 10% زيادة من البلاط نفسه للصيانة لاحقًا','سجّل كود كل دهان في بطاقة الغرفة قبل ما ينسى الدهّان']
+ 7:['اشترِ 10% زيادة من البلاط نفسه للصيانة لاحقًا','سجّل كود كل دهان في بطاقة الغرفة']
 };
-const WORKERS=[
- {n:'رحيم',job:'عامل',r:150,adv:200,a:['f','f','f','h','f','']},
- {n:'سليم',job:'عامل',r:150,adv:0,a:['f','f','','f','f','']},
- {n:'كمال',job:'مساعد نجّار',r:200,adv:300,a:['f','f','f','f','f','']},
- {n:'أنور',job:'فني عزل',r:220,adv:0,a:['','f','f','f','h','']}
-];
-const DAYS=['سبت','أحد','إثنين','ثلاثاء','أربعاء','خميس'];
-const TRANCHES=[['الأولى — بعد الرخصة',140000,'مصروفة'],['الثانية — بعد الأساسات',140000,'مصروفة'],['الثالثة — بعد الهيكل',140000,'مصروفة'],['الرابعة — بعد اللياسة',140000,'قادمة'],['الخامسة — بعد التشطيب',140000,'لاحقًا']];
-const GOV=[
- {n:'رخصة البناء',by:'بلدي',ref:'4471983',st:'سارية',cls:'p-good',info:'تنتهي '+greg(D('2029-03-12'),{month:'long',year:'numeric'}),docs:'مكتملة'},
- {n:'عداد الكهرباء',by:'الشركة السعودية للكهرباء',ref:'SEC-90215',st:'قيد التنفيذ',cls:'p-info',info:'الرسوم مسددة 6,300 ر.س — بانتظار المعاينة',docs:'مكتملة'},
- {n:'عداد المياه والصرف',by:'شركة المياه الوطنية',ref:'—',st:'ينقصه مستند',cls:'p-warn',info:'مطلوب: مخطط الموقع العام المعتمد',docs:'2 من 3'},
- {n:'شهادة إتمام البناء',by:'بلدي',ref:'—',st:'بعد التسليم',cls:'p-mute',info:'تُطلب بعد اكتمال الواجهات والعدادات',docs:'0 من 4'}
-];
-const ROOMS=[
- {n:'مجلس الرجال',area:'32 م²',sw:['#D9D4CB','#B9A585','#2F3A40','#C8B596'],
-  items:[['البلاط','بورسلان مطفي 120×60 — رمادي حجري','معتمد',2],['الدهان','مطفي — كود SA-1024 أبيض حجري','عينة',1],['الجبس','إطار مخفي مع إضاءة خطية دافئة','معتمد',2],['الإنارة','سبوتات 7 واط 3000K × 14','فكرة',0],['المفاتيح','لوحات مطفية سوداء','مشترى',3]]},
- {n:'الصالة',area:'48 م²',sw:['#EDE9E2','#A9B4AA','#6E5B45','#D6CFC3'],items:[['البلاط','رخام كرارا مصقول','عينة',1],['الدهان','كود SA-2208 أخضر رمادي','فكرة',0]]},
- {n:'غرفة النوم الرئيسية',area:'28 م²',sw:['#F1ECE4','#C9B6A0','#4A4F55','#E3D9CB'],items:[['الأرضية','باركيه HDF بلوط فاتح','معتمد',2]]},
- {n:'المطبخ',area:'18 م²',sw:['#FFFFFF','#2E3438','#B08D57','#DADADA'],items:[['الخزائن','أكريليك أبيض + خشب جوزي','عينة',1]]}
-];
-const PIPE=['فكرة','عينة','معتمد','مشترى','مركّب'];
-const DEFECTS=[
- {t:'تسريب عند اختبار ضغط حمام الدور الأول',who:'أبو محمد السبّاك',lv:'عالية',cls:'p-bad',st:'مفتوحة',d:'2026-10-04'},
- {t:'ميلان بسيط في عتبة نافذة غرفة النوم 2',who:'مؤسسة ركائز البنيان',lv:'متوسطة',cls:'p-warn',st:'مفتوحة',d:'2026-09-18'},
- {t:'تعشيش خرساني في عمود الدرج',who:'مؤسسة ركائز البنيان',lv:'متوسطة',cls:'p-warn',st:'مغلقة — أُصلحت بالإيبوكسي',d:'2026-07-12'}
-];
-const AGREE=[
- {w:'أبو محمد السبّاك',t:'يعيد اختبار الضغط على حسابه بعد إصلاح التسريب، ولا تُصرف الدفعة الثالثة قبل نجاحه.',d:'2026-10-04',m:'تسجيل صوتي 0:42'},
- {w:'مؤسسة ركائز البنيان',t:'رفع جدار السور الجنوبي 60 سم بمبلغ 6,500 ر.س يُضاف للمستخلص الأخير.',d:'2026-09-02',m:'صورة رسالة واتساب'},
- {w:'معرض الدرّة للبلاط',t:'تثبيت سعر البورسلان 58 ر.س للمتر حتى نهاية ديسمبر مع توريد على دفعتين.',d:'2026-09-28',m:'صورة عرض السعر'}
-];
-const DOCS=[['صك الأرض','PDF · 2 صفحة','ملكية'],['المخططات المعمارية — الإصدار 3','PDF · 18 صفحة','مخططات'],['المخططات الإنشائية — الإصدار 2','PDF · 12 صفحة','مخططات'],['تقرير فحص التربة','PDF · 24 صفحة','تقارير'],['عقد مقاول العظم','صورة ممسوحة · 4 صفحات','عقود'],['رخصة البناء','PDF · 1 صفحة','تصاريح'],['نتائج كسر المكعبات — سقف الأول','PDF · 2 صفحة','تقارير']];
-const DIARY=[
- {d:'2026-10-06',tag:'إنجاز',tc:'p-good',t:'انتهاء تمديد مواسير التغذية للدور الأول',n:'4 صور · ملاحظة صوتية',ph:'ph-pipe'},
- {d:'2026-10-04',tag:'عيب',tc:'p-bad',t:'اختبار الضغط لحمام الدور الأول نزل بعد ساعتين',n:'2 صورة · فيديو 0:18',ph:'ph-pipe'},
- {d:'2026-10-02',tag:'قرار',tc:'p-info',t:'نقل مخرج التكييف في المجلس لفوق الباب',n:'صورة على المخطط',ph:'ph-block'},
- {d:'2026-09-29',tag:'ملاحظة',tc:'p-mute',t:'زيارة مندوب الكهرباء للموقع وتحديد مكان العداد',n:'3 صور',ph:'ph-sky'}
-];
-const WARRANTY=[['العزل المائي للسطح','10 سنوات','بعد التسليم'],['السخانات المركزية','5 سنوات','بعد التركيب'],['وحدات التكييف','7 سنوات على الضاغط','بعد التشغيل'],['ضمان الهيكل الإنشائي','10 سنوات','من شهادة الإتمام']];
-
-/* ============ الحالة ============ */
-let ONB_DONE=false;try{ONB_DONE=localStorage.getItem('db-onb')==='1'}catch(e){}
-const S={visit:true,q:'',qa:null,onb:null,device:'phone',tab:'home',stack:[],jseg:'diary',week:27,sheet:null,filter:'الكل',checks:{},wall:true,room:0,toast:''};
-const spent=()=>STAGES.reduce((a,s)=>a+s.spent,0);
-const cashIn=()=>P.self+P.finDisbursed;
-
-/* ============ مكوّنات ============ */
-function ring(p,size=118,stroke=11){
- const r=(size-stroke)/2,c=2*Math.PI*r,off=c*(1-Math.min(p,1));
- return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="transform:rotate(-90deg)"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--line)" stroke-width="${stroke}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--accent)" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}"/></svg>`;
+function makeStages(budget,withDemo){
+ const st=['done','done','done','done','done','now','todo','todo','todo','todo','todo'];
+ const pct=[100,100,100,100,100,60,0,0,0,0,0];
+ const dates=[['-240','-188'],['-185','-162'],['-161','-130'],['-128','-48'],['-53','-22'],['-27','18'],['19','59'],['60','159'],['117','174'],['164','185'],['185','200']];
+ return STAGE_TPL.map(([n,sub,w],i)=>({id:i,name:n,sub,budget:Math.round(budget*w/500)*500,pct:withDemo?pct[i]:0,st:withDemo?st[i]:(i===0?'now':'todo'),
+  from:withDemo?addDays(+dates[i][0]):'',to:withDemo?addDays(+dates[i][1]):'',opening:0,checks:(DEFAULT_CHECKS[i]||['استلام الأعمال قبل الدفع','مطابقة الكميات مع الاتفاق']).map(t=>({id:uid(),t,on:false}))}));
 }
+function seedDemo(){
+ const db={v:2,demo:true,project:{name:'بيت حي الياسمين',plan:'دورين وملحق',area:550,budget:1100000,self:400000},
+  fin:{has:true,approved:700000,installment:4850,next:addDays(20),bank:'تمويل البناء الذاتي',tranches:[
+   {id:uid(),name:'الأولى — بعد الرخصة',a:140000,st:'مصروفة'},{id:uid(),name:'الثانية — بعد الأساسات',a:140000,st:'مصروفة'},{id:uid(),name:'الثالثة — بعد الهيكل',a:140000,st:'مصروفة'},{id:uid(),name:'الرابعة — بعد اللياسة',a:140000,st:'قادمة'},{id:uid(),name:'الخامسة — بعد التشطيب',a:140000,st:'لاحقًا'}]},
+  stages:makeStages(1100000,true),catOpening:{}};
+ const E=(dd,t,p,a,cat,stage,pay,src)=>({id:uid(),d:addDays(dd),t,p,a,cat,stage,pay,src});
+ db.expenses=[
+  E(-1,'مواسير PPR وأكواع','مؤسسة الصفوة لمواد البناء',4280,'مواد',5,'تحويل','تمويل'),
+  E(-2,'أجور العمال — الأسبوع الماضي','العمالة اليومية',3150,'أجور يومية',5,'نقد','ذاتي'),
+  E(-4,'دفعة ثانية — تمديد كهرباء الأرضي','أبو فيصل الكهربائي',8000,'مقاولات',5,'تحويل','تمويل'),
+  E(-6,'كيابل 4 و6 مم','مركز النور للكهرباء',9640,'مواد',5,'بطاقة','تمويل'),
+  E(-9,'عربون بلاط بورسلان 620 م²','معرض الدرّة للبلاط',34100,'مواد',7,'تحويل','ذاتي'),
+  E(-13,'دفعة ثانية — سباكة الأرضي','أبو محمد السبّاك',7000,'مقاولات',5,'نقد','ذاتي'),
+  E(-15,'نقل مخلفات — 3 قلابات','مؤسسة الرواسي للنقل',1350,'نقليات ومعدات',4,'نقد','ذاتي'),
+  E(-17,'رسوم طلب عداد الكهرباء','الشركة السعودية للكهرباء',6300,'رسوم حكومية',9,'سداد','ذاتي'),
+  E(-25,'عربون كهرباء','أبو فيصل الكهربائي',8000,'مقاولات',5,'تحويل','تمويل'),
+  E(-27,'عربون سباكة','أبو محمد السبّاك',7000,'مقاولات',5,'نقد','ذاتي'),
+  E(-22,'دفعة المباني والملحق','مؤسسة ركائز البنيان',23100,'مقاولات',4,'شيك','تمويل'),
+  E(-63,'صبة سقف الأول','مؤسسة ركائز البنيان',46200,'مقاولات',3,'شيك','تمويل'),
+  E(-91,'صبة سقف الأرضي','مؤسسة ركائز البنيان',46200,'مقاولات',3,'شيك','تمويل'),
+  E(-130,'إنجاز الأساسات','مؤسسة ركائز البنيان',46200,'مقاولات',2,'شيك','تمويل'),
+  E(-189,'دفعة مقدمة 20%','مؤسسة ركائز البنيان',46200,'مقاولات',3,'تحويل','ذاتي')
+ ];
+ const target=[43200,36500,126800,251300,68150,60390,0,34100,0,6300,0];
+ let open=0;db.stages.forEach((s,i)=>{const have=db.expenses.filter(e=>e.stage===i).reduce((a,e)=>a+e.a,0);s.opening=Math.max(0,target[i]-have);open+=s.opening});
+ const W={'مقاولات':.30,'مواد':.48,'أجور يومية':.07,'مكتب هندسي':.07,'نقليات ومعدات':.04,'رسوم حكومية':.02,'نثريات':.02};
+ CATK.forEach(k=>db.catOpening[k]=Math.round(open*W[k]));
+ const C=(name,role,type,terms,value,extras,progress,phone,rate,stage,more={})=>({id:uid(),name,role,type,terms,value,extras,progress,phone,rate,stage,retention:0,defect:'',...more});
+ db.contractors=[
+  C('مؤسسة ركائز البنيان','مقاول العظم','بالمتر','550 م² × 420 ر.س',231000,6500,100,'0551234876',4,3,{retention:10}),
+  C('أبو محمد السبّاك','سباكة','مصنعية فقط','المالك يوفّر المواد',28000,0,55,'0504771209',0,5,{defect:'تسريب عند اختبار ضغط حمام الدور الأول'}),
+  C('أبو فيصل الكهربائي','كهرباء وتيار خفيف','مصنعية فقط','المالك يوفّر المواد',32000,0,65,'0533418562',0,5),
+  C('شركة برودة للتكييف','تكييف مركزي','شامل مواد ومصنعية','8 وحدات دكت',64000,0,20,'0920004551',0,5),
+  C('أبو سعد المبلّط','تركيب بلاط ورخام','بالمتر','620 م² × 38 ر.س تركيب',23560,0,0,'0559087321',0,7),
+  C('مؤسسة لمسة للجبس','جبس وديكورات','مقطوعية','كامل الأدوار حسب المخطط',45000,0,0,'0566902114',0,7)
+ ];
+ db.workers=[
+  {id:uid(),n:'رحيم',job:'عامل',r:150,adv:200,a:['f','f','f','h','f','']},
+  {id:uid(),n:'سليم',job:'عامل',r:150,adv:0,a:['f','f','','f','f','']},
+  {id:uid(),n:'كمال',job:'مساعد نجّار',r:200,adv:300,a:['f','f','f','f','f','']},
+  {id:uid(),n:'أنور',job:'فني عزل',r:220,adv:0,a:['','f','f','f','h','']}
+ ];
+ db.gov=[
+  {id:uid(),n:'رخصة البناء',by:'بلدي',ref:'4471983',st:'سارية',info:'',fee:0,exp:addDays(880)},
+  {id:uid(),n:'عداد الكهرباء',by:'الشركة السعودية للكهرباء',ref:'SEC-90215',st:'قيد التنفيذ',info:'الرسوم مسددة — بانتظار المعاينة',fee:6300,exp:''},
+  {id:uid(),n:'عداد المياه والصرف',by:'شركة المياه الوطنية',ref:'',st:'ينقصه مستند',info:'مطلوب: مخطط الموقع العام المعتمد',fee:0,exp:''},
+  {id:uid(),n:'شهادة إتمام البناء',by:'بلدي',ref:'',st:'لم تبدأ',info:'تُطلب بعد اكتمال الواجهات والعدادات',fee:0,exp:''}
+ ];
+ const it=(k,v,lv,price)=>({id:uid(),k,v,lv,price});
+ db.rooms=[
+  {id:uid(),n:'مجلس الرجال',area:'32 م²',floor:'الأرضي',sw:['#D9D4CB','#B9A585','#2F3A40','#C8B596'],photos:[],items:[it('البلاط','بورسلان مطفي 120×60 — رمادي حجري',2,5800),it('الدهان','مطفي — كود SA-1024 أبيض حجري',1,1400),it('الجبس','إطار مخفي مع إضاءة خطية دافئة',2,6200),it('الإنارة','سبوتات 7 واط 3000K × 14',0,1960),it('المفاتيح','لوحات مطفية سوداء',3,900)]},
+  {id:uid(),n:'الصالة',area:'48 م²',floor:'الأرضي',sw:['#EDE9E2','#A9B4AA','#6E5B45','#D6CFC3'],photos:[],items:[it('البلاط','رخام كرارا مصقول',1,14400),it('الدهان','كود SA-2208 أخضر رمادي',0,1800)]},
+  {id:uid(),n:'غرفة النوم الرئيسية',area:'28 م²',floor:'الأول',sw:['#F1ECE4','#C9B6A0','#4A4F55','#E3D9CB'],photos:[],items:[it('الأرضية','باركيه HDF بلوط فاتح',2,4200)]},
+  {id:uid(),n:'المطبخ',area:'18 م²',floor:'الأرضي',sw:['#FFFFFF','#2E3438','#B08D57','#DADADA'],photos:[],items:[it('الخزائن','أكريليك أبيض + خشب جوزي',1,38000)]}
+ ];
+ db.defects=[
+  {id:uid(),t:'تسريب عند اختبار ضغط حمام الدور الأول',who:'أبو محمد السبّاك',lv:'عالية',d:addDays(-3),closed:false},
+  {id:uid(),t:'ميلان بسيط في عتبة نافذة غرفة النوم 2',who:'مؤسسة ركائز البنيان',lv:'متوسطة',d:addDays(-19),closed:false},
+  {id:uid(),t:'تعشيش خرساني في عمود الدرج',who:'مؤسسة ركائز البنيان',lv:'متوسطة',d:addDays(-87),closed:true}
+ ];
+ db.agree=[
+  {id:uid(),w:'أبو محمد السبّاك',t:'يعيد اختبار الضغط على حسابه بعد إصلاح التسريب، ولا تُصرف الدفعة الثالثة قبل نجاحه.',amt:0,d:addDays(-3)},
+  {id:uid(),w:'مؤسسة ركائز البنيان',t:'رفع جدار السور الجنوبي 60 سم يُضاف للمستخلص الأخير.',amt:6500,d:addDays(-35)},
+  {id:uid(),w:'معرض الدرّة للبلاط',t:'تثبيت سعر البورسلان 58 ر.س للمتر لمدة 3 أشهر مع توريد على دفعتين.',amt:0,d:addDays(-9)}
+ ];
+ db.docs=[['صك الأرض','ملكية'],['المخططات المعمارية — الإصدار 3','مخططات'],['المخططات الإنشائية — الإصدار 2','مخططات'],['تقرير فحص التربة','تقارير'],['عقد مقاول العظم','عقود'],['رخصة البناء','تصاريح'],['نتائج كسر المكعبات — سقف الأول','تقارير']].map(([t,c])=>({id:uid(),t,c,note:''}));
+ db.diary=[
+  {id:uid(),d:addDays(-1),tag:'إنجاز',t:'انتهاء تمديد مواسير التغذية للدور الأول',stage:5,photos:[]},
+  {id:uid(),d:addDays(-3),tag:'عيب',t:'اختبار الضغط لحمام الدور الأول نزل بعد ساعتين',stage:5,photos:[]},
+  {id:uid(),d:addDays(-5),tag:'قرار',t:'نقل مخرج التكييف في المجلس لفوق الباب',stage:5,photos:[]},
+  {id:uid(),d:addDays(-8),tag:'ملاحظة',t:'زيارة مندوب الكهرباء وتحديد مكان العداد',stage:9,photos:[]}
+ ];
+ db.walls=[{id:uid(),t:'المطبخ — جدار المغسلة',d:addDays(-5),note:'حار يمين، بارد يسار، صرف 4 إنش بالمنتصف'},{id:uid(),t:'حمام الأول — جدار المغسلة',d:addDays(-2),note:''},{id:uid(),t:'المجلس — جدار التلفزيون',d:addDays(-4),note:'تمديد HDMI وفيشين'}];
+ db.mats=[
+  {id:uid(),n:'حديد تسليح',u:'طن',need:42,bought:43.5,used:43.5,price:2650,lo:2450,hi:2700,sup:'مصنع الوطنية للحديد - 2650\nمؤسسة البناء الحديث - 2580\nحديد الخليج - 2720'},
+  {id:uid(),n:'خرسانة جاهزة',u:'م³',need:310,bought:318,used:318,price:265,lo:240,hi:270,sup:'خرسانة الرياض - 265\nمصنع اليمامة للخرسانة - 255'},
+  {id:uid(),n:'بلوك معزول 20 سم',u:'حبة',need:9800,bought:10400,used:9650,price:4.1,lo:3.6,hi:4.0,sup:'مصنع الجزيرة للبلوك - 4.1\nبلوك الصفا - 3.8'},
+  {id:uid(),n:'أسمنت',u:'كيس',need:620,bought:840,used:840,price:15,lo:14,hi:16,sup:''},
+  {id:uid(),n:'مواسير PPR',u:'متر',need:900,bought:760,used:610,price:6.5,lo:5.5,hi:7,sup:''}
+ ];
+ db.reminders=[
+  {id:uid(),t:'رش سقف الملحق بالماء',s:'الساعة 5:00 م · اليوم الخامس بعد الصبة',d:todayISO(),icon:'drop',done:false},
+  {id:uid(),t:'أجّل صبة السور للسبت',s:'متوقع حرارة 39° مع غبار',d:addDays(1),icon:'sun',done:false},
+  {id:uid(),t:'فك شدات سقف الملحق',s:'بعد 14 يومًا من الصبة',d:addDays(9),icon:'clock',done:false}
+ ];
+ db.warranty=[{id:uid(),t:'العزل المائي للسطح',dur:'10 سنوات',from:'',who:''},{id:uid(),t:'السخانات المركزية',dur:'5 سنوات',from:'',who:''},{id:uid(),t:'وحدات التكييف',dur:'7 سنوات على الضاغط',from:'',who:'شركة برودة للتكييف'}];
+ db.week={paid:false};
+ return db;
+}
+function emptyDB(o){
+ const fin=o.hasFin?o.fin:0;
+ return {v:2,demo:false,project:{name:'بيتي',plan:o.plan,area:o.area,budget:o.budget,self:Math.max(o.budget-fin,0)},
+  fin:{has:!!o.hasFin,approved:fin,installment:0,next:'',bank:'',tranches:[]},stages:makeStages(o.budget,false),catOpening:{},
+  expenses:[],contractors:[],workers:[],gov:[
+   {id:uid(),n:'رخصة البناء',by:'بلدي',ref:'',st:'لم تبدأ',info:'',fee:0,exp:''},{id:uid(),n:'عداد الكهرباء',by:'الشركة السعودية للكهرباء',ref:'',st:'لم تبدأ',info:'',fee:0,exp:''},
+   {id:uid(),n:'عداد المياه والصرف',by:'شركة المياه الوطنية',ref:'',st:'لم تبدأ',info:'',fee:0,exp:''},{id:uid(),n:'شهادة إتمام البناء',by:'بلدي',ref:'',st:'لم تبدأ',info:'',fee:0,exp:''}],
+  rooms:[],defects:[],agree:[],docs:[],diary:[],walls:[],mats:[],reminders:[],warranty:[],week:{paid:false}};
+}
+
+/* ================= التخزين ================= */
+const KEY='daftar-baiti-v2';
+let DB;
+try{DB=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){DB=null}
+if(!DB||DB.v!==2)DB=seedDemo();
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(DB));return true}catch(e){toast('مساحة الحفظ امتلأت، قلّل الصور');return false}}
+
+/* ================= الحسابات ================= */
+const expSum=f=>DB.expenses.filter(f).reduce((a,e)=>a+num(e.a),0);
+const stageById=id=>DB.stages.find(s=>s.id===id);
+const stageSpent=s=>num(s.opening)+expSum(e=>e.stage===s.id);
+const spent=()=>DB.stages.reduce((a,s)=>a+num(s.opening),0)+expSum(()=>true);
+const budget=()=>num(DB.project.budget)||1;
+const finIn=()=>DB.fin.tranches.filter(t=>t.st==='مصروفة').reduce((a,t)=>a+num(t.a),0);
+const cashIn=()=>num(DB.project.self)+finIn();
+const conTotal=c=>num(c.value)+num(c.extras);
+const conPaid=c=>expSum(e=>e.p===c.name);
+const curStage=()=>DB.stages.find(s=>s.st==='now')||DB.stages.find(s=>s.st!=='done')||DB.stages[DB.stages.length-1];
+const catTotals=()=>CATK.map(k=>({k,v:num(DB.catOpening[k])+expSum(e=>e.cat===k),c:CATC[k]}));
+const parties=()=>{const r=[];DB.expenses.forEach(e=>{if(e.p&&!r.includes(e.p))r.push(e.p)});DB.contractors.forEach(c=>{if(!r.includes(c.name))r.push(c.name)});return r};
+const supList=m=>String(m.sup||'').split('\n').map(l=>l.split(/[-–:]/)).filter(x=>x[0]&&x[0].trim()&&x.length>1).map(x=>[x[0].trim(),num(x[x.length-1])]);
+const isLeak=m=>num(m.need)>0&&num(m.bought)>num(m.need)*1.15;
+
+/* ================= الحالة ================= */
+const S={tab:'home',stack:[],jseg:'diary',week:27,sheet:null,form:null,filter:'الكل',room:0,toast:'',visit:true,q:'',qa:null,onb:null,sel:null,device:'phone'};
+let ONB_DONE=false;try{ONB_DONE=localStorage.getItem('db-onb2')==='1'}catch(e){}
+
+/* ================= مكوّنات ================= */
+function ring(p,size=118,stroke=11){const r=(size-stroke)/2,c=2*Math.PI*r,off=c*(1-Math.max(0,Math.min(p,1)));
+ return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="transform:rotate(-90deg)"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--line)" stroke-width="${stroke}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--accent)" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}"/></svg>`}
 const bar=(p,cls='')=>`<div class="bar ${cls}"><i style="width:${Math.max(0,Math.min(100,p))}%"></i></div>`;
 const icoBox=(n,bg,fg)=>`<span class="ico" style="background:${bg};color:${fg}">${ic(n,19)}</span>`;
 const stars=n=>Array.from({length:5},(_,i)=>`<span style="color:${i<n?'var(--warn)':'var(--line)'}">${ic('star',14,2)}</span>`).join('');
-function nav(title,{back=false,big=true,right=''}={}){
- return `<div class="navbar">${back?`<button class="backbtn" onclick="goBack()">${ic('back',20,2.2)}<span>رجوع</span></button>`:''}<h2 class="${big?'':'sm'}">${title}</h2>${right}</div>`;
-}
-function qr(seed=7){
- const n=21;let s=seed,out='';const rnd=()=>{s=(s*9301+49297)%233280;return s/233280};
- const finder=(x,y)=>(x>=0&&x<7&&y>=0&&y<7)&&(x==0||x==6||y==0||y==6||(x>=2&&x<=4&&y>=2&&y<=4));
- for(let y=0;y<n;y++)for(let x=0;x<n;x++){
-  let on;const inF=(a,b)=>a>=0&&a<8&&b>=0&&b<8;
-  if(inF(x,y))on=finder(x,y);else if(inF(x-13,y))on=finder(x-14,y);else if(inF(x,y-13))on=finder(x,y-14);else on=rnd()>.52;
-  if(on)out+=`<rect x="${x}" y="${y}" width="1.02" height="1.02"/>`;
- }
- return `<svg class="qr" viewBox="0 0 21 21" fill="#111" role="img" aria-label="رمز QR تجريبي">${out}</svg>`;
-}
+const addBtn=(type,extra='')=>`<button class="iconbtn" style="background:var(--accent);color:#fff;border:0" aria-label="إضافة" onclick="openForm('${type}',null${extra})">${ic('plus',20,2.4)}</button>`;
+function nav(title,{back=false,big=true,right=''}={}){return `<div class="navbar">${back?`<button class="backbtn" onclick="goBack()">${ic('back',20,2.2)}<span>رجوع</span></button>`:''}<h2 class="${big?'':'sm'}">${esc(title)}</h2>${right}</div>`}
+const empty=(t,type,label)=>`<div class="card" style="text-align:center;padding:28px 18px"><div class="muted" style="margin-bottom:12px">${t}</div>${type?`<button class="btn pri" onclick="openForm('${type}',null)">${ic('plus',18,2.2)} ${label}</button>`:''}</div>`;
+const thumb=(src,cls='',label='')=>src&&String(src).startsWith('data:')?`<div class="ph ${cls}" style="background:url('${src}') center/cover"><span>${esc(label)}</span></div>`:`<div class="ph ${src||'ph-conc'} ${cls}"><span>${esc(label)}</span></div>`;
+const PIPE=['فكرة','عينة','معتمد','مشترى','مركّب'];
+const DAYS=['سبت','أحد','إثنين','ثلاثاء','أربعاء','خميس'];
 
-/* ============ الشاشات ============ */
-function scrHome(w){
- const sp=spent(),pct=sp/P.budget,rem=P.budget-sp,liq=cashIn()-sp,cur=STAGES.find(s=>s.st==='now')||STAGES[0];
- const head=`<div class="greet row between" style="align-items:flex-end"><div><div class="eyebrow">${hijri(TODAY)} · ${greg(TODAY)}</div><p class="h">بيت حي الياسمين</p></div><button class="iconbtn" style="width:42px;height:42px" aria-label="اسأل دفترك" onclick="go('ask')">${ic('search',19)}</button></div>`;
- const visit=S.visit?`<div class="card" style="background:var(--blue-soft);box-shadow:none;margin-bottom:12px"><div class="row between"><div class="row" style="gap:8px;color:var(--blue)">${ic('home',18)}<b>أنت في الموقع الآن</b></div><button class="small muted" onclick="S.visit=false;render()">إخفاء</button></div><div class="row" style="gap:8px;margin-top:10px"><button class="btn" style="flex:1;padding:9px 6px" onclick="S.jseg='diary';tabTo('journal');toast('الكاميرا تفتح هنا في التطبيق')">${ic('camera',17)}صوّر</button><button class="btn" style="flex:1;padding:9px 6px" onclick="go('defects')">${ic('alert',17)}ملاحظة</button><button class="btn" style="flex:1;padding:9px 6px" onclick="go('workers')">${ic('users',17)}حضّر</button></div></div>`:'';
- const pulse=`<div class="card"><div class="pulse">
-   <div class="ringbox">${ring(pct)}<div class="c"><div><b class="num">${Math.round(pct*100)}%</b><span class="small muted">من الميزانية</span></div></div></div>
-   <div class="figs">
-    <div><div class="eyebrow">صرفت</div><div class="big">${sar(sp)}</div></div>
-    <div><div class="eyebrow">باقي من الميزانية</div><div style="font-weight:600">${sar(rem)}</div></div>
-    <div><div class="eyebrow">معك الآن للصرف</div><div style="font-weight:600;color:var(--good)">${sar(liq)}</div></div>
-   </div></div></div>`;
- const T=[
-  {i:'drop',bg:'var(--blue-soft)',fg:'var(--blue)',t:'رش سقف الملحق بالماء',s:'الساعة 5:00 م · اليوم الخامس بعد الصبة',on:"toast('سجّلت الرش. التذكير القادم بكرة 5:00 م')",end:'<span class="pill p-info">تم؟</span>'},
-  {i:'alert',bg:'var(--bad-soft)',fg:'var(--bad)',t:'لا تدفع للسبّاك الآن',s:'تسريب في حمام الأول، ينتظر إعادة الاختبار',on:"go('defects')"},
-  {i:'bank',bg:'var(--accent-soft)',fg:'var(--accent)',t:'قسط التمويل',s:'بعد 20 يومًا · '+greg(D('2026-10-27'),{day:'numeric',month:'long'}),on:"go('finance')",end:`<span class="amt">${sar(4850)}</span>`},
-  {i:'cube',bg:'var(--bad-soft)',fg:'var(--bad)',t:'الأسمنت أعلى من المعتاد بـ 35%',s:'220 كيس زيادة عن مرحلة العظم',on:"go('materials')"},
-  {i:'sun',bg:'var(--warn-soft)',fg:'var(--warn)',t:'أجّل صبة السور للسبت',s:'الخميس 39° مع غبار',on:"toast('حارس الطقس يتابع لك التوقعات')"}
- ];
- const today=`<div class="sect"><span class="h3">اليوم</span><span class="small muted num">${T.length} أمور</span></div>
- <div class="list attn">${T.map(x=>`<button class="item" onclick="${x.on}">${icoBox(x.i,x.bg,x.fg)}<div class="grow"><div class="t">${x.t}</div><div class="s">${x.s}</div></div>${x.end||ic('chev',16)}</button>`).join('')}</div>`;
- const stage=`<div class="sect"><span class="h3">وين وصل البناء</span><button class="link" onclick="tabTo('stages')">كل المراحل</button></div>
- <button class="card" style="width:100%;text-align:start;display:block" onclick="go('stage',${cur.id})">
-  <div class="row between"><div><div class="eyebrow">المرحلة ${cur.id} من 10</div><div class="h3" style="font-size:18px">${cur.name}</div></div><span class="pill p-acc num">${cur.pct}%</span></div>
-  <div style="margin:10px 0 6px">${bar(cur.pct)}</div>
-  <div class="row between small muted"><span>بدأت ${short(cur.from)}</span><span>تنتهي تقريبًا ${short(cur.to)}</span></div>
-  <div class="photos" style="margin-top:12px"><div class="ph ph-pipe"><span>تمديدات الأول</span></div><div class="ph ph-block"><span>بلوك الملحق</span></div><div class="ph ph-sky"><span>الواجهة</span></div></div>
- </button>`;
- if(w) return `${nav('الرئيسية')}<div class="scroll">${head}${visit}<div class="cols"><div>${pulse}${stage}</div><div>${today.replace('class="sect"','class="sect" style="margin-top:0"')}</div></div></div>`;
- return `<div style="height:6px"></div><div class="scroll">${head}${visit}${pulse}${today}${stage}</div>`;
-}
-
-function catRow(){
- const tot=CATS.reduce((a,c)=>a+c.v,0);
- return `<div class="card"><div class="row between"><span class="h3">توزيع الصرف</span><span class="small muted">الإجمالي ${sar(tot)}</span></div>
- <div style="display:flex;height:12px;border-radius:8px;overflow:hidden;margin:12px 0;gap:2px">${CATS.map(c=>`<i style="flex:${c.v};background:${c.c}"></i>`).join('')}</div>
- <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 14px">${CATS.map(c=>`<div class="row between small"><span class="row" style="gap:6px"><i style="width:9px;height:9px;border-radius:3px;background:${c.c};display:inline-block"></i>${c.k}</span><span class="num muted">${Math.round(c.v/tot*100)}%</span></div>`).join('')}</div></div>`;
-}
-function scrExpenses(w){
- const f=S.filter,list=EXP.filter(e=>f==='الكل'||e.cat===f||(f==='تمويل'&&e.src==='تمويل'));
- const month=EXP.filter(e=>e.d.startsWith('2026-10')).reduce((a,e)=>a+e.a,0);
- const chips=['الكل','مواد','مقاولات','أجور يومية','رسوم حكومية','تمويل'].map(c=>`<button class="chip ${c===f?'on':''}" onclick="S.filter='${c}';render()">${c}</button>`).join('');
- const items=list.map(e=>`<div class="item">${icoBox(e.cat==='مواد'?'cube':e.cat==='مقاولات'?'helmet':e.cat==='أجور يومية'?'users':e.cat==='رسوم حكومية'?'stamp':'truck','var(--app)','var(--ink)')}<div class="grow"><div class="t">${e.t}</div><div class="s">${e.p} · ${short(e.d)} · ${e.pay}${e.inv?' · 🧾':''}</div></div><div style="text-align:end"><div class="amt">${sar(e.a)}</div><div class="small muted">${STAGES[e.stage].name.split(' ')[0]}</div></div></div>`).join('');
- const summary=`<div class="cols" style="grid-template-columns:1fr 1fr;margin-bottom:12px"><div class="card kpi"><div class="l">هذا الشهر</div><div class="v">${sar(month)}</div></div><div class="card kpi"><div class="l">الإجمالي</div><div class="v">${sar(spent())}</div></div></div>`;
- const body=`<div class="chips" style="margin-bottom:10px">${chips}</div><div class="list">${items||'<div class="item muted">لا توجد قيود في هذا التصنيف</div>'}</div>`;
- const right=`<button class="iconbtn" aria-label="تصدير" onclick="toast('تم تجهيز كشف PDF شامل')">${ic('share',18)}</button>`;
- if(w) return `${nav('المصروفات',{right})}<div class="scroll"><div class="cols" style="grid-template-columns:1.4fr 1fr">${'<div>'+summary+body+'</div>'}<div class="stack">${catRow()}<div class="card small muted">كل قيد مرتبط بالمرحلة والجهة وطريقة الدفع ومصدر المال، مع صورة الفاتورة. التصدير PDF أو CSV.</div></div></div></div>`;
- return `${nav('المصروفات',{right})}<div class="scroll">${summary}${catRow()}<div style="height:12px"></div>${body}</div>`;
-}
-
-function scrStages(w){
- const items=STAGES.map(s=>{
-  const over=s.spent>s.budget;
-  const pill=s.st==='done'?'<span class="pill p-good">منجزة</span>':s.st==='now'?`<span class="pill p-acc num">${s.pct}%</span>`:(s.spent?'<span class="pill p-info">طلبيات مبكرة</span>':'<span class="pill p-mute">قادمة</span>');
-  return `<button class="st" onclick="go('stage',${s.id})"><span class="dot ${s.st}">${s.st==='done'?ic('check',15,2.6):s.id}</span><div class="card"><div class="row between"><b style="font-size:14.5px">${s.name}</b>${pill}</div><div class="small muted" style="margin:2px 0 8px">${s.sub}</div>${bar(s.budget?s.spent/s.budget*100:0,over?'bad':s.st==='done'?'good':'')}<div class="row between small" style="margin-top:6px"><span class="muted">${sar(s.spent)} من ${sar(s.budget)}</span>${over?`<span style="color:var(--bad);font-weight:600">تجاوز ${sar(s.spent-s.budget)}</span>`:''}</div></div></button>`;
- }).join('');
- const after=`<button class="st" onclick="go('memory')"><span class="dot todo">${ic('shield',14)}</span><div class="card"><div class="row between"><b>ما بعد السكن</b><span class="pill p-mute">ذاكرة البيت</span></div><div class="small muted">الضمانات والصيانة الدورية</div></div></button>`;
- return `${nav('المراحل')}<div class="scroll"><div class="${w?'cols':''}" style="${w?'grid-template-columns:1.3fr 1fr':''}"><div class="tl">${items}${after}</div>${w?`<div class="stack" style="position:sticky;top:0">${stageDetailBody(STAGES[5],true)}</div>`:''}</div></div>`;
-}
-const CHECKLIST={
- 5:['اختبار ضغط مواسير التغذية 10 بار لمدة 24 ساعة بدون نزول','تصوير كل الجدران قبل اللياسة (ما خلف الجدار)','مطابقة أماكن الأفياش والمفاتيح مع المخطط','تأريض لوحة الكهرباء الرئيسية وفحصه','ميول مواسير الصرف واختبار الماء','تثبيت مواسير التكييف وعزلها'],
- 6:['استقامة الزوايا وعدم وجود تموجات','تشريب اللياسة بالماء 3 أيام','اختبار غمر السطح 48 ساعة بعد العزل'],
- 3:['استلام حديد التسليح من المشرف قبل الصب','نتائج كسر المكعبات 7 و28 يومًا','عدم وجود تعشيش أو شروخ']
+/* ================= نماذج الإدخال العامة ================= */
+const stageOpts=()=>DB.stages.map(s=>[s.id,s.name]);
+const FORMS={
+ expense:{title:'مصروف',list:()=>DB.expenses,def:()=>({d:todayISO(),stage:curStage()?.id??0,cat:'مواد',pay:'نقد',src:'ذاتي'}),fields:[
+  ['a','المبلغ (ر.س)','num',{req:1,big:1}],['p','لمين؟','text',{req:1,sug:parties}],['t','البيان','text',{ph:'مقابل ماذا؟'}],['d','التاريخ','date'],
+  ['stage','المرحلة','select',{opts:stageOpts}],['cat','التصنيف','chips',{opts:CATK}],['pay','طريقة الدفع','chips',{opts:['نقد','تحويل','شيك','بطاقة','سداد']}],
+  ['src','من وين المال؟','chips',{opts:['ذاتي','تمويل']}],['photo','صورة الفاتورة','photo']]},
+ contractor:{title:'مقاول',list:()=>DB.contractors,def:()=>({type:'مقطوعية',progress:0,rate:0,value:0,extras:0,retention:0,stage:curStage()?.id??0}),fields:[
+  ['name','الاسم','text',{req:1}],['role','البند','text',{ph:'سباكة، كهرباء، عظم...'}],['phone','الجوال','tel'],['type','نوع التعاقد','chips',{opts:['مقطوعية','بالمتر','مصنعية فقط','شامل مواد ومصنعية']}],
+  ['terms','تفاصيل الاتفاق','text',{ph:'مثال: 550 م² × 420 ر.س'}],['value','قيمة الاتفاق (ر.س)','num'],['extras','أعمال إضافية (ر.س)','num'],['retention','محتجز ضمان %','num'],
+  ['stage','المرحلة','select',{opts:stageOpts}],['progress','نسبة الإنجاز','range'],['defect','ملاحظة مفتوحة عليه','text'],['rate','تقييمك','stars'],['photo','صورة العقد','photo']]},
+ worker:{title:'عامل',list:()=>DB.workers,def:()=>({r:150,adv:0,a:['','','','','','']}),fields:[['n','الاسم','text',{req:1}],['job','المهنة','text'],['r','اليومية (ر.س)','num'],['adv','سلف هذا الأسبوع (ر.س)','num'],['phone','الجوال','tel']]},
+ stage:{title:'مرحلة',list:()=>DB.stages,def:()=>({st:'todo',pct:0,budget:0,opening:0,checks:[]}),fields:[['name','اسم المرحلة','text',{req:1}],['sub','الوصف','text'],['budget','الميزانية (ر.س)','num'],['st','الحالة','chips',{opts:[['todo','قادمة'],['now','جارية'],['done','منجزة']]}],['pct','نسبة الإنجاز','range'],['from','البداية','date'],['to','النهاية المتوقعة','date']]},
+ check:{title:'نقطة فحص',list:()=>stageById(S.form.parent).checks,def:()=>({on:false}),fields:[['t','النقطة','text',{req:1,ph:'مثال: اختبار الضغط بحضوري'}]]},
+ diary:{title:'يومية',list:()=>DB.diary,def:()=>({d:todayISO(),tag:'ملاحظة',stage:curStage()?.id??0,photos:[]}),fields:[['tag','النوع','chips',{opts:['إنجاز','ملاحظة','قرار','عيب']}],['t','وش صار؟','textarea',{req:1}],['photos','الصور','photos'],['d','التاريخ','date'],['stage','المرحلة','select',{opts:stageOpts}]]},
+ defect:{title:'عيب أو ملاحظة',list:()=>DB.defects,def:()=>({d:todayISO(),lv:'متوسطة',closed:false}),fields:[['t','وصف العيب','textarea',{req:1}],['who','المسؤول','text',{sug:()=>DB.contractors.map(c=>c.name)}],['lv','الأولوية','chips',{opts:['عالية','متوسطة','منخفضة']}],['photo','صورة العيب','photo'],['after','صورة بعد الإصلاح','photo'],['d','التاريخ','date'],['closed','تم الإصلاح وأُغلقت','toggle']]},
+ agree:{title:'اتفاق',list:()=>DB.agree,def:()=>({d:todayISO()}),fields:[['w','مع مين؟','text',{req:1,sug:()=>DB.contractors.map(c=>c.name)}],['t','وش اتفقتوا عليه؟','textarea',{req:1}],['amt','المبلغ إن وجد (ر.س)','num'],['d','التاريخ','date'],['photo','صورة رسالة أو مستند','photo']]},
+ doc:{title:'مستند',list:()=>DB.docs,def:()=>({c:'عقود'}),fields:[['t','اسم المستند','text',{req:1}],['c','التصنيف','chips',{opts:['ملكية','مخططات','عقود','تصاريح','تقارير','ضمانات','فواتير']}],['photo','صورة المستند','photo'],['note','ملاحظة','text']]},
+ gov:{title:'معاملة',list:()=>DB.gov,def:()=>({st:'لم تبدأ'}),fields:[['n','المعاملة','text',{req:1}],['by','الجهة','text'],['ref','رقم الطلب','text'],['st','الحالة','chips',{opts:['لم تبدأ','قيد التنفيذ','ينقصه مستند','مكتملة','سارية']}],['info','ملاحظات أو المطلوب','textarea'],['fee','الرسوم (ر.س)','num'],['exp','تاريخ الانتهاء','date']]},
+ material:{title:'مادة',list:()=>DB.mats,def:()=>({u:'حبة'}),fields:[['n','الصنف','text',{req:1}],['u','الوحدة','chips',{opts:['طن','م³','حبة','كيس','متر','م²','لفة']}],['need','الكمية المطلوبة','num'],['bought','المشترى','num'],['used','المستخدم','num'],['price','سعرك للوحدة (ر.س)','num'],['lo','أقل سعر بالسوق','num'],['hi','أعلى سعر بالسوق','num'],['sup','الموردين وأسعارهم','textarea',{ph:'سطر لكل مورد: الاسم - السعر'}]]},
+ room:{title:'غرفة',list:()=>DB.rooms,def:()=>({floor:'الأرضي',items:[],photos:[],sw:['#E8E3DA','#C8B596','#4A4F55','#D6CFC3']}),fields:[['n','اسم الغرفة','text',{req:1}],['area','المساحة','text',{ph:'مثال: 24 م²'}],['floor','الدور','chips',{opts:['الأرضي','الأول','الملحق']}],['photos','لوحة الإلهام (صور)','photos']]},
+ choice:{title:'اختيار',list:()=>DB.rooms.find(r=>r.id===S.form.parent).items,def:()=>({lv:0}),fields:[['k','البند','text',{req:1,ph:'بلاط، دهان، إنارة...'}],['v','المواصفات','text',{ph:'الماركة، الكود، المقاس'}],['lv','الحالة','chips',{opts:PIPE.map((p,i)=>[i,p])}],['price','التكلفة (ر.س)','num'],['photo','صورة','photo']]},
+ reminder:{title:'تذكير',list:()=>DB.reminders,def:()=>({d:todayISO(),icon:'clock',done:false}),fields:[['t','ذكّرني بـ','text',{req:1}],['s','تفاصيل','text'],['d','التاريخ','date'],['icon','النوع','chips',{opts:[['drop','خرسانة'],['coin','دفعة'],['sun','طقس'],['clock','عام']]}],['done','تم','toggle']]},
+ warranty:{title:'ضمان',list:()=>DB.warranty,def:()=>({}),fields:[['t','البند','text',{req:1}],['dur','مدة الضمان','text',{ph:'مثال: 10 سنوات'}],['from','يبدأ من','date'],['who','الجهة أو الفني','text'],['photo','صورة الضمان','photo']]},
+ wall:{title:'جدار موثّق',list:()=>DB.walls,def:()=>({d:todayISO()}),fields:[['t','الجدار','text',{req:1,ph:'المطبخ — جدار المغسلة'}],['photo','صورة قبل اللياسة','photo'],['note','وين يمر كل تمديد؟','textarea'],['d','التاريخ','date']]},
+ tranche:{title:'دفعة تمويل',list:()=>DB.fin.tranches,def:()=>({st:'قادمة'}),fields:[['name','اسم الدفعة','text',{req:1}],['a','المبلغ (ر.س)','num'],['st','الحالة','chips',{opts:['مصروفة','قادمة','لاحقًا']}]]},
+ finance:{title:'بيانات التمويل',single:()=>DB.fin,fields:[['bank','جهة التمويل','text'],['approved','المبلغ المعتمد (ر.س)','num'],['installment','القسط الشهري (ر.س)','num'],['next','تاريخ القسط القادم','date']]},
+ project:{title:'بيانات المشروع',single:()=>DB.project,fields:[['name','اسم المشروع','text',{req:1}],['plan','نوع البيت','text'],['area','مسطحات البناء (م²)','num'],['budget','الميزانية الكاملة (ر.س)','num'],['self','من مالك الخاص (ر.س)','num']]}
 };
-function stageDetailBody(s,compact){
- const list=(CHECKLIST[s.id]||['استلام الأعمال من المشرف','مطابقة الكميات مع الاتفاق','عدم وجود ملاحظات مفتوحة']);
- const key=s.id,done=list.filter((_,i)=>S.checks[key+'-'+i]).length;
- const cons=CONTRACTORS.filter(c=>(s.id===5&&[2,3,6].includes(c.id))||(s.id<=4&&s.id>=1&&c.id===1)||(s.id===7&&[4,5].includes(c.id)));
- return `
- <div class="card"><div class="row between"><div><div class="eyebrow">المرحلة ${s.id}</div><div class="h3" style="font-size:19px">${s.name}</div></div>${s.st==='now'?`<span class="pill p-acc num">${s.pct}%</span>`:''}</div>
- <div class="minigrid" style="grid-template-columns:repeat(3,1fr);margin-top:12px"><div class="kpi"><div class="l">الميزانية</div><div class="v" style="font-size:15px">${sar(s.budget)}</div></div><div class="kpi"><div class="l">المصروف</div><div class="v" style="font-size:15px">${sar(s.spent)}</div></div><div class="kpi"><div class="l">المدة</div><div class="v" style="font-size:13px">${short(s.from)} ← ${short(s.to)}</div></div></div></div>
- <div class="sect"><span class="h3">قائمة الفحص قبل الدفع</span><span class="pill ${done===list.length?'p-good':'p-warn'} num">${done}/${list.length}</span></div>
- <div class="list">${list.map((t,i)=>`<button class="chk ${S.checks[key+'-'+i]?'on':''}" onclick="S.checks['${key}-${i}']=!S.checks['${key}-${i}'];render()"><span class="box">${ic('check',14,3)}</span><span>${t}</span></button>`).join('')}</div>
- <div class="small muted" style="margin:8px 4px">${done===list.length?'كل النقاط مكتملة. تقدر تسلّم الدفعة وأنت مطمئن.':'أكمل النقاط قبل تسليم أي دفعة لمقاولي هذه المرحلة.'}</div>
- ${TIPS[s.id]?`<div class="sect"><span class="h3">لو كنت أعرف</span><span class="small muted">من ملاك سبقوك</span></div><div class="card stack" style="gap:10px">${TIPS[s.id].map(t=>`<div class="row" style="align-items:flex-start;gap:8px"><span style="color:var(--accent);flex:none;margin-top:2px">${ic('spark',16)}</span><span>${t}</span></div>`).join('')}</div>`:''}
- ${cons.length?`<div class="sect"><span class="h3">مقاولو المرحلة</span></div><div class="list">${cons.map(c=>`<button class="item" onclick="go('contractor',${c.id})">${icoBox('helmet','var(--stone-soft)','var(--ink)')}<div class="grow"><div class="t">${c.name}</div><div class="s">${c.role} · ${c.type}</div></div><span class="small muted">${c.status}</span></button>`).join('')}</div>`:''}
- ${compact?'':`<div class="sect"><span class="h3">صور المرحلة</span></div><div class="photos"><div class="ph ph-pipe"><span>مواسير الأول</span></div><div class="ph ph-block"><span>علب الكهرباء</span></div><div class="ph ph-rebar"><span>قبل الصب</span></div></div>`}`;
+const NUMT=['num','range'];
+function openForm(type,id,parent){
+ const F=FORMS[type];let data;
+ if(F.single)data=clone(F.single());
+ else{S.form={type,id,parent};const it=id?F.list().find(x=>String(x.id)===String(id)):null;data=it?clone(it):{...F.def()}}
+ S.form={type,id,parent,data,del:0};render();
 }
-function scrStage(id,w){const s=STAGES[id];return `${nav(s.name,{back:true,big:false})}<div class="scroll">${stageDetailBody(s,false)}</div>`}
-
-function buildingSVG(wk){
- const g=[];const st=v=>wk>=v;
- const conc='#9a958d',block='#c8bfae',plaster='#e6dfd2',stone='#d3bf9a',dark='#5a554e';
- g.push(`<rect x="0" y="150" width="300" height="50" fill="#b9a07a"/>`);
- if(wk<6) g.push(`<rect x="50" y="150" width="200" height="${Math.min(30,wk*6)}" fill="#8a7255"/>`);
- if(st(4)&&wk<9) g.push(`<rect x="60" y="150" width="180" height="10" fill="${conc}"/>`);
- if(st(5)) [70,120,180,230].forEach(x=>g.push(`<rect x="${x-6}" y="${st(9)?150:142}" width="12" height="${st(9)?8:8}" fill="${conc}"/>`));
- const wallFill=st(38)?stone:st(30)?plaster:block;
- // ground floor
- if(st(9)){
-  if(st(23)) g.push(`<rect x="62" y="104" width="176" height="46" fill="${wallFill}"/>`);
-  else if(st(19)) g.push(`<rect x="62" y="${150-Math.min(46,(wk-18)*12)}" width="176" height="${Math.min(46,(wk-18)*12)}" fill="${block}"/>`);
-  [64,118,176,232].forEach(x=>g.push(`<rect x="${x}" y="${st(10)?104:130}" width="6" height="${st(10)?46:20}" fill="${conc}"/>`));
- }
- if(st(13)) g.push(`<rect x="56" y="98" width="188" height="7" fill="${conc}"/>`);
- // first floor
- if(st(15)){
-  if(st(24)) g.push(`<rect x="62" y="56" width="176" height="42" fill="${wallFill}"/>`);
-  [64,118,176,232].forEach(x=>g.push(`<rect x="${x}" y="56" width="6" height="42" fill="${conc}"/>`));
- }
- if(st(18)) g.push(`<rect x="56" y="50" width="188" height="7" fill="${conc}"/>`);
- // annex
- if(st(20)){
-  if(st(25)) g.push(`<rect x="160" y="26" width="76" height="24" fill="${wallFill}"/>`);
-  [162,230].forEach(x=>g.push(`<rect x="${x}" y="26" width="6" height="24" fill="${conc}"/>`));
- }
- if(st(22)) g.push(`<rect x="156" y="20" width="84" height="6" fill="${conc}"/>`);
- if(st(18)&&st(24)) g.push(`<rect x="56" y="44" width="100" height="6" fill="${st(38)?stone:block}"/>`);
- // openings
- if(st(23)){
-  const win=st(38)?'#2f4a5e':dark;
-  [[84,114,22,24],[140,114,26,24],[196,114,22,24],[84,66,22,22],[140,66,26,22],[196,66,22,22],[182,30,24,14]].forEach(([x,y,w,h],i)=>{if(i<6||st(25))g.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${win}" opacity="${st(38)?1:.55}"/>`)});
- }
- if(st(23)&&!st(38)) g.push(`<rect x="114" y="122" width="16" height="28" fill="${dark}" opacity=".5"/>`);
- if(st(40)){ g.push(`<rect x="114" y="120" width="16" height="30" fill="#6b4a2c"/>`); g.push(`<rect x="20" y="132" width="34" height="18" fill="${stone}"/><rect x="246" y="132" width="34" height="18" fill="${stone}"/>`);}
- if(st(42)){ [[30,128],[268,124]].forEach(([x,y])=>g.push(`<rect x="${x-2}" y="${y}" width="4" height="${150-y}" fill="#6b4a2c"/><circle cx="${x}" cy="${y-6}" r="11" fill="#5f8a4f"/>`)); }
- // scaffold & crane feel while building
- if(st(9)&&!st(36)) g.push(`<g stroke="${dark}" stroke-width=".8" opacity=".5">${[50,250].map(x=>`<line x1="${x}" y1="150" x2="${x}" y2="${st(15)?40:96}"/>`).join('')}</g>`);
- return `<svg viewBox="0 0 300 200" width="100%" height="100%" preserveAspectRatio="xMidYMax meet" role="img" aria-label="البيت في الأسبوع ${wk}">${g.join('')}</svg>`;
+function closeForm(){S.form=null;render()}
+function fset(k,v,re){S.form.data[k]=v;if(re)render()}
+function saveForm(){
+ const f=S.form,F=FORMS[f.type],d=f.data;
+ for(const [k,l,t,o] of F.fields){if(NUMT.includes(t)||t==='num')d[k]=num(d[k]);if(o&&o.req&&(d[k]===''||d[k]==null||(t==='num'&&!d[k]))){f.miss=k;render();toast('أكمل: '+l);return}}
+ if(F.single){Object.assign(F.single(),d)}
+ else{const L=F.list();if(f.id){const i=L.findIndex(x=>String(x.id)===String(f.id));if(i>-1){
+   if(f.type==='contractor'&&L[i].name!==d.name)DB.expenses.forEach(e=>{if(e.p===L[i].name)e.p=d.name});
+   L[i]=d}}else{d.id=f.type==='stage'?Math.max(-1,...DB.stages.map(s=>s.id))+1:uid();L.push(d)}}
+ if(f.type==='stage'&&d.st==='now')DB.stages.forEach(s=>{if(s.id!==d.id&&s.st==='now')s.st='todo'});
+ persist();S.form=null;toast(f.id||F.single?'حُفظ التعديل':'أُضيف');
 }
-function weekLabel(wk){
- if(wk<6)return 'الحفر والإحلال';if(wk<9)return 'الأساسات';if(wk<23)return 'الهيكل الخرساني';if(wk<26)return 'المباني';if(wk<=28)return 'التمديدات';if(wk<36)return 'اللياسة والعزل';if(wk<40)return 'التشطيبات والواجهات';return 'تسليم المفتاح';
+function delForm(){
+ const f=S.form;if(!f.del){f.del=1;render();return}
+ const L=FORMS[f.type].list();const i=L.findIndex(x=>String(x.id)===String(f.id));if(i>-1)L.splice(i,1);
+ if(f.type==='stage')DB.expenses.forEach(e=>{if(e.stage===f.id)e.stage=curStage()?.id??0});
+ persist();S.form=null;if(['contractor','stage'].includes(f.type))S.stack=S.stack.filter(x=>!(x[0]===f.type&&String(x[1])===String(f.id)));toast('حُذف');
 }
-function scrJournal(w){
- const seg=`<div class="seg" style="margin-bottom:14px">${[['diary','اليوميات'],['lapse','عدسة الزمن'],['wall','ما خلف الجدار']].map(([k,t])=>`<button class="${S.jseg===k?'on':''}" onclick="S.jseg='${k}';render()">${t}</button>`).join('')}</div>`;
- let body='';
- if(S.jseg==='diary'){
-  const week=`<div class="card" style="margin-bottom:12px"><div class="row between"><span class="h3">ملخص الأسبوع 27</span><span class="pill p-acc">جاهز للإرسال</span></div>
-  <div class="row" style="gap:8px;margin:12px 0"><div style="flex:1"><div class="tlapse" style="aspect-ratio:4/3">${buildingSVG(23)}</div><div class="small muted" style="text-align:center;margin-top:4px">قبل شهر</div></div><div style="flex:1"><div class="tlapse" style="aspect-ratio:4/3">${buildingSVG(27)}</div><div class="small muted" style="text-align:center;margin-top:4px">الآن</div></div></div>
-  <div class="small">هذا الأسبوع صرفنا 25,070 ر.س، وخلصت تمديدات الدور الأول، والتمديدات كاملة وصلت 60%.</div>
-  <button class="btn pri blk" style="margin-top:12px" onclick="toast('الملخص جاهز للإرسال عبر واتساب')">${ic('share',17)} أرسله للعائلة</button></div>`;
-  body=week+`<div class="stack">${DIARY.map(e=>`<div class="card entry"><div class="when"><b class="num">${D(e.d).getDate()}</b><span class="small muted">${greg(D(e.d),{month:'short'})}</span></div><div style="flex:1;min-width:0"><div class="row between"><span class="pill ${e.tc}">${e.tag}</span><span class="small muted">${hijri(D(e.d),{day:'numeric',month:'short'})}</span></div><div style="font-weight:600;margin:6px 0 4px">${e.t}</div><div class="small muted">${e.n}</div></div><div class="ph ${e.ph}" style="width:64px;flex:none"></div></div>`).join('')}</div>`;
- }else if(S.jseg==='lapse'){
-  const wk=S.week,start=D('2026-04-05'),d=new Date(start.getTime()+(wk-1)*7*864e5),future=wk>27;
-  body=`<div class="card"><div class="tlapse">${buildingSVG(wk)}${future?'<span class="pill p-info" style="position:absolute;top:10px;right:10px">معاينة مستقبلية</span>':''}<span class="pill p-mute" style="position:absolute;top:10px;left:10px;background:var(--card)">نقطة التصوير: الركن الشمالي</span></div>
-  <div class="row between" style="margin:12px 0 4px"><div><div class="h3">الأسبوع <span class="num">${wk}</span> · ${weekLabel(wk)}</div><div class="small muted">${greg(d)} · ${hijri(d)}</div></div></div>
-  <input id="wk" type="range" min="1" max="44" value="${wk}" aria-label="الأسبوع" oninput="S.week=+this.value;render()">
-  <div class="row between small muted"><span>بداية الحفر</span><span>اليوم</span><span>المفتاح</span></div>
-  <div class="row" style="margin-top:12px;gap:8px"><button class="btn pri" style="flex:1" onclick="playLapse()">${ic('camera',18)} شغّل الفيديو المتسارع</button></div></div>
-  <div class="card small muted" style="margin-top:12px">كل أسبوع يذكّرك التطبيق بالتصوير من نفس النقطة، ويعرض لك الصورة السابقة شفافة فوق الكاميرا لتضبط الزاوية نفسها.</div>`;
- }else{
-  body=`<div class="card"><div class="row between" style="margin-bottom:10px"><div><div class="h3">جدار المطبخ — الدور الأرضي</div><div class="small muted">صُوّر قبل اللياسة · ${short('2026-10-02')}</div></div><button class="chip ${S.wall?'on':''}" onclick="S.wall=!S.wall;render()">${S.wall?'إخفاء':'إظهار'} التمديدات</button></div>
-  <div style="border-radius:14px;overflow:hidden;aspect-ratio:4/3;max-width:100%;background:${S.wall?'#cfc8bc':'var(--stone-soft)'};position:relative">
-   <svg viewBox="0 0 400 300" width="100%" height="100%"><rect width="400" height="300" fill="${S.wall?'#cbc4b8':'#ece5d8'}"/>${S.wall?`<g fill="none" stroke-width="7" stroke-linecap="round"><path d="M30 60H200V230" stroke="#d64535"/><path d="M60 90H260V230" stroke="#3b7bd0"/><path d="M370 40V160H300" stroke="#e6a52a" stroke-width="4"/><path d="M370 160V250H330" stroke="#e6a52a" stroke-width="4"/><path d="M120 300V250" stroke="#7a7a7a" stroke-width="12"/></g><g fill="#fff" stroke="#333" stroke-width="2"><rect x="190" y="222" width="22" height="16"/><rect x="250" y="222" width="22" height="16"/><rect x="290" y="150" width="20" height="20"/><rect x="320" y="240" width="20" height="20"/></g><g font-size="13" font-family="-apple-system, SF Arabic, system-ui, sans-serif" fill="#222"><text x="205" y="54" text-anchor="middle">حار</text><text x="262" y="84" text-anchor="middle">بارد</text><text x="360" y="32">كهرباء</text><text x="132" y="290">صرف 4"</text></g>`:'<text x="200" y="155" text-anchor="middle" font-size="16" fill="#8a7c66" font-family="-apple-system, SF Arabic, system-ui, sans-serif">الجدار بعد اللياسة والدهان</text>'}</svg>
-  </div>
-  <div class="row small" style="gap:12px;margin-top:10px;flex-wrap:wrap"><span class="row" style="gap:4px"><i style="width:10px;height:10px;background:#d64535;border-radius:3px;display:inline-block"></i>تغذية حار</span><span class="row" style="gap:4px"><i style="width:10px;height:10px;background:#3b7bd0;border-radius:3px;display:inline-block"></i>تغذية بارد</span><span class="row" style="gap:4px"><i style="width:10px;height:10px;background:#e6a52a;border-radius:3px;display:inline-block"></i>كهرباء</span></div></div>
-  <div class="sect"><span class="h3">جدران موثّقة</span><span class="small muted num">23 جدار</span></div>
-  <div class="list">${['حمام الدور الأول — جدار المغسلة','المجلس — جدار التلفزيون','غرفة النوم الرئيسية — خلف السرير'].map(t=>`<div class="item">${icoBox('wall','var(--stone-soft)','var(--ink)')}<div class="grow"><div class="t">${t}</div><div class="s">صور مقاسة بالمتر · مرتبطة بالمخطط</div></div>${ic('chev',16)}</div>`).join('')}</div>`;
- }
- return `${nav('اليوميات')}<div class="scroll">${seg}${w?`<div style="max-width:640px">${body}</div>`:body}</div>`;
+function compress(file){return new Promise(res=>{if(!file||!file.type.startsWith('image/')){toast('اختر صورة');res(null);return}
+ const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const m=1000,sc=Math.min(1,m/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.72))};img.onerror=()=>res(null);img.src=r.result};r.readAsDataURL(file)})}
+async function pickPhoto(k,multi,inp){const files=[...(inp.files||[])];if(!files.length)return;const target=S.form?S.form.data:S.sheet;
+ for(const f of files){const d=await compress(f);if(!d)continue;if(multi)target[k]=(target[k]||[]).concat(d);else target[k]=d}render()}
+function dropPhoto(k,i){const t=S.form?S.form.data:S.sheet;if(i==null)t[k]=null;else t[k].splice(i,1);render()}
+function fieldHTML([k,l,t,o={}],d,miss){
+ const v=d[k],cls=`field ${miss===k?'hot':''}`,id='ff-'+k;
+ if(t==='text'||t==='tel'){const sug=o.sug?o.sug().filter(x=>x&&x!==v).slice(0,6):[];
+  return `<div class="${cls}"><label for="${id}">${l}</label><input id="${id}" ${t==='tel'?'inputmode="tel" dir="ltr" style="text-align:right"':''} placeholder="${esc(o.ph||'')}" value="${esc(v)}" oninput="fset('${k}',this.value)"></div>${sug.length?`<div class="chips" style="margin-top:-4px">${sug.map(x=>`<button class="chip" onclick="fset('${k}',this.textContent,1)">${esc(x)}</button>`).join('')}</div>`:''}`}
+ if(t==='num')return `<div class="${cls} ${o.big?'amtfield':''}"><label for="${id}">${l}</label><input id="${id}" inputmode="decimal" placeholder="0" value="${v||v===0&&!o.big?esc(v):''}" oninput="fset('${k}',this.value)"></div>`;
+ if(t==='date')return `<div class="${cls}"><label for="${id}">${l}</label><input id="${id}" type="date" value="${esc(v||'')}" oninput="fset('${k}',this.value)"></div>`;
+ if(t==='textarea')return `<div class="${cls}"><label for="${id}">${l}</label><textarea id="${id}" rows="3" placeholder="${esc(o.ph||'')}" oninput="fset('${k}',this.value)">${esc(v)}</textarea></div>`;
+ if(t==='select')return `<div class="${cls}"><label for="${id}">${l}</label><select id="${id}" onchange="fset('${k}',isNaN(this.value)?this.value:+this.value)">${o.opts().map(([a,b])=>`<option value="${a}" ${String(a)===String(v)?'selected':''}>${esc(b)}</option>`).join('')}</select></div>`;
+ if(t==='chips')return `<div><div class="small muted" style="margin:0 4px 6px">${l}</div><div class="chips" style="flex-wrap:wrap">${o.opts.map(x=>{const [a,b]=Array.isArray(x)?x:[x,x];return `<button class="chip ${String(a)===String(v)?'on':''}" onclick="fset('${k}',${typeof a==='number'?a:`'${a}'`},1)">${esc(b)}</button>`}).join('')}</div></div>`;
+ if(t==='range')return `<div class="field"><label for="${id}">${l}: <b id="${id}-v" class="num">${num(v)}%</b></label><input id="${id}" type="range" min="0" max="100" step="5" value="${num(v)}" oninput="fset('${k}',+this.value);document.getElementById('${id}-v').textContent=this.value+'%'"></div>`;
+ if(t==='stars')return `<div class="field row between"><label style="margin:0">${l}</label><span class="row" style="gap:2px">${[1,2,3,4,5].map(i=>`<button aria-label="${i}" onclick="fset('${k}',${i===num(v)?0:i},1)" style="color:${i<=num(v)?'var(--warn)':'var(--line)'}">${ic('star',22,2)}</button>`).join('')}</span></div>`;
+ if(t==='toggle')return `<div class="list"><button class="chk ${v?'on':''}" onclick="fset('${k}',!S.form.data['${k}'],1)"><span class="box">${ic('check',14,3)}</span><span>${l}</span></button></div>`;
+ if(t==='photo')return `<div><div class="small muted" style="margin:0 4px 6px">${l}</div>${v?`<div class="pthumb"><img src="${v}" alt=""><button aria-label="إزالة" onclick="dropPhoto('${k}')">${ic('x',14,2.6)}</button></div>`:`<label class="addphoto">${ic('camera',20)}<span>التقط أو اختر صورة</span><input type="file" accept="image/*" hidden onchange="pickPhoto('${k}',false,this)"></label>`}</div>`;
+ if(t==='photos'){const a=v||[];return `<div><div class="small muted" style="margin:0 4px 6px">${l}</div><div class="pgrid">${a.map((p,i)=>`<div class="pthumb"><img src="${p}" alt=""><button aria-label="إزالة" onclick="dropPhoto('${k}',${i})">${ic('x',14,2.6)}</button></div>`).join('')}<label class="addphoto sq">${ic('plus',22)}<span>صورة</span><input type="file" accept="image/*" multiple hidden onchange="pickPhoto('${k}',true,this)"></label></div></div>`}
+ return '';
 }
-
-const MODS=[
- ['contractors','المقاولون','helmet','6 مقاولين · المتبقي لهم 82,160 ر.س'],
- ['workers','العمالة اليومية','users','4 عمال · مسيّر هذا الأسبوع'],
- ['materials','المواد والكميات','cube','تنبيه: الأسمنت فوق المعتاد'],
- ['finance','التمويل','bank','مصروف 420,000 من 700,000'],
- ['gov','المعاملات الحكومية','stamp','معاملة تحتاج مستندًا'],
- ['design','اختيارات التصميم','palette','بطاقات الغرف وأكواد الألوان'],
- ['docs','المستندات','file','7 مستندات مؤرشفة'],
- ['defects','العيوب والملاحظات','alert','2 مفتوحة'],
- ['agree','الاتفاقات والقرارات','hand','3 اتفاقات موثقة'],
- ['memory','ذاكرة البيت','shield','الضمانات والصيانة بعد السكن'],
- ['key','لحظة المفتاح','key','تُفتح يوم التسليم']
-];
-const GROUPS=[['الناس',['contractors','workers']],['الفلوس',['finance','materials']],['الأوراق',['gov','docs','agree','defects']],['البيت',['design','key','memory']]];
-function scrMore(){
- const M=Object.fromEntries(MODS.map(m=>[m[0],m]));
- return `${nav('المزيد')}<div class="scroll">${GROUPS.map(([g,ks],gi)=>`<div class="sect" ${gi===0?'style="margin-top:4px"':''}><span class="h3">${g}</span></div><div class="list">${ks.map(k=>{const [,t,i,s2]=M[k];return `<button class="item" onclick="go('${k}')">${icoBox(i,'var(--stone-soft)','var(--ink)')}<div class="grow"><div class="t">${t}</div><div class="s">${s2}</div></div>${ic('chev',16)}</button>`}).join('')}</div>`).join('')}
- <div class="sect"><span class="h3">الإعدادات</span></div>
- <div class="list"><button class="item" onclick="startOnb()">${icoBox('home','var(--app)','var(--ink)')}<div class="grow"><div class="t">إعداد المشروع</div><div class="s">المساحة، الميزانية، التمويل</div></div>${ic('chev',16)}</button><div class="item">${icoBox('lock','var(--app)','var(--ink)')}<div class="grow"><div class="t">القفل بـ Face ID</div></div><span class="pill p-good">مفعّل</span></div><div class="item">${icoBox('users','var(--app)','var(--ink)')}<div class="grow"><div class="t">المشاركة</div><div class="s">أم عبدالله (إضافة) · م. خالد المشرف (مشاهدة)</div></div></div><div class="item">${icoBox('share','var(--app)','var(--ink)')}<div class="grow"><div class="t">نسخة احتياطية كاملة</div><div class="s">آخر نسخة على iCloud اليوم 6:12 ص</div></div></div></div></div>`;
-}
-
-function contractorBody(c){
- const total=c.value+c.extras,rem=total-c.paid;
- return `<div class="card"><div class="row" style="gap:12px">${icoBox('helmet','var(--stone-soft)','var(--ink)')}<div style="flex:1;min-width:0"><div class="h3" style="font-size:18px">${c.name}</div><div class="small muted">${c.role} · ${c.status}</div></div></div>
- <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap"><span class="pill p-info">${c.type}</span><span class="pill p-mute">${c.terms}</span></div>
- <div class="row small" style="margin-top:12px;gap:8px"><span class="num" style="user-select:all">${c.phone}</span><button class="chip" onclick="toast('نُسخ الرقم')">نسخ</button><button class="chip" onclick="toast('يفتح واتساب في التطبيق الحقيقي')">واتساب</button></div></div>
- <div class="cols3" style="grid-template-columns:repeat(3,1fr);margin-top:12px;gap:8px"><div class="card kpi" style="padding:12px"><div class="l">المتفق عليه</div><div class="v" style="font-size:15px">${sar(total)}</div></div><div class="card kpi" style="padding:12px"><div class="l">المدفوع</div><div class="v" style="font-size:15px;color:var(--good)">${sar(c.paid)}</div></div><div class="card kpi" style="padding:12px"><div class="l">المتبقي</div><div class="v" style="font-size:15px;color:var(--accent)">${sar(rem)}</div></div></div>
- ${c.retention?`<div class="card small" style="margin-top:12px"><b>محتجز ضمان 10%:</b> ${sar(c.retention)} يُصرف بعد 3 أشهر من الاستلام إن لم تظهر عيوب.</div>`:''}
- ${c.defect?`<div class="card small row" style="margin-top:12px;background:var(--bad-soft);color:var(--bad);box-shadow:none">${ic('alert',18)}<span>عيب مفتوح: ${c.defect}. التطبيق ينبهك قبل أي دفعة.</span></div>`:''}
- <div class="sect"><span class="h3">كشف الحساب</span><button class="link" onclick="toast('تم إنشاء كشف PDF جاهز للإرسال')">تصدير PDF</button></div>
- ${c.ledger.length?`<div class="list" style="overflow-x:auto"><table class="st-table"><thead><tr><th>التاريخ</th><th>البيان</th><th style="text-align:end">المبلغ</th></tr></thead><tbody>${c.ledger.map(([d,t,a])=>`<tr><td class="small">${short(d)}</td><td>${t}</td><td class="n">${fmt(a)}</td></tr>`).join('')}<tr><td></td><td><b>الإجمالي المدفوع</b></td><td class="n"><b>${fmt(c.paid)}</b></td></tr></tbody></table></div>`:'<div class="card small muted">لا توجد دفعات بعد. أول دفعة تُسجّل هنا تلقائيًا من المصروفات.</div>'}
- ${c.changes.length?`<div class="sect"><span class="h3">أعمال إضافية وأوامر تغيير</span></div><div class="list">${c.changes.map(([t,a,s])=>`<div class="item"><div class="grow"><div class="t">${t}</div><div class="s">${s}</div></div><span class="amt">${a}</span></div>`).join('')}</div>`:''}
- <div class="sect"><span class="h3">تقييمك</span></div><div class="card row between"><span class="small muted">${c.rate?'الجودة والالتزام والأمانة':'يُفتح التقييم عند إنهاء الأعمال'}</span><span class="row" style="gap:1px">${stars(c.rate)}</span></div>`;
-}
-function scrContractors(w){
- const owed=CONTRACTORS.reduce((a,c)=>a+(c.value+c.extras-c.paid),0);
- const list=`<div class="card kpi" style="margin-bottom:12px"><div class="l">إجمالي المتبقي لكل المقاولين</div><div class="v">${sar(owed)}</div></div><div class="list">${CONTRACTORS.map(c=>{const t=c.value+c.extras;return `<button class="item" onclick="${w?`S.sel=${c.id};render()`:`go('contractor',${c.id})`}" style="${w&&(S.sel||1)===c.id?'background:var(--accent-soft)':''}">${icoBox('helmet','var(--stone-soft)','var(--ink)')}<div class="grow"><div class="t">${c.name}</div><div class="s">${c.role} · ${c.type}</div><div style="margin-top:6px">${bar(t?c.paid/t*100:0,'good')}</div></div><div style="text-align:end"><div class="amt">${sar(t-c.paid)}</div><div class="small muted">متبقٍ</div></div></button>`}).join('')}</div>`;
- if(w){const c=CONTRACTORS.find(x=>x.id===(S.sel||1));return `${nav('المقاولون',{back:S.stack.length>0})}<div class="scroll"><div class="cols" style="grid-template-columns:1fr 1.2fr"><div>${list}</div><div>${contractorBody(c)}</div></div></div>`}
- return `${nav('المقاولون',{back:true})}<div class="scroll">${list}</div>`;
-}
-function scrContractor(id){const c=CONTRACTORS.find(x=>x.id===id);return `${nav('كشف المقاول',{back:true,big:false})}<div class="scroll">${contractorBody(c)}</div>`}
-
-function scrWorkers(w){
- const rows=WORKERS.map((wk,wi)=>{const days=wk.a.reduce((s,x)=>s+(x==='f'?1:x==='h'?.5:0),0);return {wk,wi,days,due:days*wk.r-wk.adv}});
- const total=rows.reduce((a,r)=>a+r.due,0);
- return `${nav('العمالة اليومية',{back:true,big:!w})}<div class="scroll">
- <div class="card"><div class="row between" style="margin-bottom:10px"><span class="h3">تحضير الأسبوع 27</span><span class="small muted">اضغط لتبديل: حاضر · نصف · غائب</span></div>
- <div class="att"><span></span>${DAYS.map(d=>`<span class="d">${d}</span>`).join('')}
- ${rows.map(({wk,wi})=>`<span><b>${wk.n}</b><br><span class="small muted">${wk.job}</span></span>${wk.a.map((x,di)=>`<button class="${x}" aria-label="${wk.n} ${DAYS[di]}" onclick="cycle(${wi},${di})">${x==='f'?'✓':x==='h'?'½':'—'}</button>`).join('')}`).join('')}</div></div>
- <div class="sect"><span class="h3">مسيّر الأسبوع</span><button class="link" onclick="toast('سُجّل مصروف أجور ${fmt(total)} ر.س')">اعتماد ودفع</button></div>
- <div class="list" style="overflow-x:auto"><table class="st-table"><thead><tr><th>العامل</th><th>الأيام</th><th>اليومية</th><th>سلف</th><th style="text-align:end">المستحق</th></tr></thead><tbody>${rows.map(({wk,days,due})=>`<tr><td><b>${wk.n}</b></td><td class="num">${days}</td><td class="num">${wk.r}</td><td class="num">${wk.adv||'—'}</td><td class="n"><b>${fmt(due)}</b></td></tr>`).join('')}<tr><td colspan="4"><b>الإجمالي</b></td><td class="n"><b>${fmt(total)}</b> <span class="cur">ر.س</span></td></tr></tbody></table></div>
- <div class="card small muted" style="margin-top:12px">كل يوم عمل يُربط بالمرحلة والعمل المنجز، ويرسل التطبيق إيصال دفع لكل عامل.</div></div>`;
-}
-function scrFinance(w){
- const avail=cashIn()-spent();
- return `${nav('التمويل',{back:true,big:!w})}<div class="scroll"><div class="${w?'cols':''}"><div>
- <div class="card"><div class="eyebrow">تمويل البناء الذاتي · 20 سنة</div><div class="row between" style="margin:6px 0 10px"><div class="kpi"><div class="l">المصروف من البنك</div><div class="v">${sar(P.finDisbursed)}</div></div><div class="kpi" style="text-align:end"><div class="l">المعتمد</div><div class="v" style="font-size:16px">${sar(P.finApproved)}</div></div></div>${bar(P.finDisbursed/P.finApproved*100,'blue')}
- <div class="minigrid"><div class="kpi"><div class="l">القسط الشهري</div><div class="v" style="font-size:16px">${sar(4850)}</div></div><div class="kpi"><div class="l">القسط القادم</div><div class="v" style="font-size:15px">${greg(D('2026-10-27'),{day:'numeric',month:'long'})}</div></div></div></div>
- <div class="sect"><span class="h3">مصادر المال</span></div>
- <div class="card"><div style="display:flex;height:14px;border-radius:8px;overflow:hidden;gap:2px"><i style="flex:${P.self};background:var(--stone)"></i><i style="flex:${P.finDisbursed};background:var(--blue)"></i></div><div class="row between small" style="margin-top:8px"><span>ذاتي ${sar(P.self)}</span><span>تمويل ${sar(P.finDisbursed)}</span></div>
- <div class="row" style="margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);gap:10px">${icoBox('coin','var(--good-soft)','var(--good)')}<div><div class="small muted">السيولة المتاحة للصرف الآن</div><b>${sar(avail)}</b></div></div></div></div>
- <div><div class="sect" ${w?'style="margin-top:0"':''}><span class="h3">دفعات البنك</span></div>
- <div class="list">${TRANCHES.map(([t,a,s])=>`<div class="item"><span class="ico" style="background:${s==='مصروفة'?'var(--good-soft)':'var(--app)'};color:${s==='مصروفة'?'var(--good)':'var(--muted)'}">${s==='مصروفة'?ic('check',18,2.4):ic('clock',18)}</span><div class="grow"><div class="t">${t}</div><div class="s">${s}</div></div><span class="amt">${sar(a)}</span></div>`).join('')}</div>
- <div class="card small row" style="margin-top:12px;background:var(--warn-soft);color:var(--warn);box-shadow:none;align-items:flex-start">${ic('alert',18)}<span>الدفعة الرابعة مشروطة بإنجاز اللياسة. مصاريف التمديدات المتبقية تقديرها 42,600 ر.س، والسيولة الحالية تغطيها.</span></div></div></div></div>`;
-}
-function scrGov(){
- return `${nav('المعاملات الحكومية',{back:true,big:false})}<div class="scroll"><div class="stack">${GOV.map(g=>`<div class="card"><div class="row between"><b style="font-size:15px">${g.n}</b><span class="pill ${g.cls}">${g.st}</span></div><div class="small muted" style="margin:4px 0 8px">${g.by} · رقم الطلب <span class="num">${g.ref}</span></div><div class="small">${g.info}</div><div class="row between small" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)"><span class="muted">المستندات</span><span>${g.docs}</span></div></div>`).join('')}</div></div>`;
-}
-function scrDesign(w){
- const r=ROOMS[S.room];
- return `${nav('اختيارات التصميم',{back:true,big:false})}<div class="scroll">
- <div class="chips" style="margin-bottom:12px">${ROOMS.map((x,i)=>`<button class="chip ${i===S.room?'on':''}" onclick="S.room=${i};render()">${x.n}</button>`).join('')}</div>
- <div class="${w?'cols':''}"><div><div class="card"><div class="row between"><div><div class="eyebrow">بطاقة الغرفة</div><div class="h3" style="font-size:19px">${r.n}</div><div class="small muted">${r.area} · الدور الأرضي</div></div>${qr(S.room*13+5)}</div>
- <div class="sect" style="margin-top:12px"><span class="h3">لوحة الإلهام</span></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">${r.sw.map(c=>`<div class="swatch" style="background:${c}"></div>`).join('')}</div></div></div>
- <div><div class="sect" ${w?'style="margin-top:0"':''}><span class="h3">الاختيارات</span><span class="small muted">فكرة ← مركّب</span></div>
- <div class="list">${r.items.map(([k,v,s,lv])=>`<div class="item" style="flex-direction:column;align-items:stretch;gap:8px"><div class="row between"><b>${k}</b><span class="pill ${lv>=2?'p-good':lv===1?'p-info':'p-mute'}">${s}</span></div><div class="small">${v}</div><div class="pipe">${PIPE.map((p,i)=>`<span class="${i<lv?'on':i===lv?'cur':''}">${p}</span>`).join('')}</div></div>`).join('')}</div>
- <div class="card small muted" style="margin-top:12px">اطبع رمز QR وعلّقه داخل الغرفة. بعد سنوات يفتح لك كل مادة وماركة وكود لون وتكلفتها.</div></div></div></div>`;
-}
-function scrDocs(){return `${nav('المستندات',{back:true,big:false})}<div class="scroll"><div class="field" style="margin-bottom:12px"><label for="ds">بحث داخل المستندات الممسوحة</label><input id="ds" placeholder="مثال: نسبة الحديد، رقم الرخصة"></div><div class="list">${DOCS.map(([t,m,c])=>`<div class="item">${icoBox('file','var(--blue-soft)','var(--blue)')}<div class="grow"><div class="t">${t}</div><div class="s">${m}</div></div><span class="pill p-mute">${c}</span></div>`).join('')}</div></div>`}
-function scrDefects(){return `${nav('العيوب والملاحظات',{back:true,big:false})}<div class="scroll"><div class="stack">${DEFECTS.map(d=>`<div class="card"><div class="row between"><span class="pill ${d.cls}">أولوية ${d.lv}</span><span class="small muted">${short(d.d)}</span></div><div style="font-weight:600;margin:8px 0 4px">${d.t}</div><div class="small muted">المسؤول: ${d.who}</div><div class="row between" style="margin-top:10px"><span class="pill ${d.st.startsWith('مغلقة')?'p-good':'p-warn'}">${d.st}</span><div class="row" style="gap:6px"><div class="ph ph-pipe" style="width:44px"></div>${d.st.startsWith('مغلقة')?'<div class="ph ph-conc" style="width:44px"><span>بعد</span></div>':''}</div></div></div>`).join('')}</div></div>`}
-function scrAgree(){return `${nav('الاتفاقات والقرارات',{back:true,big:false})}<div class="scroll"><div class="stack">${AGREE.map(a=>`<div class="card"><div class="row between"><b>${a.w}</b><span class="small muted">${short(a.d)}</span></div><div style="margin:8px 0">${a.t}</div><div class="row small" style="gap:6px;color:var(--blue)">${ic('mic',16)}${a.m}</div></div>`).join('')}</div></div>`}
-function scrMemory(){return `${nav('ذاكرة البيت',{back:true,big:false})}<div class="scroll"><div class="card small muted" style="margin-bottom:12px">بعد التسليم يتحول التطبيق إلى سجل صيانة. يذكّرك قبل انتهاء كل ضمان، ويحفظ رقم الفني الذي نفّذ كل جزء.</div><div class="list">${WARRANTY.map(([t,d,s])=>`<div class="item">${icoBox('shield','var(--good-soft)','var(--good)')}<div class="grow"><div class="t">${t}</div><div class="s">يبدأ ${s}</div></div><span class="pill p-info">${d}</span></div>`).join('')}</div><div class="sect"><span class="h3">صيانة دورية مقترحة</span></div><div class="list">${[['تنظيف فلاتر التكييف','كل 3 أشهر'],['فحص عزل السطح قبل المطر','كل أكتوبر'],['غسيل خزان المياه','كل 6 أشهر']].map(([t,d])=>`<div class="item">${icoBox('wrench','var(--app)','var(--ink)')}<div class="grow"><div class="t">${t}</div></div><span class="small muted">${d}</span></div>`).join('')}</div></div>`}
-function scrKey(){
- const days=Math.round((TODAY-D('2026-04-05'))/864e5);
- return `${nav('لحظة المفتاح',{back:true,big:false})}<div class="scroll"><div class="celebrate"><div style="display:flex;justify-content:center">${ic('key',40,1.6)}</div><div class="k">مبروك البيت</div><div style="opacity:.9">معاينة لشاشة يوم التسليم</div></div>
- <div class="cols" style="margin-top:12px;gap:8px"><div class="card kpi"><div class="l">يوم من البناء حتى الآن</div><div class="v num">${days}</div></div><div class="card kpi"><div class="l">صورة موثقة</div><div class="v num">1,284</div></div><div class="card kpi"><div class="l">قيد مصروف</div><div class="v num">316</div></div><div class="card kpi"><div class="l">عامل ومقاول</div><div class="v num">27</div></div></div>
- <div class="card row" style="margin-top:12px">${icoBox('file','var(--accent-soft)','var(--accent)')}<div style="flex:1"><b>كتاب البيت</b><div class="small muted">قصة البناء كاملة بالصور والأرقام، PDF للذكرى والمرجع</div></div></div></div>`;
-}
-
-/* ============ ورقة إضافة مصروف ============ */
-const BLANK={amount:'',party:'',title:'',stage:5,cat:'مواد',pay:'نقد',src:'ذاتي',mode:null,hot:[],more:false,auto:false};
-function recentParties(){const r=[];EXP.forEach(e=>{if(e.p&&e.p!=='—'&&!r.includes(e.p))r.push(e.p)});return r.slice(0,6)}
-function pickParty(i){const p=recentParties()[i];const last=EXP.find(e=>e.p===p);S.sheet.party=p;if(last)Object.assign(S.sheet,{cat:last.cat,stage:last.stage,pay:last.pay,src:last.src,auto:true});S.sheet.hot=S.sheet.hot.filter(h=>h!=='party');render()}
-function sheetHTML(){
- const f=S.sheet;
- if(f.gate)return gateHTML();
- const opt=(arr,key)=>`<div class="chips">${arr.map(v=>`<button class="chip ${f[key]===v?'on':''}" onclick="S.sheet.${key}='${v}';render()">${v}</button>`).join('')}</div>`;
- let assist='';
- if(f.mode==='scan') assist=`<div class="scanbox"><div class="line"></div><b>مؤسسة الصفوة لمواد البناء</b><br>فاتورة ضريبية · الرقم الضريبي 300123456700003<br>مواسير PPR 25 مم × 40 · أكواع × 60<br>الإجمالي شامل الضريبة: 3,967.50</div>`;
- if(f.mode==='voice') assist=`<div class="card" style="text-align:center"><div class="wave">${Array.from({length:14},(_,i)=>`<i style="animation-delay:${i*.06}s"></i>`).join('')}</div><div id="vtxt" style="font-weight:600;margin-top:8px;min-height:22px">${f.vtxt||''}</div></div>`;
- const hot=k=>f.hot.includes(k)?'hot':'';
- const rp=recentParties();
- return `<div class="dim" onclick="closeSheet()"></div><div class="sheet" role="dialog" aria-label="إضافة مصروف"><div class="grab"></div>
- <div class="row between" style="padding:4px 18px 8px"><button class="link" onclick="closeSheet()">إلغاء</button><b style="font-family:var(--f-display);font-size:17px">مصروف جديد</b><button class="link" style="font-weight:700" onclick="saveExp()">حفظ</button></div>
- <div class="body">
-  <div class="quick"><button onclick="simScan()">${ic('scan',22)}<b>امسح فاتورة</b><span class="small muted">يعبّي كل شي عنك</span></button><button onclick="simVoice()">${ic('mic',22)}<b>قلها بصوتك</b><span class="small muted">«دفعت لأبو محمد ألفين كاش»</span></button></div>
-  ${assist}
-  <div class="field amtfield ${hot('amount')}"><label for="f-amt">كم دفعت؟ (ر.س)</label><input id="f-amt" inputmode="decimal" placeholder="0" value="${f.amount}" oninput="S.sheet.amount=this.value"></div>
-  <div class="field ${hot('party')}"><label for="f-party">لمين؟</label><input id="f-party" placeholder="اكتب الاسم أو اختر من تحت" value="${f.party}" oninput="S.sheet.party=this.value"></div>
-  <div class="chips">${rp.map((p,i)=>`<button class="chip ${f.party===p?'on':''}" onclick="pickParty(${i})">${p}</button>`).join('')}</div>
-  <button class="field" style="width:100%;text-align:start;display:flex;align-items:center;justify-content:space-between;gap:8px" onclick="S.sheet.more=!S.sheet.more;render()">
-   <div style="min-width:0"><label>التفاصيل ${f.auto?'· مقترحة من آخر دفعة له':'· اختيارية'}</label><div style="font-weight:600;font-size:13.5px">${f.cat} · ${STAGES[f.stage].name} · ${f.pay} · ${f.src}</div></div><span class="link" style="flex:none">${f.more?'إخفاء':'تعديل'}</span></button>
-  ${f.more?`
-  <div class="field ${hot('title')}"><label for="f-title">البيان</label><input id="f-title" placeholder="مقابل ماذا؟" value="${f.title}" oninput="S.sheet.title=this.value"></div>
-  <div class="field"><label for="f-stage">المرحلة</label><select id="f-stage" onchange="S.sheet.stage=+this.value;render()">${STAGES.map(s=>`<option value="${s.id}" ${s.id===f.stage?'selected':''}>${s.name}</option>`).join('')}</select></div>
-  <div><div class="small muted" style="margin:0 4px 6px">التصنيف</div>${opt(['مواد','مقاولات','أجور يومية','رسوم حكومية','نقليات ومعدات','نثريات'],'cat')}</div>
-  <div><div class="small muted" style="margin:0 4px 6px">طريقة الدفع</div>${opt(['نقد','تحويل','شيك','بطاقة'],'pay')}</div>
-  <div><div class="small muted" style="margin:0 4px 6px">من وين المال؟</div>${opt(['ذاتي','تمويل'],'src')}</div>`:''}
-  <button class="btn pri blk" onclick="saveExp()">حفظ المصروف</button>
+function formHTML(){
+ const f=S.form,F=FORMS[f.type],editing=f.id||F.single;
+ return `<div class="dim" onclick="closeForm()"></div><div class="sheet" role="dialog" aria-label="${F.title}"><div class="grab"></div>
+ <div class="row between" style="padding:4px 18px 8px"><button class="link" onclick="closeForm()">إلغاء</button><b style="font-size:17px">${editing?'تعديل':'إضافة'} ${F.title}</b><button class="link" style="font-weight:700" onclick="saveForm()">حفظ</button></div>
+ <div class="body">${F.fields.map(x=>fieldHTML(x,f.data,f.miss)).join('')}
+  <button class="btn pri blk" onclick="saveForm()">${editing?'حفظ التعديل':'إضافة'}</button>
+  ${f.id&&!F.single?`<button class="btn blk" style="color:var(--bad);${f.del?'background:var(--bad);color:#fff;border-color:var(--bad)':''}" onclick="delForm()">${ic('trash',17)} ${f.del?'اضغط مرة ثانية لتأكيد الحذف':'حذف'}</button>`:''}
  </div></div>`;
 }
-function simScan(){
- S.sheet.mode='scan';S.sheet.hot=[];render();
- setTimeout(()=>{if(!S.sheet)return;Object.assign(S.sheet,{amount:'3967.50',party:'مؤسسة الصفوة لمواد البناء',title:'مواسير PPR وأكواع — فاتورة ممسوحة',cat:'مواد',stage:5,pay:'تحويل',auto:true,hot:['amount','party']});render();toast('قرأت الفاتورة. راجع الحقول ثم احفظ')},1600);
-}
-function simVoice(){
- S.sheet.mode='voice';S.sheet.vtxt='';S.sheet.hot=[];render();
- const words='دفعت لأبو محمد السبّاك ألفين كاش'.split(' ');let i=0;
- const t=setInterval(()=>{if(!S.sheet){clearInterval(t);return}S.sheet.vtxt=words.slice(0,++i).join(' ');const el=document.getElementById('vtxt');if(el)el.textContent=S.sheet.vtxt;
-  if(i>=words.length){clearInterval(t);setTimeout(()=>{if(!S.sheet)return;Object.assign(S.sheet,{amount:'2000',party:'أبو محمد السبّاك',title:'دفعة سباكة',cat:'مقاولات',stage:5,pay:'نقد',src:'ذاتي',auto:true,hot:['amount','party']});render();toast('فهمت: 2,000 ر.س نقدًا لأبو محمد')},500)}},260);
-}
-function saveExp(){
- const a=parseFloat(String(S.sheet.amount).replace(/,/g,''));
- const f=S.sheet;
- if(!a||a<=0){f.hot=['amount'];render();toast('اكتب المبلغ أولًا');return}
- if(!String(f.party).trim()){f.hot=['party'];render();toast('اكتب لمين دفعت');return}
- const con=CONTRACTORS.find(x=>x.name===f.party);
- if(con&&!f.confirmed){f.gate=true;render();return}
- EXP.unshift({d:'2026-10-07',t:f.title||('دفعة — '+f.cat),p:f.party||'—',a,cat:f.cat,stage:f.stage,pay:f.pay,src:f.src,inv:f.mode==='scan'});
- STAGES[f.stage].spent+=a;const c=CATS.find(x=>x.k===f.cat);if(c)c.v+=a;
- if(con){con.paid+=a;con.ledger.push(['2026-10-07',f.title||'دفعة',a])}
- S.sheet=null;toast(f.signed?`حُفظت الدفعة ${fmt(a)} ر.س مع إيصال موقّع`:`حُفظ ${fmt(a)} ر.س في ${STAGES[f.stage].name}`);
-}
-function closeSheet(){S.sheet=null;render()}
 
+/* ================= الرئيسية ================= */
+function todayItems(){
+ const T=[];
+ DB.reminders.filter(r=>!r.done&&daysTo(r.d)<=3).sort((a,b)=>a.d<b.d?-1:1).forEach(r=>T.push({i:r.icon||'clock',bg:'var(--blue-soft)',fg:'var(--blue)',t:r.t,s:(r.s?r.s+' · ':'')+(daysTo(r.d)===0?'اليوم':daysTo(r.d)<0?'متأخر':short(r.d)),on:`doneReminder('${r.id}')`,end:'<span class="pill p-info">تم؟</span>'}));
+ DB.contractors.forEach(c=>{if(c.defect)T.push({i:'alert',bg:'var(--bad-soft)',fg:'var(--bad)',t:'لا تدفع لـ'+c.name+' الآن',s:c.defect,on:`go('contractor','${c.id}')`});
+  else{const t=conTotal(c),p=conPaid(c);if(t&&p/t*100>num(c.progress)+5)T.push({i:'coin',bg:'var(--warn-soft)',fg:'var(--warn)',t:'دفعت لـ'+c.name+' أكثر من إنجازه',s:`مدفوع ${Math.round(p/t*100)}% · منجز ${num(c.progress)}%`,on:`go('contractor','${c.id}')`})}});
+ DB.defects.filter(d=>!d.closed&&d.lv==='عالية'&&!DB.contractors.some(c=>c.defect&&c.name===d.who)).forEach(d=>T.push({i:'alert',bg:'var(--bad-soft)',fg:'var(--bad)',t:'عيب عاجل',s:d.t,on:"go('defects')"}));
+ if(DB.fin.has&&DB.fin.next&&daysTo(DB.fin.next)>=0&&daysTo(DB.fin.next)<=31)T.push({i:'bank',bg:'var(--accent-soft)',fg:'var(--accent)',t:'قسط التمويل',s:`بعد ${daysTo(DB.fin.next)} يومًا · ${short(DB.fin.next)}`,on:"go('finance')",end:num(DB.fin.installment)?`<span class="amt">${sar(DB.fin.installment)}</span>`:''});
+ DB.mats.filter(isLeak).forEach(m=>T.push({i:'cube',bg:'var(--bad-soft)',fg:'var(--bad)',t:`${m.n} أعلى من المطلوب بـ ${Math.round((num(m.bought)/num(m.need)-1)*100)}%`,s:`${fmt(num(m.bought)-num(m.need))} ${m.u} زيادة`,on:"go('materials')"}));
+ DB.gov.filter(g=>g.st==='ينقصه مستند').forEach(g=>T.push({i:'stamp',bg:'var(--warn-soft)',fg:'var(--warn)',t:g.n+' ينقصها مستند',s:g.info||'افتح المعاملة',on:"go('gov')"}));
+ return T;
+}
+function doneReminder(id){const r=DB.reminders.find(x=>x.id===id);if(r){r.done=true;persist();toast('تم ✓ '+r.t)}}
+function scrHome(w){
+ const sp=spent(),b=budget(),pct=sp/b,rem=b-sp,liq=cashIn()-sp,cur=curStage(),T=todayItems();
+ const head=`<div class="greet row between" style="align-items:flex-end"><div style="min-width:0"><div class="eyebrow">${hijri(TODAY)} · ${greg(TODAY)}</div><p class="h">${esc(DB.project.name)}</p></div><button class="iconbtn" style="width:42px;height:42px;flex:none" aria-label="اسأل دفترك" onclick="go('ask')">${ic('search',19)}</button></div>`;
+ const visit=S.visit?`<div class="card" style="background:var(--blue-soft);box-shadow:none;margin-bottom:12px"><div class="row between"><div class="row" style="gap:8px;color:var(--blue)">${ic('home',18)}<b>أنت في الموقع الآن</b></div><button class="small muted" onclick="S.visit=false;render()">إخفاء</button></div><div class="row" style="gap:8px;margin-top:10px"><button class="btn" style="flex:1;padding:9px 6px" onclick="openForm('diary',null)">${ic('camera',17)}صوّر</button><button class="btn" style="flex:1;padding:9px 6px" onclick="openForm('defect',null)">${ic('alert',17)}ملاحظة</button><button class="btn" style="flex:1;padding:9px 6px" onclick="go('workers')">${ic('users',17)}حضّر</button></div></div>`:'';
+ const pulse=`<div class="card"><div class="pulse"><div class="ringbox">${ring(pct)}<div class="c"><div><b class="num">${Math.round(pct*100)}%</b><span class="small muted">من الميزانية</span></div></div></div>
+  <div class="figs"><div><div class="eyebrow">صرفت</div><div class="big">${sar(sp)}</div></div><div><div class="eyebrow">باقي من الميزانية</div><div style="font-weight:600;${rem<0?'color:var(--bad)':''}">${sar(rem)}</div></div><div><div class="eyebrow">معك الآن للصرف</div><div style="font-weight:600;color:${liq<0?'var(--bad)':'var(--good)'}">${sar(liq)}</div></div></div></div></div>`;
+ const today=`<div class="sect"><span class="h3">اليوم</span><span class="row" style="gap:12px"><button class="link" onclick="go('reminders')">التذكيرات</button><button class="link" onclick="openForm('reminder',null)">+ تذكير</button></span></div>
+ ${T.length?`<div class="list attn">${T.map(x=>`<button class="item" onclick="${x.on}">${icoBox(x.i,x.bg,x.fg)}<div class="grow"><div class="t">${esc(x.t)}</div><div class="s">${esc(x.s)}</div></div>${x.end||ic('chev',16)}</button>`).join('')}</div>`:`<div class="card small muted" style="text-align:center">ما عندك شي عاجل اليوم 👌</div>`}`;
+ const lastPh=DB.diary.flatMap(d=>d.photos||[]).slice(0,3);
+ const phs=[...lastPh,...['ph-pipe','ph-block','ph-sky'].slice(0,DB.demo?3-lastPh.length:0)];
+ const stage=cur?`<div class="sect"><span class="h3">وين وصل البناء</span><button class="link" onclick="tabTo('stages')">كل المراحل</button></div>
+ <button class="card" style="width:100%;text-align:start;display:block" onclick="go('stage',${cur.id})">
+  <div class="row between"><div style="min-width:0"><div class="eyebrow">المرحلة ${DB.stages.indexOf(cur)+1} من ${DB.stages.length}</div><div class="h3" style="font-size:18px">${esc(cur.name)}</div></div><span class="pill p-acc num">${num(cur.pct)}%</span></div>
+  <div style="margin:10px 0 6px">${bar(cur.pct)}</div>
+  <div class="row between small muted"><span>${cur.from?'بدأت '+short(cur.from):'لم تحدد البداية'}</span><span>${cur.to?'تنتهي تقريبًا '+short(cur.to):''}</span></div>
+  ${phs.length?`<div class="photos" style="margin-top:12px">${phs.map(p=>thumb(p)).join('')}</div>`:''}
+ </button>`:'';
+ if(w)return `${nav('الرئيسية')}<div class="scroll">${head}${visit}<div class="cols"><div>${pulse}${stage}</div><div>${today.replace('class="sect"','class="sect" style="margin-top:0"')}</div></div></div>`;
+ return `<div style="height:6px"></div><div class="scroll">${head}${visit}${pulse}${today}${stage}</div>`;
+}
+function scrReminders(){
+ const L=[...DB.reminders].sort((a,b)=>(a.done-b.done)||(a.d<b.d?-1:1));
+ return `${nav('التذكيرات',{back:S.device==='phone',big:false,right:addBtn('reminder')})}<div class="scroll">${L.length?`<div class="list">${L.map(r=>`<div class="item"><button class="box-btn" aria-label="تم" onclick="const r=DB.reminders.find(x=>x.id==='${r.id}');r.done=!r.done;persist();render()"><span class="box" style="${r.done?'background:var(--good);border-color:var(--good);color:#fff':''}">${ic('check',14,3)}</span></button><button class="grow" style="text-align:start" onclick="openForm('reminder','${r.id}')"><div class="t" style="${r.done?'text-decoration:line-through;color:var(--muted)':''}">${esc(r.t)}</div><div class="s">${esc(r.s||'')} ${r.d?'· '+short(r.d):''}</div></button>${ic('chev',16)}</div>`).join('')}</div>`:empty('ما عندك تذكيرات. أضف مواعيد الرش، الدفعات، أو أي شي تبي تتذكره.','reminder','أضف تذكير')}</div>`;
+}
 
+/* ================= المصروفات ================= */
+function catCard(){const C=catTotals(),tot=C.reduce((a,c)=>a+c.v,0)||1;
+ return `<div class="card"><div class="row between"><span class="h3">توزيع الصرف</span><span class="small muted">تكلفة المتر ${sar(spent()/(num(DB.project.area)||1))}</span></div>
+ <div style="display:flex;height:12px;border-radius:8px;overflow:hidden;margin:12px 0;gap:2px">${C.filter(c=>c.v>0).map(c=>`<i style="flex:${c.v};background:${c.c}"></i>`).join('')||'<i style="flex:1;background:var(--line)"></i>'}</div>
+ <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 14px">${C.map(c=>`<div class="row between small"><span class="row" style="gap:6px"><i style="width:9px;height:9px;border-radius:3px;background:${c.c};display:inline-block"></i>${c.k}</span><span class="num muted">${Math.round(c.v/tot*100)}%</span></div>`).join('')}</div></div>`}
+function expRow(e){const st=stageById(e.stage);return `<button class="item" onclick="openForm('expense','${e.id}')">${e.photo?`<span class="ico" style="background:url('${e.photo}') center/cover"></span>`:icoBox(e.cat==='مواد'?'cube':e.cat==='مقاولات'?'helmet':e.cat==='أجور يومية'?'users':e.cat==='رسوم حكومية'?'stamp':'truck','var(--app)','var(--ink)')}<div class="grow"><div class="t">${esc(e.t||e.cat)}</div><div class="s">${esc(e.p)} · ${short(e.d)} · ${esc(e.pay||'')}${e.signed?' · ✍️':''}</div></div><div style="text-align:end"><div class="amt">${sar(e.a)}</div><div class="small muted">${esc(st?st.name.split(' ')[0]:'')}</div></div></button>`}
+function scrExpenses(w){
+ const f=S.filter,list=[...DB.expenses].filter(e=>f==='الكل'||e.cat===f||(f==='تمويل'&&e.src==='تمويل')).sort((a,b)=>a.d<b.d?1:-1);
+ const ym=todayISO().slice(0,7),month=expSum(e=>String(e.d).startsWith(ym));
+ const chips=['الكل','مواد','مقاولات','أجور يومية','رسوم حكومية','تمويل'].map(c=>`<button class="chip ${c===f?'on':''}" onclick="S.filter='${c}';render()">${c}</button>`).join('');
+ const summary=`<div class="cols" style="margin-bottom:12px"><div class="card kpi"><div class="l">هذا الشهر</div><div class="v">${sar(month)}</div></div><div class="card kpi"><div class="l">الإجمالي</div><div class="v">${sar(spent())}</div></div></div>`;
+ const body=`<div class="chips" style="margin-bottom:10px">${chips}</div>${list.length?`<div class="list">${list.map(expRow).join('')}</div>`:empty(f==='الكل'?'ما سجّلت أي مصروف بعد.':'ما فيه قيود في هذا التصنيف.',f==='الكل'?'expense':'','سجّل أول مصروف')}${num(DB.catOpening['مواد'])?'<div class="small muted" style="margin:10px 4px">الإجمالي يشمل مصروفات سابقة مسجلة كأرصدة افتتاحية للمراحل المنجزة.</div>':''}`;
+ const right=addBtn('expense');
+ if(w)return `${nav('المصروفات',{right})}<div class="scroll"><div class="cols" style="grid-template-columns:1.4fr 1fr"><div>${summary}${body}</div><div class="stack">${catCard()}</div></div></div>`;
+ return `${nav('المصروفات',{right})}<div class="scroll">${summary}${catCard()}<div style="height:12px"></div>${body}</div>`;
+}
 
-/* ============ المواد والكميات ============ */
-function priceTag(m){const [lo,hi]=m.mkt;return m.price>hi?'<span class="pill p-bad">أعلى من السوق</span>':m.price<lo?'<span class="pill p-info">أرخص من السوق</span>':'<span class="pill p-good">سعر مناسب</span>'}
+/* ================= المراحل ================= */
+function scrStages(w){
+ const items=DB.stages.map((s,i)=>{const sp=stageSpent(s),over=s.budget&&sp>s.budget;
+  const pill=s.st==='done'?'<span class="pill p-good">منجزة</span>':s.st==='now'?`<span class="pill p-acc num">${num(s.pct)}%</span>`:(sp?'<span class="pill p-info">صرف مبكر</span>':'<span class="pill p-mute">قادمة</span>');
+  return `<button class="st" onclick="go('stage',${s.id})"><span class="dot ${s.st}">${s.st==='done'?ic('check',15,2.6):i+1}</span><div class="card"><div class="row between"><b style="font-size:14.5px">${esc(s.name)}</b>${pill}</div><div class="small muted" style="margin:2px 0 8px">${esc(s.sub||'')}</div>${bar(s.budget?sp/s.budget*100:0,over?'bad':s.st==='done'?'good':'')}<div class="row between small" style="margin-top:6px"><span class="muted">${sar(sp)} من ${sar(s.budget)}</span>${over?`<span style="color:var(--bad);font-weight:600">تجاوز ${sar(sp-s.budget)}</span>`:''}</div></div></button>`}).join('');
+ const after=`<button class="st" onclick="go('memory')"><span class="dot todo">${ic('shield',14)}</span><div class="card"><div class="row between"><b>ما بعد السكن</b><span class="pill p-mute">ذاكرة البيت</span></div><div class="small muted">الضمانات والصيانة الدورية</div></div></button>`;
+ const totB=DB.stages.reduce((a,s)=>a+num(s.budget),0);
+ const note=Math.abs(totB-budget())>1000?`<div class="card small" style="background:var(--warn-soft);color:var(--warn);box-shadow:none;margin-bottom:12px">مجموع ميزانيات المراحل ${sar(totB)} يختلف عن ميزانية المشروع ${sar(budget())}.</div>`:'';
+ const cur=curStage();
+ return `${nav('المراحل',{right:addBtn('stage')})}<div class="scroll">${note}<div class="${w?'cols':''}" style="${w?'grid-template-columns:1.3fr 1fr':''}"><div class="tl">${items}${after}</div>${w&&cur?`<div class="stack">${stageDetailBody(cur,true)}</div>`:''}</div></div>`;
+}
+function toggleCheck(sid,cid){const s=stageById(sid),c=s.checks.find(x=>x.id===cid);c.on=!c.on;persist();render()}
+function stageDetailBody(s,compact){
+ const list=s.checks||[],done=list.filter(c=>c.on).length,sp=stageSpent(s);
+ const cons=DB.contractors.filter(c=>c.stage===s.id);
+ const exps=DB.expenses.filter(e=>e.stage===s.id).sort((a,b)=>a.d<b.d?1:-1);
+ const photos=DB.diary.filter(d=>d.stage===s.id).flatMap(d=>d.photos||[]);
+ return `<div class="card"><div class="row between"><div style="min-width:0"><div class="eyebrow">المرحلة ${DB.stages.indexOf(s)+1}</div><div class="h3" style="font-size:19px">${esc(s.name)}</div></div><button class="chip" onclick="openForm('stage',${s.id})">${ic('edit',15)} تعديل</button></div>
+ <div style="margin:12px 0 6px">${bar(s.pct)}</div><div class="row between small muted"><span>الإنجاز ${num(s.pct)}%</span><span>${s.from?short(s.from):'—'} ← ${s.to?short(s.to):'—'}</span></div>
+ <div class="minigrid"><div class="kpi"><div class="l">الميزانية</div><div class="v" style="font-size:15px">${sar(s.budget)}</div></div><div class="kpi"><div class="l">المصروف</div><div class="v" style="font-size:15px;${sp>s.budget?'color:var(--bad)':''}">${sar(sp)}</div></div></div></div>
+ <div class="sect"><span class="h3">قائمة الفحص قبل الدفع</span><span class="row" style="gap:10px"><span class="pill ${done===list.length&&list.length?'p-good':'p-warn'} num">${done}/${list.length}</span><button class="link" onclick="openForm('check',null,${s.id})">+ نقطة</button></span></div>
+ ${list.length?`<div class="list">${list.map(c=>`<div class="chk ${c.on?'on':''}" style="align-items:center"><button class="box" style="cursor:pointer" aria-label="تحديد" onclick="toggleCheck(${s.id},'${c.id}')">${ic('check',14,3)}</button><button style="flex:1;text-align:start" onclick="toggleCheck(${s.id},'${c.id}')">${esc(c.t)}</button><button class="muted" aria-label="تعديل" onclick="openForm('check','${c.id}',${s.id})">${ic('edit',15)}</button></div>`).join('')}</div>
+ <div class="small muted" style="margin:8px 4px">${done===list.length?'كل النقاط مكتملة. تقدر تسلّم الدفعة وأنت مطمئن.':'أكمل النقاط قبل تسليم أي دفعة لمقاولي هذه المرحلة.'}</div>`:`<div class="card small muted">أضف النقاط اللي تبي تتأكد منها قبل ما تدفع.</div>`}
+ ${TIPS[s.id]?`<div class="sect"><span class="h3">لو كنت أعرف</span><span class="small muted">من ملاك سبقوك</span></div><div class="card stack" style="gap:10px">${TIPS[s.id].map(t=>`<div class="row" style="align-items:flex-start;gap:8px"><span style="color:var(--accent);flex:none;margin-top:2px">${ic('spark',16)}</span><span>${t}</span></div>`).join('')}</div>`:''}
+ <div class="sect"><span class="h3">مقاولو المرحلة</span><button class="link" onclick="openForm('contractor',null);S.form.data.stage=${s.id}">+ مقاول</button></div>
+ ${cons.length?`<div class="list">${cons.map(c=>`<button class="item" onclick="go('contractor','${c.id}')">${icoBox('helmet','var(--stone-soft)','var(--ink)')}<div class="grow"><div class="t">${esc(c.name)}</div><div class="s">${esc(c.role||'')} · ${esc(c.type||'')}</div></div><span class="small muted num">${num(c.progress)}%</span></button>`).join('')}</div>`:'<div class="card small muted">ما فيه مقاولين مرتبطين بهذه المرحلة.</div>'}
+ ${compact?'':`<div class="sect"><span class="h3">مصروفات المرحلة</span><span class="small muted">${exps.length} قيد</span></div>${exps.length?`<div class="list">${exps.slice(0,8).map(expRow).join('')}</div>`:'<div class="card small muted">ما فيه مصروفات مسجلة لهذه المرحلة.</div>'}
+ ${photos.length?`<div class="sect"><span class="h3">صور المرحلة</span></div><div class="photos">${photos.slice(0,9).map(p=>thumb(p)).join('')}</div>`:''}`}`;
+}
+function scrStage(id){const s=stageById(+id);if(!s){S.stack.pop();return current()}return `${nav(s.name,{back:true,big:false})}<div class="scroll">${stageDetailBody(s,false)}</div>`}
+
+/* ================= اليوميات ================= */
+function buildingSVG(wk){
+ const g=[],st=v=>wk>=v,conc='#9a958d',block='#c8bfae',plaster='#e6dfd2',stone='#d3bf9a',dark='#5a554e';
+ g.push(`<rect x="0" y="150" width="300" height="50" fill="#b9a07a"/>`);
+ if(wk<6)g.push(`<rect x="50" y="150" width="200" height="${Math.min(30,wk*6)}" fill="#8a7255"/>`);
+ if(st(4)&&wk<9)g.push(`<rect x="60" y="150" width="180" height="10" fill="${conc}"/>`);
+ if(st(5))[70,120,180,230].forEach(x=>g.push(`<rect x="${x-6}" y="${st(9)?150:142}" width="12" height="8" fill="${conc}"/>`));
+ const wallFill=st(38)?stone:st(30)?plaster:block;
+ if(st(9)){if(st(23))g.push(`<rect x="62" y="104" width="176" height="46" fill="${wallFill}"/>`);else if(st(19))g.push(`<rect x="62" y="${150-Math.min(46,(wk-18)*12)}" width="176" height="${Math.min(46,(wk-18)*12)}" fill="${block}"/>`);
+  [64,118,176,232].forEach(x=>g.push(`<rect x="${x}" y="${st(10)?104:130}" width="6" height="${st(10)?46:20}" fill="${conc}"/>`))}
+ if(st(13))g.push(`<rect x="56" y="98" width="188" height="7" fill="${conc}"/>`);
+ if(st(15)){if(st(24))g.push(`<rect x="62" y="56" width="176" height="42" fill="${wallFill}"/>`);[64,118,176,232].forEach(x=>g.push(`<rect x="${x}" y="56" width="6" height="42" fill="${conc}"/>`))}
+ if(st(18))g.push(`<rect x="56" y="50" width="188" height="7" fill="${conc}"/>`);
+ if(st(20)){if(st(25))g.push(`<rect x="160" y="26" width="76" height="24" fill="${wallFill}"/>`);[162,230].forEach(x=>g.push(`<rect x="${x}" y="26" width="6" height="24" fill="${conc}"/>`))}
+ if(st(22))g.push(`<rect x="156" y="20" width="84" height="6" fill="${conc}"/>`);
+ if(st(24))g.push(`<rect x="56" y="44" width="100" height="6" fill="${st(38)?stone:block}"/>`);
+ if(st(23)){const win=st(38)?'#2f4a5e':dark;[[84,114,22,24],[140,114,26,24],[196,114,22,24],[84,66,22,22],[140,66,26,22],[196,66,22,22],[182,30,24,14]].forEach(([x,y,w,h],i)=>{if(i<6||st(25))g.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${win}" opacity="${st(38)?1:.55}"/>`)})}
+ if(st(23)&&!st(38))g.push(`<rect x="114" y="122" width="16" height="28" fill="${dark}" opacity=".5"/>`);
+ if(st(40)){g.push(`<rect x="114" y="120" width="16" height="30" fill="#6b4a2c"/>`);g.push(`<rect x="20" y="132" width="34" height="18" fill="${stone}"/><rect x="246" y="132" width="34" height="18" fill="${stone}"/>`)}
+ if(st(42))[[30,128],[268,124]].forEach(([x,y])=>g.push(`<rect x="${x-2}" y="${y}" width="4" height="${150-y}" fill="#6b4a2c"/><circle cx="${x}" cy="${y-6}" r="11" fill="#5f8a4f"/>`));
+ if(st(9)&&!st(36))g.push(`<g stroke="${dark}" stroke-width=".8" opacity=".5">${[50,250].map(x=>`<line x1="${x}" y1="150" x2="${x}" y2="${st(15)?40:96}"/>`).join('')}</g>`);
+ return `<svg viewBox="0 0 300 200" width="100%" height="100%" preserveAspectRatio="xMidYMax meet" role="img" aria-label="البيت في الأسبوع ${wk}">${g.join('')}</svg>`;
+}
+const weekLabel=wk=>wk<6?'الحفر والإحلال':wk<9?'الأساسات':wk<23?'الهيكل الخرساني':wk<26?'المباني':wk<=28?'التمديدات':wk<36?'اللياسة والعزل':wk<40?'التشطيبات والواجهات':'تسليم المفتاح';
+const TAGC={'إنجاز':'p-good','عيب':'p-bad','قرار':'p-info','ملاحظة':'p-mute'};
+function scrJournal(w){
+ const seg=`<div class="seg" style="margin-bottom:14px">${[['diary','اليوميات'],['lapse','عدسة الزمن'],['wall','ما خلف الجدار']].map(([k,t])=>`<button class="${S.jseg===k?'on':''}" onclick="S.jseg='${k}';render()">${t}</button>`).join('')}</div>`;
+ let body='',right='';
+ if(S.jseg==='diary'){right=addBtn('diary');
+  const wk=DB.diary.filter(d=>daysTo(d.d)>=-7),wsum=expSum(e=>daysTo(e.d)>=-7&&daysTo(e.d)<=0);
+  const summary=`<div class="card" style="margin-bottom:12px"><div class="row between"><span class="h3">ملخص الأسبوع</span><span class="pill p-acc">جاهز للإرسال</span></div>
+  <div class="small" style="margin-top:8px">صرفت هذا الأسبوع ${sar(wsum)}، وسجّلت ${wk.length} يوميات، و${esc(curStage()?.name||'')} وصلت ${num(curStage()?.pct)}%.</div>
+  <button class="btn pri blk" style="margin-top:12px" onclick="shareWeek()">${ic('share',17)} أرسله للعائلة</button></div>`;
+  const L=[...DB.diary].sort((a,b)=>a.d<b.d?1:-1);
+  body=summary+(L.length?`<div class="stack">${L.map(e=>`<button class="card entry" style="text-align:start;width:100%" onclick="openForm('diary','${e.id}')"><div class="when"><b class="num">${D(e.d).getDate()}</b><span class="small muted">${greg(D(e.d),{month:'short'})}</span></div><div style="flex:1;min-width:0"><div class="row between"><span class="pill ${TAGC[e.tag]||'p-mute'}">${esc(e.tag)}</span><span class="small muted">${hijri(D(e.d),{day:'numeric',month:'short'})}</span></div><div style="font-weight:600;margin:6px 0 4px">${esc(e.t)}</div><div class="small muted">${(e.photos||[]).length?(e.photos.length+' صور · '):''}${esc(stageById(e.stage)?.name||'')}</div></div>${(e.photos||[])[0]?thumb(e.photos[0],'mini'):''}</button>`).join('')}</div>`:empty('ابدأ يومياتك: صورة وسطر عن كل زيارة للموقع.','diary','أضف يومية'));
+ }else if(S.jseg==='lapse'){
+  const wk=S.week,start=D(DB.stages[1]?.from||todayISO()),d=new Date(start.getTime()+(wk-1)*7*864e5),future=d>TODAY;
+  body=`<div class="card"><div class="tlapse">${buildingSVG(wk)}${future?'<span class="pill p-info" style="position:absolute;top:10px;right:10px">معاينة مستقبلية</span>':''}<span class="pill p-mute" style="position:absolute;top:10px;left:10px;background:var(--card)">نقطة التصوير: الركن الشمالي</span></div>
+  <div style="margin:12px 0 4px"><div class="h3">الأسبوع <span class="num">${wk}</span> · ${weekLabel(wk)}</div><div class="small muted">${greg(d)} · ${hijri(d)}</div></div>
+  <input id="wk" type="range" min="1" max="44" value="${wk}" aria-label="الأسبوع" oninput="S.week=+this.value;render()">
+  <div class="row between small muted"><span>بداية الحفر</span><span>المفتاح</span></div>
+  <button class="btn pri blk" style="margin-top:12px" onclick="playLapse()">${ic('camera',18)} شغّل الفيديو المتسارع</button></div>
+  <div class="card small muted" style="margin-top:12px">هذا رسم توضيحي. في التطبيق الفعلي تتكوّن عدسة الزمن من صورك الأسبوعية من نفس الزاوية.</div>`;
+ }else{right=addBtn('wall');
+  body=`<div class="card small muted" style="margin-bottom:12px">صوّر كل جدار قبل اللياسة واكتب وين يمر كل تمديد. بعد سنين لما تبي تخرم أو تصلّح، ترجع هنا.</div>
+  ${DB.walls.length?`<div class="list">${DB.walls.map(x=>`<button class="item" onclick="openForm('wall','${x.id}')">${x.photo?`<span class="ico" style="background:url('${x.photo}') center/cover"></span>`:icoBox('wall','var(--stone-soft)','var(--ink)')}<div class="grow"><div class="t">${esc(x.t)}</div><div class="s">${esc(x.note||'بدون ملاحظات')} · ${short(x.d)}</div></div>${ic('chev',16)}</button>`).join('')}</div>`:empty('ما وثّقت أي جدار بعد.','wall','وثّق جدار')}`;
+ }
+ return `${nav('اليوميات',{right})}<div class="scroll">${seg}${w?`<div style="max-width:640px">${body}</div>`:body}</div>`;
+}
+function shareWeek(){const t=`ملخص بناء ${DB.project.name}: صرفنا هذا الأسبوع ${fmt(expSum(e=>daysTo(e.d)>=-7&&daysTo(e.d)<=0))} ريال، و${curStage()?.name} وصلت ${num(curStage()?.pct)}%.`;
+ try{navigator.clipboard.writeText(t).then(()=>toast('نُسخ الملخص، الصقه في واتساب'),()=>toast('الملخص جاهز للإرسال'))}catch(e){toast('الملخص جاهز للإرسال')}}
+let lapseTimer=null;
+function playLapse(){clearInterval(lapseTimer);S.week=1;render();lapseTimer=setInterval(()=>{if(S.jseg!=='lapse'){clearInterval(lapseTimer);return}S.week++;render();if(S.week>=44)clearInterval(lapseTimer)},160)}
+
+/* ================= المزيد ================= */
+const MODS={contractors:['المقاولون','helmet',()=>`${DB.contractors.length} مقاول · المتبقي ${fmt(DB.contractors.reduce((a,c)=>a+conTotal(c)-conPaid(c),0))} ر.س`],
+ workers:['العمالة اليومية','users',()=>`${DB.workers.length} عمال`],finance:['التمويل','bank',()=>DB.fin.has?`مصروف ${fmt(finIn())} من ${fmt(DB.fin.approved)}`:'بدون تمويل'],
+ materials:['المواد والكميات','cube',()=>{const l=DB.mats.filter(isLeak).length;return l?`تنبيه: ${l} مادة فوق المطلوب`:`${DB.mats.length} أصناف`}],
+ gov:['المعاملات الحكومية','stamp',()=>`${DB.gov.length} معاملات`],docs:['المستندات','file',()=>`${DB.docs.length} مستند`],agree:['الاتفاقات والقرارات','hand',()=>`${DB.agree.length} اتفاق موثّق`],
+ defects:['العيوب والملاحظات','alert',()=>`${DB.defects.filter(d=>!d.closed).length} مفتوحة`],design:['اختيارات التصميم','palette',()=>`${DB.rooms.length} غرف`],
+ key:['لحظة المفتاح','key',()=>'تُفتح يوم التسليم'],memory:['ذاكرة البيت','shield',()=>`${DB.warranty.length} ضمانات`],reminders:['التذكيرات','bell',()=>`${DB.reminders.filter(r=>!r.done).length} قادمة`]};
+const GROUPS=[['الناس',['contractors','workers']],['الفلوس',['finance','materials']],['الأوراق',['gov','docs','agree','defects']],['البيت',['design','reminders','key','memory']]];
+function scrMore(){
+ return `${nav('المزيد')}<div class="scroll">${GROUPS.map(([g,ks],gi)=>`<div class="sect" ${gi===0?'style="margin-top:4px"':''}><span class="h3">${g}</span></div><div class="list">${ks.map(k=>{const [t,i,s]=MODS[k];return `<button class="item" onclick="go('${k}')">${icoBox(i,'var(--stone-soft)','var(--ink)')}<div class="grow"><div class="t">${t}</div><div class="s">${esc(s())}</div></div>${ic('chev',16)}</button>`}).join('')}</div>`).join('')}
+ <div class="sect"><span class="h3">الإعدادات</span></div>
+ <div class="list">
+  <button class="item" onclick="openForm('project')">${icoBox('home','var(--app)','var(--ink)')}<div class="grow"><div class="t">بيانات المشروع</div><div class="s">${esc(DB.project.plan||'')} · ${fmt(num(DB.project.area))} م² · ${fmt(budget())} ر.س</div></div>${ic('chev',16)}</button>
+  <button class="item" onclick="startOnb()">${icoBox('spark','var(--app)','var(--ink)')}<div class="grow"><div class="t">ابدأ مشروع جديد</div><div class="s">أربعة أسئلة ويتجهز دفترك</div></div>${ic('chev',16)}</button>
+  <div class="item">${icoBox('lock','var(--app)','var(--ink)')}<div class="grow"><div class="t">القفل بـ Face ID</div><div class="s">في التطبيق الفعلي</div></div><span class="pill p-good">مفعّل</span></div>
+  <button class="item" onclick="resetDemo()">${icoBox('reset','var(--app)','var(--ink)')}<div class="grow"><div class="t">${S.confirmReset?'اضغط مرة ثانية للتأكيد':'إرجاع البيانات التجريبية'}</div><div class="s">يمسح تعديلاتك ويرجع المثال</div></div></button>
+ </div>
+ <div class="small muted" style="margin:14px 4px">بياناتك محفوظة على هذا الجهاز وهذا المتصفح فقط.</div></div>`;
+}
+function resetDemo(){if(!S.confirmReset){S.confirmReset=1;render();setTimeout(()=>{S.confirmReset=0},4000);return}S.confirmReset=0;DB=seedDemo();persist();S.stack=[];S.tab='home';toast('رجعت البيانات التجريبية')}
+
+/* ================= المقاولون ================= */
+function contractorBody(c){
+ const total=conTotal(c),paid=conPaid(c),rem=total-paid,pp=total?Math.round(paid/total*100):0;
+ const ledger=DB.expenses.filter(e=>e.p===c.name).sort((a,b)=>a.d<b.d?-1:1);
+ return `<div class="card"><div class="row" style="gap:12px">${c.photo?`<span class="ico" style="background:url('${c.photo}') center/cover"></span>`:icoBox('helmet','var(--stone-soft)','var(--ink)')}<div style="flex:1;min-width:0"><div class="h3" style="font-size:18px">${esc(c.name)}</div><div class="small muted">${esc(c.role||'')}${stageById(c.stage)?' · '+esc(stageById(c.stage).name):''}</div></div><button class="chip" onclick="openForm('contractor','${c.id}')">${ic('edit',15)} تعديل</button></div>
+ <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">${c.type?`<span class="pill p-info">${esc(c.type)}</span>`:''}${c.terms?`<span class="pill p-mute">${esc(c.terms)}</span>`:''}</div>
+ ${c.phone?`<div class="row small" style="margin-top:12px;gap:8px"><span class="num" style="user-select:all" dir="ltr">${esc(c.phone)}</span><button class="chip" onclick="copyText('${esc(c.phone)}')">نسخ الرقم</button><a class="chip" href="https://wa.me/966${esc(String(c.phone).replace(/\D/g,'').replace(/^0/,''))}" target="_blank" rel="noopener">واتساب</a></div>`:''}</div>
+ <div class="cols3" style="margin-top:12px;gap:8px"><div class="card kpi" style="padding:12px"><div class="l">المتفق عليه</div><div class="v" style="font-size:15px">${sar(total)}</div></div><div class="card kpi" style="padding:12px"><div class="l">المدفوع</div><div class="v" style="font-size:15px;color:var(--good)">${sar(paid)}</div></div><div class="card kpi" style="padding:12px"><div class="l">المتبقي</div><div class="v" style="font-size:15px;color:${rem<0?'var(--bad)':'var(--accent)'}">${sar(rem)}</div></div></div>
+ <div class="card stack" style="gap:10px;margin-top:12px"><div><div class="row between small"><span>الإنجاز</span><b class="num">${num(c.progress)}%</b></div>${bar(c.progress,'good')}</div><div><div class="row between small"><span>المدفوع</span><b class="num" style="${pp>num(c.progress)+5?'color:var(--bad)':''}">${pp}%</b></div>${bar(pp,pp>num(c.progress)+5?'bad':'')}</div></div>
+ ${num(c.retention)?`<div class="card small" style="margin-top:12px"><b>محتجز ضمان ${num(c.retention)}%:</b> ${sar(total*num(c.retention)/100)} يُصرف بعد فترة الضمان إذا ما ظهرت عيوب.</div>`:''}
+ ${c.defect?`<div class="card small row" style="margin-top:12px;background:var(--bad-soft);color:var(--bad);box-shadow:none;align-items:flex-start">${ic('alert',18)}<span>عليه ملاحظة مفتوحة: ${esc(c.defect)}. التطبيق ينبهك قبل أي دفعة.</span></div>`:''}
+ <button class="btn pri blk" style="margin-top:12px" onclick="newExpense({party:'${esc(c.name).replace(/'/g,"\\'")}',cat:'مقاولات',stage:${num(c.stage)},auto:true})">${ic('coin',18)} سجّل دفعة له</button>
+ <div class="sect"><span class="h3">كشف الحساب</span><button class="link" onclick="copyText(statement('${c.id}'))">نسخ الكشف</button></div>
+ ${ledger.length?`<div class="list" style="overflow-x:auto"><table class="st-table"><thead><tr><th>التاريخ</th><th>البيان</th><th style="text-align:end">المبلغ</th></tr></thead><tbody>${ledger.map(e=>`<tr onclick="openForm('expense','${e.id}')" style="cursor:pointer"><td class="small">${short(e.d)}</td><td>${esc(e.t||'دفعة')}${e.signed?' ✍️':''}</td><td class="n">${fmt(e.a)}</td></tr>`).join('')}<tr><td></td><td><b>الإجمالي المدفوع</b></td><td class="n"><b>${fmt(paid)}</b></td></tr></tbody></table></div>`:'<div class="card small muted">ما فيه دفعات بعد. أي مصروف تسجله باسمه يظهر هنا تلقائيًا.</div>'}
+ <div class="sect"><span class="h3">تقييمك</span></div><button class="card row between" style="width:100%" onclick="openForm('contractor','${c.id}')"><span class="small muted">${num(c.rate)?'الجودة والالتزام والأمانة':'قيّمه عند إنهاء الأعمال'}</span><span class="row" style="gap:1px">${stars(num(c.rate))}</span></button>`;
+}
+function statement(id){const c=DB.contractors.find(x=>x.id===id);const L=DB.expenses.filter(e=>e.p===c.name).sort((a,b)=>a.d<b.d?-1:1);
+ return `كشف حساب: ${c.name}\nقيمة الاتفاق: ${fmt(conTotal(c))} ريال\n`+L.map(e=>`${e.d}  ${e.t||'دفعة'}  ${fmt(e.a)}`).join('\n')+`\nالمدفوع: ${fmt(conPaid(c))}\nالمتبقي: ${fmt(conTotal(c)-conPaid(c))}`}
+function copyText(t){try{navigator.clipboard.writeText(t).then(()=>toast('نُسخ'),()=>toast('ما قدرت أنسخ'))}catch(e){toast('ما قدرت أنسخ')}}
+function scrContractors(w){
+ const owed=DB.contractors.reduce((a,c)=>a+(conTotal(c)-conPaid(c)),0);
+ const sel=DB.contractors.find(c=>c.id===S.sel)||DB.contractors[0];
+ const list=DB.contractors.length?`<div class="card kpi" style="margin-bottom:12px"><div class="l">إجمالي المتبقي لكل المقاولين</div><div class="v">${sar(owed)}</div></div><div class="list">${DB.contractors.map(c=>{const t=conTotal(c),p=conPaid(c);return `<button class="item" onclick="${w?`S.sel='${c.id}';render()`:`go('contractor','${c.id}')`}" style="${w&&sel&&sel.id===c.id?'background:var(--accent-soft)':''}">${icoBox('helmet','var(--stone-soft)','var(--ink)')}<div class="grow"><div class="t">${esc(c.name)}</div><div class="s">${esc(c.role||'')} · ${esc(c.type||'')}</div><div style="margin-top:6px">${bar(t?p/t*100:0,'good')}</div></div><div style="text-align:end"><div class="amt">${sar(t-p)}</div><div class="small muted">متبقٍ</div></div></button>`}).join('')}</div>`:empty('أضف مقاوليك وعمّالك المتخصصين، وكل دفعة تسجلها تنحسب على حسابهم.','contractor','أضف مقاول');
+ const right=addBtn('contractor');
+ if(w&&sel)return `${nav('المقاولون',{right})}<div class="scroll"><div class="cols" style="grid-template-columns:1fr 1.2fr"><div>${list}</div><div>${contractorBody(sel)}</div></div></div>`;
+ return `${nav('المقاولون',{back:S.device==='phone',right})}<div class="scroll">${list}</div>`;
+}
+function scrContractor(id){const c=DB.contractors.find(x=>x.id===id);if(!c){S.stack.pop();return current()}return `${nav('كشف المقاول',{back:true,big:false})}<div class="scroll">${contractorBody(c)}</div>`}
+
+/* ================= العمالة ================= */
+function cycle(id,di){const o=['f','h',''],w=DB.workers.find(x=>x.id===id);w.a[di]=o[(o.indexOf(w.a[di])+1)%3];persist();render()}
+function payWeek(){const rows=DB.workers.map(w=>({w,due:w.a.reduce((s,x)=>s+(x==='f'?1:x==='h'?.5:0),0)*num(w.r)-num(w.adv)}));const tot=rows.reduce((a,r)=>a+Math.max(0,r.due),0);
+ if(!tot){toast('ما فيه مستحقات هذا الأسبوع');return}
+ DB.expenses.push({id:uid(),d:todayISO(),t:'أجور العمال — '+DB.workers.map(w=>w.n).join('، '),p:'العمالة اليومية',a:tot,cat:'أجور يومية',stage:curStage()?.id??0,pay:'نقد',src:'ذاتي'});
+ DB.workers.forEach(w=>{w.a=['','','','','',''];w.adv=0});persist();toast(`سُجّل مصروف أجور ${fmt(tot)} ر.س وبدأ أسبوع جديد`)}
+function scrWorkers(w){
+ const rows=DB.workers.map(wk=>{const days=wk.a.reduce((s,x)=>s+(x==='f'?1:x==='h'?.5:0),0);return {wk,days,due:days*num(wk.r)-num(wk.adv)}});
+ const total=rows.reduce((a,r)=>a+r.due,0);
+ if(!DB.workers.length)return `${nav('العمالة اليومية',{back:S.device==='phone',big:false,right:addBtn('worker')})}<div class="scroll">${empty('أضف العمال اللي يشتغلون باليومية، وحضّرهم بلمسة كل يوم.','worker','أضف عامل')}</div>`;
+ return `${nav('العمالة اليومية',{back:S.device==='phone',big:!w,right:addBtn('worker')})}<div class="scroll">
+ <div class="card"><div class="row between" style="margin-bottom:10px"><span class="h3">تحضير هذا الأسبوع</span><span class="small muted">اضغط: حاضر · نصف · غائب</span></div>
+ <div class="att"><span></span>${DAYS.map(d=>`<span class="d">${d}</span>`).join('')}
+ ${rows.map(({wk})=>`<button style="text-align:start" onclick="openForm('worker','${wk.id}')"><b>${esc(wk.n)}</b><br><span class="small muted">${esc(wk.job||'')}</span></button>${wk.a.map((x,di)=>`<button class="${x}" aria-label="${esc(wk.n)} ${DAYS[di]}" onclick="cycle('${wk.id}',${di})">${x==='f'?'✓':x==='h'?'½':'—'}</button>`).join('')}`).join('')}</div>
+ <div class="small muted" style="margin-top:8px">اضغط على اسم العامل لتعديله أو حذفه.</div></div>
+ <div class="sect"><span class="h3">مسيّر الأسبوع</span></div>
+ <div class="list" style="overflow-x:auto"><table class="st-table"><thead><tr><th>العامل</th><th>الأيام</th><th>اليومية</th><th>سلف</th><th style="text-align:end">المستحق</th></tr></thead><tbody>${rows.map(({wk,days,due})=>`<tr><td><b>${esc(wk.n)}</b></td><td class="num">${days}</td><td class="num">${fmt(num(wk.r))}</td><td class="num">${num(wk.adv)?fmt(num(wk.adv)):'—'}</td><td class="n"><b>${fmt(due)}</b></td></tr>`).join('')}<tr><td colspan="4"><b>الإجمالي</b></td><td class="n"><b>${fmt(total)}</b> <span class="cur">ر.س</span></td></tr></tbody></table></div>
+ <button class="btn pri blk" style="margin-top:12px" onclick="payWeek()">${ic('coin',18)} اعتمد المسيّر وسجّله كمصروف</button></div>`;
+}
+
+/* ================= التمويل ================= */
+function cycleTranche(id){const o=['مصروفة','قادمة','لاحقًا'],t=DB.fin.tranches.find(x=>x.id===id);t.st=o[(o.indexOf(t.st)+1)%3];persist();render()}
+function scrFinance(w){
+ const F=DB.fin,avail=cashIn()-spent(),fi=finIn();
+ if(!F.has)return `${nav('التمويل',{back:S.device==='phone',big:false})}<div class="scroll"><div class="card" style="text-align:center;padding:24px"><div class="muted" style="margin-bottom:12px">مشروعك بدون تمويل حاليًا.</div><button class="btn pri" onclick="DB.fin.has=true;persist();openForm('finance')">${ic('plus',18)} أضف تمويل</button></div><div class="card row between" style="margin-top:12px"><span class="muted">معك للصرف الآن</span><b>${sar(avail)}</b></div></div>`;
+ return `${nav('التمويل',{back:S.device==='phone',big:!w,right:`<button class="chip" onclick="openForm('finance')">${ic('edit',15)} تعديل</button>`})}<div class="scroll"><div class="${w?'cols':''}"><div>
+ <div class="card"><div class="eyebrow">${esc(F.bank||'التمويل')}</div><div class="row between" style="margin:6px 0 10px"><div class="kpi"><div class="l">استلمت من البنك</div><div class="v">${sar(fi)}</div></div><div class="kpi" style="text-align:end"><div class="l">المعتمد</div><div class="v" style="font-size:16px">${sar(F.approved)}</div></div></div>${bar(num(F.approved)?fi/num(F.approved)*100:0,'blue')}
+ <div class="minigrid"><div class="kpi"><div class="l">القسط الشهري</div><div class="v" style="font-size:16px">${sar(F.installment)}</div></div><div class="kpi"><div class="l">القسط القادم</div><div class="v" style="font-size:15px">${F.next?short(F.next):'—'}</div></div></div></div>
+ <div class="sect"><span class="h3">مصادر المال</span></div>
+ <div class="card"><div style="display:flex;height:14px;border-radius:8px;overflow:hidden;gap:2px"><i style="flex:${num(DB.project.self)||0.0001};background:var(--stone)"></i><i style="flex:${fi||0.0001};background:var(--blue)"></i></div><div class="row between small" style="margin-top:8px"><span>ذاتي ${sar(DB.project.self)}</span><span>تمويل ${sar(fi)}</span></div>
+ <div class="row" style="margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);gap:10px">${icoBox('coin',avail<0?'var(--bad-soft)':'var(--good-soft)',avail<0?'var(--bad)':'var(--good)')}<div><div class="small muted">السيولة المتاحة للصرف الآن</div><b>${sar(avail)}</b></div></div></div></div>
+ <div><div class="sect" ${w?'style="margin-top:0"':''}><span class="h3">دفعات البنك</span><button class="link" onclick="openForm('tranche',null)">+ دفعة</button></div>
+ ${F.tranches.length?`<div class="list">${F.tranches.map(t=>`<div class="item"><button class="ico" aria-label="تغيير الحالة" onclick="cycleTranche('${t.id}')" style="background:${t.st==='مصروفة'?'var(--good-soft)':'var(--app)'};color:${t.st==='مصروفة'?'var(--good)':'var(--muted)'}">${t.st==='مصروفة'?ic('check',18,2.4):ic('clock',18)}</button><button class="grow" style="text-align:start" onclick="openForm('tranche','${t.id}')"><div class="t">${esc(t.name)}</div><div class="s">${esc(t.st)} · اضغط الدائرة لتغيير الحالة</div></button><span class="amt">${sar(t.a)}</span></div>`).join('')}</div>`:'<div class="card small muted">أضف دفعات التمويل وشروط صرف كل دفعة.</div>'}</div></div></div>`;
+}
+
+/* ================= الحكومي، المستندات، العيوب، الاتفاقات ================= */
+const GOVC={'سارية':'p-good','مكتملة':'p-good','قيد التنفيذ':'p-info','ينقصه مستند':'p-warn','لم تبدأ':'p-mute'};
+function scrGov(){return `${nav('المعاملات الحكومية',{back:S.device==='phone',big:false,right:addBtn('gov')})}<div class="scroll">${DB.gov.length?`<div class="stack">${DB.gov.map(g=>`<button class="card" style="text-align:start;width:100%" onclick="openForm('gov','${g.id}')"><div class="row between"><b style="font-size:15px">${esc(g.n)}</b><span class="pill ${GOVC[g.st]||'p-mute'}">${esc(g.st)}</span></div><div class="small muted" style="margin:4px 0 6px">${esc(g.by||'')}${g.ref?' · رقم الطلب <span class="num">'+esc(g.ref)+'</span>':''}</div>${g.info?`<div class="small">${esc(g.info)}</div>`:''}<div class="row between small" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)"><span class="muted">${num(g.fee)?'الرسوم '+fmt(num(g.fee))+' ر.س':'بدون رسوم مسجلة'}</span><span>${g.exp?'تنتهي '+short(g.exp):''}</span></div></button>`).join('')}</div>`:empty('أضف معاملاتك: الرخصة، العدادات، شهادة الإتمام.','gov','أضف معاملة')}</div>`}
+function scrDocs(){const q=(S.dq||'').trim();const L=DB.docs.filter(d=>!q||(d.t+d.c+(d.note||'')).includes(q));
+ return `${nav('المستندات',{back:S.device==='phone',big:false,right:addBtn('doc')})}<div class="scroll"><div class="field" style="margin-bottom:12px"><label for="ds">بحث</label><input id="ds" placeholder="اسم المستند أو التصنيف" value="${esc(S.dq||'')}" oninput="S.dq=this.value" onchange="render()"></div>
+ ${L.length?`<div class="list">${L.map(d=>`<button class="item" onclick="openForm('doc','${d.id}')">${d.photo?`<span class="ico" style="background:url('${d.photo}') center/cover"></span>`:icoBox('file','var(--blue-soft)','var(--blue)')}<div class="grow"><div class="t">${esc(d.t)}</div><div class="s">${d.photo?'صورة محفوظة':'بدون صورة'}${d.note?' · '+esc(d.note):''}</div></div><span class="pill p-mute">${esc(d.c)}</span></button>`).join('')}</div>`:empty(q?'ما فيه نتائج.':'صوّر عقودك ومخططاتك وفواتيرك الكبيرة واحفظها هنا.',q?'':'doc','أضف مستند')}</div>`}
+function toggleDefect(id){const d=DB.defects.find(x=>x.id===id);d.closed=!d.closed;persist();toast(d.closed?'أُغلق العيب ✓':'أُعيد فتح العيب')}
+function scrDefects(){const L=[...DB.defects].sort((a,b)=>a.closed-b.closed);
+ return `${nav('العيوب والملاحظات',{back:S.device==='phone',big:false,right:addBtn('defect')})}<div class="scroll">${L.length?`<div class="stack">${L.map(d=>`<div class="card"><button style="width:100%;text-align:start" onclick="openForm('defect','${d.id}')"><div class="row between"><span class="pill ${d.lv==='عالية'?'p-bad':d.lv==='متوسطة'?'p-warn':'p-mute'}">أولوية ${esc(d.lv)}</span><span class="small muted">${short(d.d)}</span></div><div style="font-weight:600;margin:8px 0 4px;${d.closed?'text-decoration:line-through;color:var(--muted)':''}">${esc(d.t)}</div><div class="small muted">المسؤول: ${esc(d.who||'—')}</div>${d.photo||d.after?`<div class="row" style="gap:6px;margin-top:8px">${d.photo?thumb(d.photo,'mini','قبل'):''}${d.after?thumb(d.after,'mini','بعد'):''}</div>`:''}</button>
+ <div class="row between" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)"><span class="pill ${d.closed?'p-good':'p-warn'}">${d.closed?'مغلقة':'مفتوحة'}</span><button class="chip ${d.closed?'':'on'}" onclick="toggleDefect('${d.id}')">${d.closed?'أعد فتحها':'تم الإصلاح'}</button></div></div>`).join('')}</div>`:empty('ما فيه عيوب مسجلة 👌','defect','سجّل عيب')}</div>`}
+function scrAgree(){return `${nav('الاتفاقات والقرارات',{back:S.device==='phone',big:false,right:addBtn('agree')})}<div class="scroll">${DB.agree.length?`<div class="stack">${[...DB.agree].sort((a,b)=>a.d<b.d?1:-1).map(a=>`<button class="card" style="text-align:start;width:100%" onclick="openForm('agree','${a.id}')"><div class="row between"><b>${esc(a.w)}</b><span class="small muted">${short(a.d)}</span></div><div style="margin:8px 0">${esc(a.t)}</div><div class="row between small">${num(a.amt)?`<span class="amt">${sar(a.amt)}</span>`:'<span></span>'}${a.photo?'<span class="pill p-info">مرفق صورة</span>':''}</div></button>`).join('')}</div>`:empty('أي اتفاق شفهي مع مقاول أو مورد، سجّله هنا بتاريخه حتى ما يضيع حق أحد.','agree','سجّل اتفاق')}</div>`}
+
+/* ================= التصميم ================= */
+function qr(seed=7){const n=21;let s=seed,out='';const rnd=()=>{s=(s*9301+49297)%233280;return s/233280};const finder=(x,y)=>(x>=0&&x<7&&y>=0&&y<7)&&(x==0||x==6||y==0||y==6||(x>=2&&x<=4&&y>=2&&y<=4));
+ for(let y=0;y<n;y++)for(let x=0;x<n;x++){let on;const inF=(a,b)=>a>=0&&a<8&&b>=0&&b<8;if(inF(x,y))on=finder(x,y);else if(inF(x-13,y))on=finder(x-14,y);else if(inF(x,y-13))on=finder(x,y-14);else on=rnd()>.52;if(on)out+=`<rect x="${x}" y="${y}" width="1.02" height="1.02"/>`}
+ return `<svg class="qr" viewBox="0 0 21 21" fill="#111" role="img" aria-label="رمز QR تجريبي">${out}</svg>`}
+function advChoice(rid,cid){const r=DB.rooms.find(x=>x.id===rid),c=r.items.find(x=>x.id===cid);c.lv=(num(c.lv)+1)%5;persist();toast('الحالة: '+PIPE[c.lv])}
+function scrDesign(w){
+ if(!DB.rooms.length)return `${nav('اختيارات التصميم',{back:S.device==='phone',big:false,right:addBtn('room')})}<div class="scroll">${empty('أضف غرف بيتك، ولكل غرفة اختياراتها: البلاط، الدهان، الإنارة...','room','أضف غرفة')}</div>`;
+ if(S.room>=DB.rooms.length)S.room=0;const r=DB.rooms[S.room],cost=r.items.reduce((a,i)=>a+num(i.price),0);
+ const sw=(r.photos||[]).length?`<div class="pgrid">${r.photos.map(p=>`<div class="pthumb"><img src="${p}" alt=""></div>`).join('')}</div>`:`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">${(r.sw||[]).map(c=>`<div class="swatch" style="background:${c}"></div>`).join('')}</div>`;
+ return `${nav('اختيارات التصميم',{back:S.device==='phone',big:false,right:addBtn('room')})}<div class="scroll">
+ <div class="chips" style="margin-bottom:12px">${DB.rooms.map((x,i)=>`<button class="chip ${i===S.room?'on':''}" onclick="S.room=${i};render()">${esc(x.n)}</button>`).join('')}</div>
+ <div class="${w?'cols':''}"><div><div class="card"><div class="row between" style="align-items:flex-start"><div style="min-width:0"><div class="eyebrow">بطاقة الغرفة</div><div class="h3" style="font-size:19px">${esc(r.n)}</div><div class="small muted">${esc(r.area||'')} · ${esc(r.floor||'')}</div><div style="font-weight:700;margin-top:8px">${sar(cost)}</div><button class="chip" style="margin-top:8px" onclick="openForm('room','${r.id}')">${ic('edit',15)} تعديل الغرفة</button></div>${qr(S.room*13+5)}</div>
+ <div class="sect" style="margin-top:12px"><span class="h3">لوحة الإلهام</span></div>${sw}</div></div>
+ <div><div class="sect" ${w?'style="margin-top:0"':''}><span class="h3">الاختيارات</span><button class="link" onclick="openForm('choice',null,'${r.id}')">+ اختيار</button></div>
+ ${r.items.length?`<div class="list">${r.items.map(it=>`<div class="item" style="flex-direction:column;align-items:stretch;gap:8px"><button class="row between" style="width:100%" onclick="openForm('choice','${it.id}','${r.id}')"><b>${esc(it.k)}</b><span class="row" style="gap:8px">${num(it.price)?`<span class="small muted">${fmt(num(it.price))} ر.س</span>`:''}${ic('edit',15)}</span></button><div class="small">${esc(it.v||'')}</div><button class="pipe" onclick="advChoice('${r.id}','${it.id}')" aria-label="تقدّم الحالة">${PIPE.map((p,i)=>`<span class="${i<num(it.lv)?'on':i===num(it.lv)?'cur':''}">${p}</span>`).join('')}</button></div>`).join('')}</div><div class="small muted" style="margin:8px 4px">اضغط على شريط الحالة لنقل الاختيار للمرحلة التالية.</div>`:'<div class="card small muted">أضف اختيارات هذه الغرفة.</div>'}</div></div></div>`;
+}
+
+/* ================= الذاكرة واللحظة ================= */
+function scrMemory(){return `${nav('ذاكرة البيت',{back:S.device==='phone',big:false,right:addBtn('warranty')})}<div class="scroll"><div class="card small muted" style="margin-bottom:12px">بعد التسليم يتحول التطبيق إلى سجل صيانة. يذكّرك قبل انتهاء كل ضمان، ويحفظ رقم الفني اللي نفّذ كل جزء.</div>
+ ${DB.warranty.length?`<div class="list">${DB.warranty.map(w=>`<button class="item" onclick="openForm('warranty','${w.id}')">${icoBox('shield','var(--good-soft)','var(--good)')}<div class="grow"><div class="t">${esc(w.t)}</div><div class="s">${w.from?'يبدأ '+short(w.from):'يبدأ بعد التسليم'}${w.who?' · '+esc(w.who):''}</div></div><span class="pill p-info">${esc(w.dur||'')}</span></button>`).join('')}</div>`:empty('سجّل ضماناتك: العزل، السخانات، المكيفات...','warranty','أضف ضمان')}
+ <div class="sect"><span class="h3">صيانة دورية مقترحة</span></div><div class="list">${[['تنظيف فلاتر التكييف','كل 3 أشهر'],['فحص عزل السطح قبل المطر','كل أكتوبر'],['غسيل خزان المياه','كل 6 أشهر']].map(([t,d])=>`<div class="item">${icoBox('wrench','var(--app)','var(--ink)')}<div class="grow"><div class="t">${t}</div></div><span class="small muted">${d}</span></div>`).join('')}</div></div>`}
+function scrKey(){const first=[...DB.expenses].sort((a,b)=>a.d<b.d?-1:1)[0],days=first?Math.max(0,-daysTo(first.d)):0,ph=DB.diary.reduce((a,d)=>a+(d.photos||[]).length,0);
+ return `${nav('لحظة المفتاح',{back:S.device==='phone',big:false})}<div class="scroll"><div class="celebrate"><div style="display:flex;justify-content:center">${ic('key',40,1.6)}</div><div class="k">مبروك البيت</div><div style="opacity:.9">معاينة لشاشة يوم التسليم</div></div>
+ <div class="cols" style="margin-top:12px;gap:8px"><div class="card kpi"><div class="l">يوم من البناء</div><div class="v num">${days}</div></div><div class="card kpi"><div class="l">صورة موثقة</div><div class="v num">${ph}</div></div><div class="card kpi"><div class="l">قيد مصروف</div><div class="v num">${DB.expenses.length}</div></div><div class="card kpi"><div class="l">مقاول وعامل</div><div class="v num">${DB.contractors.length+DB.workers.length}</div></div></div>
+ <div class="card row" style="margin-top:12px">${icoBox('file','var(--accent-soft)','var(--accent)')}<div style="flex:1"><b>كتاب البيت</b><div class="small muted">قصة البناء كاملة بالصور والأرقام، PDF للذكرى والمرجع</div></div></div></div>`}
+
+/* ================= المواد ================= */
+function priceTag(m){const lo=num(m.lo),hi=num(m.hi),p=num(m.price);if(!p||!hi)return '';return p>hi?'<span class="pill p-bad">أعلى من السوق</span>':p<lo?'<span class="pill p-info">أرخص من السوق</span>':'<span class="pill p-good">سعر مناسب</span>'}
 function scrMaterials(w){
- const leak=MATS.find(m=>m.leak),extra=leak.bought-leak.need;
- const alert=`<div class="card row" style="background:var(--bad-soft);color:var(--bad);box-shadow:none;align-items:flex-start;gap:10px;margin-bottom:12px">${ic('alert',20)}<div><b>كشف الهدر: ${leak.n}</b><div class="small" style="margin-top:2px">اشتريت ${fmt(leak.bought)} ${leak.u} والمعتاد لمرحلة العظم حوالي ${fmt(leak.need)}. الفرق ${fmt(extra)} ${leak.u} بقيمة ${fmt(extra*leak.price)} ر.س. راجع استلامات الموقع مع المقاول.</div></div></div>`;
- const cards=MATS.map(m=>{
-  const pct=m.need?Math.min(100,m.bought/m.need*100):0,site=m.bought-m.used;
-  return `<div class="card"><div class="row between"><b style="font-size:15px">${m.n}</b>${priceTag(m)}</div>
-  <div class="cols3" style="gap:8px;margin:10px 0 8px"><div class="kpi"><div class="l">المطلوب</div><div class="v" style="font-size:15px"><span class="num">${fmt(m.need)}</span> <span class="cur">${m.u}</span></div></div><div class="kpi"><div class="l">${m.ordered?'المطلوب من المورد':'المشترى'}</div><div class="v" style="font-size:15px;${m.bought>m.need*1.08?'color:var(--bad)':''}"><span class="num">${fmt(m.ordered||m.bought)}</span></div></div><div class="kpi"><div class="l">باقي بالموقع</div><div class="v" style="font-size:15px"><span class="num">${fmt(site)}</span></div></div></div>
-  ${bar(pct,m.bought>m.need*1.08?'bad':'blue')}
-  <div class="small muted" style="margin-top:8px">سعرك ${m.price} · متوسط السوق ${m.mkt[0]}–${m.mkt[1]} ر.س لكل ${m.u}</div>
-  ${m.sup?`<div class="row" style="gap:6px;margin-top:8px;flex-wrap:wrap">${[...m.sup].sort((a,b)=>a[1]-b[1]).map((x,i)=>`<span class="pill ${i===0?'p-good':'p-mute'}">${x[0]} · ${x[1]}</span>`).join('')}</div>`:''}</div>`}).join('');
- return `${nav('المواد والكميات',{back:true,big:false})}<div class="scroll">${alert}<div class="${w?'cols':'stack'}">${cards}</div><div class="small muted" style="margin:12px 4px">الكميات المطلوبة محسوبة تقديريًا من مساحة البيت والمخطط، وأسعار السوق تقديرية تتحدث من مشتريات المستخدمين.</div></div>`;
+ const leaks=DB.mats.filter(isLeak);
+ const alerts=leaks.map(m=>{const extra=num(m.bought)-num(m.need);return `<div class="card row" style="background:var(--bad-soft);color:var(--bad);box-shadow:none;align-items:flex-start;gap:10px;margin-bottom:12px">${ic('alert',20)}<div><b>كشف الهدر: ${esc(m.n)}</b><div class="small" style="margin-top:2px">اشتريت ${fmt(num(m.bought))} ${esc(m.u)} والمطلوب حوالي ${fmt(num(m.need))}. الفرق ${fmt(extra)} ${esc(m.u)} بقيمة ${fmt(extra*num(m.price))} ر.س. راجع استلامات الموقع.</div></div></div>`}).join('');
+ const cards=DB.mats.map(m=>{const pct=num(m.need)?Math.min(100,num(m.bought)/num(m.need)*100):0,site=num(m.bought)-num(m.used),sup=supList(m).sort((a,b)=>a[1]-b[1]);
+  return `<button class="card" style="text-align:start;width:100%" onclick="openForm('material','${m.id}')"><div class="row between"><b style="font-size:15px">${esc(m.n)}</b>${priceTag(m)}</div>
+  <div class="cols3" style="gap:8px;margin:10px 0 8px"><div class="kpi"><div class="l">المطلوب</div><div class="v" style="font-size:15px"><span class="num">${fmt(num(m.need))}</span> <span class="cur">${esc(m.u)}</span></div></div><div class="kpi"><div class="l">المشترى</div><div class="v" style="font-size:15px;${isLeak(m)?'color:var(--bad)':''}"><span class="num">${fmt(num(m.bought))}</span></div></div><div class="kpi"><div class="l">باقي بالموقع</div><div class="v" style="font-size:15px"><span class="num">${fmt(site)}</span></div></div></div>
+  ${bar(pct,isLeak(m)?'bad':'blue')}
+  ${num(m.price)?`<div class="small muted" style="margin-top:8px">سعرك ${fmt(num(m.price))}${num(m.hi)?` · السوق ${fmt(num(m.lo))}–${fmt(num(m.hi))}`:''} ر.س لكل ${esc(m.u)}</div>`:''}
+  ${sup.length?`<div class="row" style="gap:6px;margin-top:8px;flex-wrap:wrap">${sup.map((x,i)=>`<span class="pill ${i===0?'p-good':'p-mute'}">${esc(x[0])} · ${fmt(x[1])}</span>`).join('')}</div>`:''}</button>`}).join('');
+ return `${nav('المواد والكميات',{back:S.device==='phone',big:false,right:addBtn('material')})}<div class="scroll">${alerts}${DB.mats.length?`<div class="${w?'cols':'stack'}">${cards}</div><div class="small muted" style="margin:12px 4px">اضغط على أي مادة لتعديل الكميات والأسعار.</div>`:empty('سجّل المواد الأساسية وكمياتها، والتطبيق ينبهك لو المشترى أكثر من المطلوب.','material','أضف مادة')}</div>`;
 }
 
-/* ============ اسأل دفترك ============ */
-const nz=t=>String(t).replace(/[ً-ْ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي');
+/* ================= اسأل دفترك ================= */
+const nz=t=>String(t??'').replace(/[ً-ْ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي');
 function answer(q){
  const n=nz(q.replace(/[؟?]/g,'').trim());if(!n)return null;
  const has=(...k)=>k.some(x=>n.includes(nz(x)));
- const rec=e=>({t:e.t,s:`${e.p} · ${short(e.d)}${e.inv?' · فاتورة':''}`,a:e.a});
- if(has('ارخص')){const m=MATS.find(m=>m.sup&&n.includes(nz(m.n.split(' ')[0])))||MATS[0];const s=[...m.sup].sort((a,b)=>a[1]-b[1]);
-  return {a:`أرخص مورد ${m.n} عندك: <b>${s[0][0]}</b> بسعر ${s[0][1]} ر.س لكل ${m.u}.`,recs:s.map(x=>({t:x[0],s:`${m.n}`,a:x[1]})),go:['materials','افتح المواد']}}
- if(has('فاتور')){const words=n.split(' ').filter(w=>w.length>2&&!['فاتوره','وين','اين'].includes(w));const r=EXP.filter(e=>e.inv&&words.some(w=>nz(e.t+e.p).includes(w.replace(/^ال/,''))));
-  return r.length?{a:`لقيت ${r.length===1?'الفاتورة':r.length+' فواتير'}، صورتها محفوظة مع القيد.`,recs:r.map(rec)}:{a:'ما لقيت فاتورة بهذا الاسم. جرّب كلمة ثانية.',recs:EXP.filter(e=>e.inv).slice(0,4).map(rec)}}
- const stop=['ابو','مؤسسه','شركه','معرض','مركز','العماله','الشركه','لمواد','البناء','اليوميه'];
- const people=[...new Set([...CONTRACTORS.map(c=>c.name),...EXP.map(e=>e.p)])];
- const who=people.find(p=>nz(p).split(' ').some(w=>w.length>2&&!stop.includes(w)&&n.includes(w.replace(/^ال/,''))));
- if(who){const c=CONTRACTORS.find(x=>x.name===who);const r=EXP.filter(e=>e.p===who);
-  if(c){const t=c.value+c.extras;return {a:`دفعت لـ<b>${who}</b> ${sar(c.paid)} من أصل ${sar(t)}، والباقي له ${sar(t-c.paid)}.${c.defect?' وعليه ملاحظة مفتوحة.':''}`,recs:c.ledger.map(([d,tt,a])=>({t:tt,s:short(d),a})),go:['contractor:'+c.id,'كشف الحساب']}}
-  const sum=r.reduce((a,e)=>a+e.a,0);return {a:`دفعت لـ<b>${who}</b> ${sar(sum)} في ${r.length} ${r.length===1?'قيد':'قيود'}.`,recs:r.map(rec)}}
- const TOP=[[['سباك','مواسير','PPR'],'السباكة'],[['كهرب','كيابل'],'الكهرباء'],[['بلاط'],'البلاط'],[['عمال','اجور'],'أجور العمال'],[['نقل','مخلفات'],'النقل']];
+ const rec=e=>({t:e.t||e.cat,s:`${e.p} · ${short(e.d)}${e.photo?' · فاتورة':''}`,a:e.a,id:e.id});
+ if(has('ارخص')){const m=DB.mats.find(m=>supList(m).length&&n.includes(nz(m.n.split(' ')[0])))||DB.mats.find(m=>supList(m).length);if(m){const s=supList(m).sort((a,b)=>a[1]-b[1]);return {a:`أرخص مورد ${esc(m.n)} عندك: <b>${esc(s[0][0])}</b> بسعر ${fmt(s[0][1])} ر.س لكل ${esc(m.u)}.`,recs:s.map(x=>({t:x[0],s:m.n,a:x[1]})),go:['materials','افتح المواد']}}return {a:'ما سجّلت أسعار موردين بعد. أضفها من المواد والكميات.',recs:[],go:['materials','افتح المواد']}}
+ if(has('فاتور')){const words=n.split(' ').filter(w=>w.length>2&&!['فاتوره','وين','اين','فواتير'].includes(w));const r=DB.expenses.filter(e=>words.some(w=>nz(e.t+' '+e.p).includes(w.replace(/^ال/,''))));
+  return r.length?{a:`لقيت ${r.length===1?'القيد':r.length+' قيود'}. اضغط عليه لتشوف صورة الفاتورة أو ترفقها.`,recs:r.map(rec)}:{a:'ما لقيت شي بهذا الاسم. جرّب كلمة ثانية.',recs:[]}}
+ const stop=['ابو','مؤسسه','شركه','معرض','مركز','العماله','الشركه','لمواد','البناء','اليوميه','للمواد'];
+ const who=parties().find(p=>nz(p).split(' ').some(w=>w.length>2&&!stop.includes(w)&&n.includes(w.replace(/^ال/,''))));
+ if(who){const c=DB.contractors.find(x=>x.name===who);const r=DB.expenses.filter(e=>e.p===who);
+  if(c){const t=conTotal(c),p=conPaid(c);return {a:`دفعت لـ<b>${esc(who)}</b> ${sar(p)} من أصل ${sar(t)}، والباقي له ${sar(t-p)}.${c.defect?' وعليه ملاحظة مفتوحة.':''}`,recs:r.map(rec),go:['contractor:'+c.id,'كشف الحساب']}}
+  return {a:`دفعت لـ<b>${esc(who)}</b> ${sar(r.reduce((a,e)=>a+num(e.a),0))} في ${r.length} قيود.`,recs:r.map(rec)}}
+ const TOP=[[['سباك','مواسير','PPR'],'السباكة'],[['كهرب','كيابل'],'الكهرباء'],[['بلاط'],'البلاط'],[['عمال','اجور'],'أجور العمال'],[['نقل','مخلفات'],'النقل'],[['تكييف','مكيف'],'التكييف']];
  const tp=TOP.find(([k])=>has(...k));
- if(tp){const r=EXP.filter(e=>tp[0].some(k=>nz(e.t+e.p+e.cat).includes(nz(k))));const sum=r.reduce((a,e)=>a+e.a,0);return {a:`صرفت على ${tp[1]} ${sar(sum)} في ${r.length} قيود.`,recs:r.map(rec)}}
- if(has('تمويل','قسط','البنك')) return {a:`استلمت من البنك ${sar(P.finDisbursed)} من ${sar(P.finApproved)}، وقسطك القادم ${sar(4850)} يوم ${greg(D('2026-10-27'),{day:'numeric',month:'long'})}.`,recs:[],go:['finance','افتح التمويل']};
- if(has('باقي','متبقي','الميزانيه')) return {a:`باقي من الميزانية ${sar(P.budget-spent())}، ومعك الآن للصرف ${sar(cashIn()-spent())}.`,recs:[]};
- if(has('الشهر')){const r=EXP.filter(e=>e.d.startsWith('2026-10'));return {a:`صرفت هذا الشهر ${sar(r.reduce((a,e)=>a+e.a,0))}.`,recs:r.map(rec)}}
- if(has('صرفت','المصروف','الاجمالي')) return {a:`صرفت حتى اليوم ${sar(spent())}، يعني ${Math.round(spent()/P.budget*100)}% من الميزانية.`,recs:EXP.slice(0,4).map(rec)};
- const toks=n.split(' ').filter(w=>w.length>2);const r=EXP.filter(e=>toks.some(w=>nz(e.t+e.p).includes(w)));
+ if(tp){const r=DB.expenses.filter(e=>tp[0].some(k=>nz(e.t+' '+e.p+' '+e.cat).includes(nz(k))));return {a:`صرفت على ${tp[1]} ${sar(r.reduce((a,e)=>a+num(e.a),0))} في ${r.length} قيود.`,recs:r.map(rec)}}
+ if(has('تمويل','قسط','البنك'))return DB.fin.has?{a:`استلمت من البنك ${sar(finIn())} من ${sar(DB.fin.approved)}${DB.fin.next?`، وقسطك القادم ${sar(DB.fin.installment)} يوم ${short(DB.fin.next)}`:''}.`,recs:[],go:['finance','افتح التمويل']}:{a:'مشروعك بدون تمويل مسجل.',recs:[]};
+ if(has('باقي','متبقي','الميزانيه'))return {a:`باقي من الميزانية ${sar(budget()-spent())}، ومعك الآن للصرف ${sar(cashIn()-spent())}.`,recs:[]};
+ if(has('الشهر')){const ym=todayISO().slice(0,7),r=DB.expenses.filter(e=>String(e.d).startsWith(ym));return {a:`صرفت هذا الشهر ${sar(r.reduce((a,e)=>a+num(e.a),0))}.`,recs:r.map(rec)}}
+ if(has('صرفت','المصروف','الاجمالي'))return {a:`صرفت حتى اليوم ${sar(spent())}، يعني ${Math.round(spent()/budget()*100)}% من الميزانية.`,recs:[]};
+ const toks=n.split(' ').filter(w=>w.length>2);const r=DB.expenses.filter(e=>toks.some(w=>nz(e.t+' '+e.p).includes(w)));
  return r.length?{a:`لقيت ${r.length} نتائج مرتبطة بسؤالك.`,recs:r.map(rec)}:{a:'ما لقيت شي يطابق سؤالك. جرّب تسأل عن شخص أو بند أو فاتورة.',recs:[]};
 }
 function runAsk(t){if(t!==undefined)S.q=t;S.qa=answer(S.q);render()}
-function voiceAsk(){const t='كم دفعت لأبو محمد السبّاك؟';const w=t.split(' ');let i=0;S.qa=null;const iv=setInterval(()=>{S.q=w.slice(0,++i).join(' ');const el=document.getElementById('ask-in');if(el)el.value=S.q;if(i>=w.length){clearInterval(iv);setTimeout(()=>runAsk(),300)}},230)}
-function goAnswer(k){if(k.startsWith('contractor:'))go('contractor',+k.split(':')[1]);else go(k)}
+function voiceAsk(){const c=DB.contractors[0];const t=c?`كم دفعت لـ${c.name}؟`:'كم صرفت هذا الشهر؟';const w=t.split(' ');let i=0;S.qa=null;const iv=setInterval(()=>{S.q=w.slice(0,++i).join(' ');const el=document.getElementById('ask-in');if(el)el.value=S.q;if(i>=w.length){clearInterval(iv);setTimeout(()=>runAsk(),300)}},230)}
+function goAnswer(k){if(k.startsWith('contractor:'))go('contractor',k.split(':')[1]);else go(k)}
 function scrAsk(w){
- const ex=['كم دفعت لأبو محمد السبّاك؟','كم صرفت على الكهرباء؟','مين أرخص مورد حديد؟','وين فاتورة الكيابل؟','كم باقي من الميزانية؟','متى قسط التمويل؟'];
+ const c=DB.contractors;const ex=[c[1]?`كم دفعت لـ${c[1].name}؟`:'كم دفعت للسبّاك؟','كم صرفت على الكهرباء؟','مين أرخص مورد حديد؟','وين فاتورة الكيابل؟','كم باقي من الميزانية؟','كم صرفت هذا الشهر؟'];
  const qa=S.qa;
  return `${nav('اسأل دفترك',{back:S.device==='phone',big:false})}<div class="scroll"><div style="${w?'max-width:620px':''}">
- <form class="row" style="gap:8px" onsubmit="event.preventDefault();runAsk()"><div class="field" style="flex:1"><label for="ask-in">اسأل أي شي عن بيتك</label><input id="ask-in" autocomplete="off" placeholder="مثال: كم دفعت للكهربائي؟" value="${S.q.replace(/"/g,'&quot;')}" oninput="S.q=this.value"></div>
+ <form class="row" style="gap:8px" onsubmit="event.preventDefault();runAsk()"><div class="field" style="flex:1"><label for="ask-in">اسأل أي شي عن بيتك</label><input id="ask-in" autocomplete="off" enterkeyhint="search" placeholder="مثال: كم دفعت للكهربائي؟" value="${esc(S.q)}" oninput="S.q=this.value"></div>
  <button type="button" class="iconbtn" style="width:48px;height:48px;background:var(--accent);color:#fff;border:0" aria-label="اسأل بصوتك" onclick="voiceAsk()">${ic('mic',20)}</button></form>
+ <button class="btn blk" style="margin-top:8px" onclick="runAsk()">${ic('search',17)} اسأل</button>
  ${qa?`<div class="card" style="margin-top:12px"><div class="row" style="gap:8px;color:var(--accent);margin-bottom:6px">${ic('spark',18)}<b class="small">الجواب</b></div><div style="font-size:16px;line-height:1.8">${qa.a}</div>${qa.go?`<button class="link" style="margin-top:8px" onclick="goAnswer('${qa.go[0]}')">${qa.go[1]} ←</button>`:''}</div>
- ${qa.recs.length?`<div class="sect"><span class="h3">التفاصيل</span></div><div class="list">${qa.recs.map(r=>`<div class="item"><div class="grow"><div class="t">${r.t}</div><div class="s">${r.s}</div></div><span class="amt">${sar(r.a)}</span></div>`).join('')}</div>`:''}`:''}
+ ${qa.recs.length?`<div class="sect"><span class="h3">التفاصيل</span></div><div class="list">${qa.recs.map(r=>`<button class="item" ${r.id?`onclick="openForm('expense','${r.id}')"`:''}><div class="grow"><div class="t">${esc(r.t)}</div><div class="s">${esc(r.s)}</div></div><span class="amt">${sar(r.a)}</span></button>`).join('')}</div>`:''}`:''}
  <div class="sect"><span class="h3">${qa?'أسئلة ثانية':'جرّب تسأل'}</span></div>
- <div class="stack" style="gap:8px">${ex.map(t=>`<button class="card row between" style="padding:12px 14px;text-align:start" onclick="runAsk('${t}')"><span>${t}</span>${ic('chev',16)}</button>`).join('')}</div>
- </div></div>`;
+ <div class="stack" style="gap:8px">${ex.map(t=>`<button class="card row between" style="padding:12px 14px;text-align:start;width:100%" onclick="runAsk(this.firstElementChild.textContent)"><span>${esc(t)}</span>${ic('chev',16)}</button>`).join('')}</div></div></div>`;
 }
 
-/* ============ تأكيد الدفعة والإيصال الموقّع ============ */
-function gateHTML(){
- const f=S.sheet,c=CONTRACTORS.find(x=>x.name===f.party),a=parseFloat(String(f.amount).replace(/,/g,''))||0;
- const total=c.value+c.extras,after=c.paid+a,pp=Math.round(after/total*100),prog=c.progress,over=after-total*prog/100;
- return `<div class="dim" onclick="closeSheet()"></div><div class="sheet" role="dialog" aria-label="تأكيد الدفعة"><div class="grab"></div>
- <div class="row between" style="padding:4px 18px 8px"><button class="link" onclick="S.sheet.gate=false;render()">رجوع</button><b style="font-family:var(--f-display);font-size:17px">قبل ما تدفع</b><span style="width:34px"></span></div>
+/* ================= إضافة مصروف سريعة ================= */
+const BLANK=()=>({amount:'',party:'',title:'',stage:curStage()?.id??0,cat:'مواد',pay:'نقد',src:'ذاتي',mode:null,hot:[],more:false,auto:false,photo:null});
+function newExpense(pre={}){S.form=null;S.sheet={...BLANK(),...pre};render()}
+function pickParty(i){const p=parties()[i];const last=[...DB.expenses].reverse().find(e=>e.p===p)||DB.expenses.find(e=>e.p===p);S.sheet.party=p;
+ const c=DB.contractors.find(x=>x.name===p);if(last)Object.assign(S.sheet,{cat:last.cat,stage:last.stage,pay:last.pay,src:last.src,auto:true});else if(c)Object.assign(S.sheet,{cat:'مقاولات',stage:c.stage,auto:true});
+ S.sheet.hot=S.sheet.hot.filter(h=>h!=='party');render()}
+function sheetHTML(){
+ const f=S.sheet;if(f.gate)return gateHTML();
+ const opt=(arr,key)=>`<div class="chips" style="flex-wrap:wrap">${arr.map(v=>`<button class="chip ${f[key]===v?'on':''}" onclick="S.sheet.${key}='${v}';render()">${v}</button>`).join('')}</div>`;
+ let assist='';
+ if(f.mode==='scan')assist=`<div class="scanbox"><div class="line"></div><b>مؤسسة الصفوة لمواد البناء</b><br>فاتورة ضريبية · الرقم الضريبي 300123456700003<br>مواسير PPR 25 مم × 40 · أكواع × 60<br>الإجمالي شامل الضريبة: 3,967.50</div>`;
+ if(f.mode==='voice')assist=`<div class="card" style="text-align:center"><div class="wave">${Array.from({length:14},(_,i)=>`<i style="animation-delay:${i*.06}s"></i>`).join('')}</div><div id="vtxt" style="font-weight:600;margin-top:8px;min-height:22px">${esc(f.vtxt||'')}</div></div>`;
+ const hot=k=>f.hot.includes(k)?'hot':'';const rp=parties().slice(0,8);const st=stageById(f.stage);
+ return `<div class="dim" onclick="closeSheet()"></div><div class="sheet" role="dialog" aria-label="إضافة مصروف"><div class="grab"></div>
+ <div class="row between" style="padding:4px 18px 8px"><button class="link" onclick="closeSheet()">إلغاء</button><b style="font-size:17px">مصروف جديد</b><button class="link" style="font-weight:700" onclick="saveExp()">حفظ</button></div>
  <div class="body">
-  <div class="card" style="text-align:center"><div class="small muted">${c.name}</div><div style="font-size:30px;font-weight:700">${sar(a)}</div></div>
-  <div class="card stack" style="gap:10px">
-   <div><div class="row between small"><span>الإنجاز الفعلي</span><b class="num">${prog}%</b></div>${bar(prog,'good')}</div>
-   <div><div class="row between small"><span>المدفوع بعد هذه الدفعة</span><b class="num" style="${over>0?'color:var(--bad)':''}">${pp}%</b></div>${bar(pp,over>0?'bad':'')}</div>
-  </div>
-  ${over>0?`<div class="card small row" style="background:var(--bad-soft);color:var(--bad);box-shadow:none;align-items:flex-start">${ic('alert',18)}<span>بهذي الدفعة بتكون دفعت له أكثر من إنجازه بـ ${fmt(over)} ر.س.</span></div>`:`<div class="card small row" style="background:var(--good-soft);color:var(--good);box-shadow:none">${ic('check',18)}<span>الدفعة ضمن ما أنجزه.</span></div>`}
-  ${c.defect?`<div class="card small row" style="background:var(--warn-soft);color:var(--warn);box-shadow:none;align-items:flex-start">${ic('alert',18)}<span>عليه ملاحظة مفتوحة: ${c.defect}.</span></div>`:''}
+  <div class="quick"><button onclick="simScan()">${ic('scan',22)}<b>امسح فاتورة</b><span class="small muted">مثال: يعبّي كل شي عنك</span></button><button onclick="simVoice()">${ic('mic',22)}<b>قلها بصوتك</b><span class="small muted">«دفعت لأبو محمد ألفين كاش»</span></button></div>
+  ${assist}
+  <div class="field amtfield ${hot('amount')}"><label for="f-amt">كم دفعت؟ (ر.س)</label><input id="f-amt" inputmode="decimal" placeholder="0" value="${esc(f.amount)}" oninput="S.sheet.amount=this.value"></div>
+  <div class="field ${hot('party')}"><label for="f-party">لمين؟</label><input id="f-party" placeholder="اكتب الاسم أو اختر من تحت" value="${esc(f.party)}" oninput="S.sheet.party=this.value"></div>
+  ${rp.length?`<div class="chips">${rp.map((p,i)=>`<button class="chip ${f.party===p?'on':''}" onclick="pickParty(${i})">${esc(p)}</button>`).join('')}</div>`:''}
+  ${f.photo?`<div class="pthumb" style="width:90px"><img src="${f.photo}" alt=""><button aria-label="إزالة" onclick="dropPhoto('photo')">${ic('x',14,2.6)}</button></div>`:`<label class="addphoto">${ic('img',20)}<span>أرفق صورة الفاتورة (اختياري)</span><input type="file" accept="image/*" hidden onchange="pickPhoto('photo',false,this)"></label>`}
+  <button class="field" style="width:100%;text-align:start;display:flex;align-items:center;justify-content:space-between;gap:8px" onclick="S.sheet.more=!S.sheet.more;render()">
+   <div style="min-width:0"><label>التفاصيل ${f.auto?'· مقترحة من آخر دفعة له':'· اختيارية'}</label><div style="font-weight:600;font-size:13.5px">${esc(f.cat)} · ${esc(st?st.name:'')} · ${esc(f.pay)} · ${esc(f.src)}</div></div><span class="link" style="flex:none">${f.more?'إخفاء':'تعديل'}</span></button>
+  ${f.more?`<div class="field"><label for="f-title">البيان</label><input id="f-title" placeholder="مقابل ماذا؟" value="${esc(f.title)}" oninput="S.sheet.title=this.value"></div>
+  <div class="field"><label for="f-stage">المرحلة</label><select id="f-stage" onchange="S.sheet.stage=+this.value;render()">${DB.stages.map(s=>`<option value="${s.id}" ${s.id===f.stage?'selected':''}>${esc(s.name)}</option>`).join('')}</select></div>
+  <div><div class="small muted" style="margin:0 4px 6px">التصنيف</div>${opt(CATK,'cat')}</div><div><div class="small muted" style="margin:0 4px 6px">طريقة الدفع</div>${opt(['نقد','تحويل','شيك','بطاقة','سداد'],'pay')}</div><div><div class="small muted" style="margin:0 4px 6px">من وين المال؟</div>${opt(['ذاتي','تمويل'],'src')}</div>`:''}
+  <button class="btn pri blk" onclick="saveExp()">حفظ المصروف</button>
+ </div></div>`;
+}
+function simScan(){S.sheet.mode='scan';S.sheet.hot=[];render();setTimeout(()=>{if(!S.sheet)return;Object.assign(S.sheet,{amount:'3967.50',party:'مؤسسة الصفوة لمواد البناء',title:'مواسير PPR وأكواع',cat:'مواد',pay:'تحويل',auto:true,hot:['amount','party']});render();toast('قرأت الفاتورة. راجع الحقول ثم احفظ')},1600)}
+function simVoice(){S.sheet.mode='voice';S.sheet.vtxt='';S.sheet.hot=[];render();const words='دفعت لأبو محمد السبّاك ألفين كاش'.split(' ');let i=0;
+ const t=setInterval(()=>{if(!S.sheet){clearInterval(t);return}S.sheet.vtxt=words.slice(0,++i).join(' ');const el=document.getElementById('vtxt');if(el)el.textContent=S.sheet.vtxt;
+  if(i>=words.length){clearInterval(t);setTimeout(()=>{if(!S.sheet)return;const c=DB.contractors.find(x=>x.name.includes('السبّاك'));Object.assign(S.sheet,{amount:'2000',party:c?c.name:'أبو محمد السبّاك',title:'دفعة سباكة',cat:'مقاولات',pay:'نقد',src:'ذاتي',auto:true,hot:['amount','party']});render();toast('فهمت: 2,000 ر.س نقدًا لأبو محمد')},500)}},260)}
+function saveExp(){
+ const f=S.sheet,a=num(f.amount);
+ if(!a||a<=0){f.hot=['amount'];render();toast('اكتب المبلغ أولًا');return}
+ if(!String(f.party).trim()){f.hot=['party'];render();toast('اكتب لمين دفعت');return}
+ const con=DB.contractors.find(x=>x.name===f.party.trim());
+ if(con&&!f.confirmed){f.gate=true;render();return}
+ DB.expenses.push({id:uid(),d:todayISO(),t:f.title||(f.cat==='مقاولات'?'دفعة':f.cat),p:f.party.trim(),a,cat:f.cat,stage:f.stage,pay:f.pay,src:f.src,photo:f.photo||null,signed:!!f.signed,sig:f.sigData||null});
+ persist();S.sheet=null;toast(f.signed?`حُفظت الدفعة ${fmt(a)} ر.س مع إيصال موقّع`:`حُفظ ${fmt(a)} ر.س`);
+}
+function closeSheet(){S.sheet=null;render()}
+function gateHTML(){
+ const f=S.sheet,c=DB.contractors.find(x=>x.name===f.party.trim()),a=num(f.amount),total=conTotal(c)||a,paid=conPaid(c),after=paid+a,pp=Math.round(after/total*100),prog=num(c.progress),over=after-total*prog/100;
+ return `<div class="dim" onclick="closeSheet()"></div><div class="sheet" role="dialog" aria-label="تأكيد الدفعة"><div class="grab"></div>
+ <div class="row between" style="padding:4px 18px 8px"><button class="link" onclick="S.sheet.gate=false;render()">رجوع</button><b style="font-size:17px">قبل ما تدفع</b><span style="width:34px"></span></div>
+ <div class="body">
+  <div class="card" style="text-align:center"><div class="small muted">${esc(c.name)}</div><div style="font-size:30px;font-weight:700">${sar(a)}</div></div>
+  <div class="card stack" style="gap:10px"><div><div class="row between small"><span>الإنجاز الفعلي</span><b class="num">${prog}%</b></div>${bar(prog,'good')}</div><div><div class="row between small"><span>المدفوع بعد هذه الدفعة</span><b class="num" style="${over>0?'color:var(--bad)':''}">${pp}%</b></div>${bar(pp,over>0?'bad':'')}</div>
+  <button class="link small" style="align-self:flex-start" onclick="S.sheet.gate=false;closeSheet();go('contractor','${c.id}');openForm('contractor','${c.id}')">تحديث نسبة إنجازه</button></div>
+  ${over>0?`<div class="card small row" style="background:var(--bad-soft);color:var(--bad);box-shadow:none;align-items:flex-start">${ic('alert',18)}<span>بهذي الدفعة بتكون دفعت له أكثر من إنجازه بـ ${fmt(Math.round(over))} ر.س.</span></div>`:`<div class="card small row" style="background:var(--good-soft);color:var(--good);box-shadow:none">${ic('check',18)}<span>الدفعة ضمن ما أنجزه.</span></div>`}
+  ${c.defect?`<div class="card small row" style="background:var(--warn-soft);color:var(--warn);box-shadow:none;align-items:flex-start">${ic('alert',18)}<span>عليه ملاحظة مفتوحة: ${esc(c.defect)}.</span></div>`:''}
   <div class="list"><button class="chk ${f.ok?'on':''}" onclick="S.sheet.ok=!S.sheet.ok;this.classList.toggle('on')"><span class="box">${ic('check',14,3)}</span><span>شفت الأعمال المنجزة بنفسي</span></button></div>
-  <div><div class="row between" style="margin:0 4px 6px"><span class="small muted" id="sig-h">توقيع المستلم بإصبعه (إيصال)</span><button class="link small" onclick="S.sheet.signed=false;const c=document.getElementById('sig');c.dataset.on='';initSig(true)">مسح</button></div>
+  <div><div class="row between" style="margin:0 4px 6px"><span class="small muted" id="sig-h">توقيع المستلم بإصبعه (اختياري)</span><button class="link small" onclick="S.sheet.signed=false;initSig(true)">مسح</button></div>
   <canvas id="sig" style="width:100%;height:130px;display:block;background:var(--card);border:1.5px dashed var(--line);border-radius:14px;touch-action:none" aria-label="مساحة التوقيع"></canvas></div>
   <button class="btn pri blk" onclick="confirmPay()">${ic('pen',17)} أكّد وسجّل الدفعة</button>
  </div></div>`;
 }
-function initSig(force){const c=document.getElementById('sig');if(!c||(c.dataset.on&&!force))return;c.dataset.on='1';const r=c.getBoundingClientRect(),dpr=window.devicePixelRatio||1;c.width=r.width*dpr;c.height=r.height*dpr;const x=c.getContext('2d');x.scale(dpr,dpr);x.lineWidth=2.4;x.lineCap='round';x.lineJoin='round';x.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--ink').trim()||'#222';
+function initSig(force){const c=document.getElementById('sig');if(!c||(c.dataset.on&&!force))return;c.dataset.on='1';const r=c.getBoundingClientRect(),dpr=window.devicePixelRatio||1;c.width=r.width*dpr;c.height=r.height*dpr;const x=c.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);x.lineWidth=2.4;x.lineCap='round';x.lineJoin='round';x.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--ink').trim()||'#222';
+ const h=document.getElementById('sig-h');if(force&&h)h.textContent='توقيع المستلم بإصبعه (اختياري)';
  if(c.dataset.bound)return;c.dataset.bound='1';let d=false;const pos=e=>{const b=c.getBoundingClientRect();return [e.clientX-b.left,e.clientY-b.top]};
- c.addEventListener('pointerdown',e=>{d=true;c.setPointerCapture(e.pointerId);const x2=c.getContext('2d');const [a,b]=pos(e);x2.beginPath();x2.moveTo(a,b)});
+ c.addEventListener('pointerdown',e=>{d=true;try{c.setPointerCapture(e.pointerId)}catch(_){}const [a,b]=pos(e);const x2=c.getContext('2d');x2.beginPath();x2.moveTo(a,b)});
  c.addEventListener('pointermove',e=>{if(!d)return;const x2=c.getContext('2d');const [a,b]=pos(e);x2.lineTo(a,b);x2.stroke();if(S.sheet)S.sheet.signed=true});
- c.addEventListener('pointerup',()=>{d=false;const h=document.getElementById('sig-h');if(h&&S.sheet&&S.sheet.signed)h.textContent='تم التوقيع ✓'});}
+ c.addEventListener('pointerup',()=>{d=false;const h2=document.getElementById('sig-h');if(h2&&S.sheet&&S.sheet.signed){h2.textContent='تم التوقيع ✓';try{S.sheet.sigData=c.toDataURL('image/png')}catch(_){}}})}
 function confirmPay(){const f=S.sheet;if(!f.ok){toast('أكّد إنك شفت الأعمال أولًا');return}f.confirmed=true;f.gate=false;saveExp()}
 
-/* ============ شاشة البداية ============ */
-const W=STAGES.map(s=>s.budget/1100000);
+/* ================= شاشة البداية ================= */
 const PLANS=[['دور وملحق','حتى 350 م²'],['دورين','350 – 500 م²'],['دورين وملحق','450 – 650 م²'],['ثلاثة أدوار','600 م² فأكثر']];
-const ONB0=()=>({step:0,plan:'دورين وملحق',area:550,budget:1100000,hasFin:true,fin:700000});
+const ONB0=()=>({step:0,plan:'دورين وملحق',area:550,budget:1100000,hasFin:true,fin:700000,fresh:true});
 function startOnb(){S.onb=ONB0();S.stack=[];render()}
-function onbNum(k,v){S.onb[k]=Math.max(0,parseFloat(String(v).replace(/[^\d.]/g,''))||0)}
+function onbNum(k,v){S.onb[k]=Math.max(0,num(v))}
 function onbHTML(){
- const o=S.onb,N=4;
- const dots=`<div class="dots">${Array.from({length:N},(_,i)=>`<i class="${i<o.step?'on':''}"></i>`).join('')}</div>`;
- const lo=o.area*1800,hi=o.area*2300;
+ const o=S.onb,N=4,dots=`<div class="dots">${Array.from({length:N},(_,i)=>`<i class="${i<o.step?'on':''}"></i>`).join('')}</div>`,lo=o.area*1800,hi=o.area*2300;
  let q='',body='',next='التالي';
- if(o.step===0){
-  return `<div class="onb"><div class="grow" style="justify-content:center;text-align:center;align-items:center">
+ if(o.step===0)return `<div class="onb"><div class="grow" style="justify-content:center;text-align:center;align-items:center">
    <div class="welcome-ill"><div class="logo" style="width:88px;height:88px;border-radius:26px">${ic('home',46,1.8)}</div></div>
    <div class="q" style="margin-top:0">أهلًا بك في دفتر بيتي</div>
-   <div class="muted" style="max-width:300px">أربعة أسئلة وتبدأ. نجهّز لك مراحل البناء وتوزيع الميزانية تلقائيًا، وتقدر تعدّل أي شي بعدين.</div>
-  </div><div class="stack"><button class="btn pri blk" onclick="S.onb.step=1;render()">ابدأ مشروعي</button><button class="link" style="padding:8px" onclick="finishOnb(false)">استعرض ببيانات تجريبية</button></div></div>`;
- }
+   <div class="muted" style="max-width:320px">سجّل كل ريال وكل اتفاق وكل صورة من بناء بيتك. أربعة أسئلة وتبدأ.</div></div>
+  <div class="stack"><button class="btn pri blk" onclick="S.onb.step=1;render()">ابدأ مشروعي</button><button class="btn blk" onclick="finishOnb(false)">جرّب ببيانات مثال أولًا</button></div></div>`;
  if(o.step===1){q='وش نوع البيت؟';body=`<div class="choices">${PLANS.map(([t,d])=>`<button class="${o.plan===t?'on':''}" onclick="S.onb.plan='${t}';render()">${ic('home',22)}<span>${t}</span><span class="small muted" style="font-weight:400">${d}</span></button>`).join('')}</div>
-  <div class="field"><label for="o-area">مسطحات البناء تقريبًا (م²)</label><input id="o-area" inputmode="numeric" value="${o.area}" oninput="onbNum('area',this.value)"></div>
-  <div class="small muted">تلقاها في رخصة البناء أو المخطط. التقريب يكفي الآن.</div>`}
+  <div class="field"><label for="o-area">مسطحات البناء تقريبًا (م²)</label><input id="o-area" inputmode="numeric" value="${o.area}" oninput="onbNum('area',this.value)"></div><div class="small muted">تلقاها في رخصة البناء أو المخطط. التقريب يكفي الآن.</div>`}
  if(o.step===2){q='كم ميزانيتك للبناء؟';body=`<div class="field amtfield"><label for="o-bud">الميزانية الكاملة (ر.س)</label><input id="o-bud" inputmode="numeric" value="${fmt(o.budget)}" oninput="onbNum('budget',this.value)"></div>
   <div class="hint">تقدير تقريبي لبيت ${fmt(o.area)} م² بتشطيب متوسط: من ${fmt(lo)} إلى ${fmt(hi)} ر.س. الأسعار تتغير حسب المدينة ومستوى التشطيب.</div>
   <div class="chips"><button class="chip" onclick="S.onb.budget=${Math.round(lo/10000)*10000};render()">اقتصادي</button><button class="chip" onclick="S.onb.budget=${Math.round((lo+hi)/20000)*10000};render()">متوسط</button><button class="chip" onclick="S.onb.budget=${Math.round(hi/10000)*10000};render()">فاخر</button></div>`}
@@ -913,83 +1066,81 @@ function onbHTML(){
   ${o.hasFin?`<div class="field"><label for="o-fin">مبلغ التمويل المعتمد (ر.س)</label><input id="o-fin" inputmode="numeric" value="${fmt(o.fin)}" oninput="onbNum('fin',this.value)" onchange="render()"></div>`:''}
   <div class="card row between"><span class="muted">من مالك الخاص</span><b>${sar(self)}</b></div>`}
  if(o.step===4){q='جهّزنا لك المشروع';next='ابدأ';const cols=['var(--stone)','var(--accent)','var(--blue)','var(--good)','var(--warn)'];
-  body=`<div class="card"><div class="row between"><span class="muted">${o.plan} · ${fmt(o.area)} م²</span><b>${sar(o.budget)}</b></div>
-  <div style="display:flex;height:12px;border-radius:8px;overflow:hidden;gap:2px;margin-top:12px">${W.map((w,i)=>`<i style="flex:${w};background:${cols[i%5]}"></i>`).join('')}</div></div>
-  <div class="list">${STAGES.map((st,i)=>`<div class="item" style="padding:9px 14px"><span class="small muted num" style="width:18px">${st.id}</span><div class="grow"><div class="t" style="font-size:13.5px">${st.name}</div></div><span class="amt small">${sar(Math.round(o.budget*W[i]/500)*500)}</span></div>`).join('')}</div>
-  <div class="small muted">التوزيع مبني على متوسط بيوت مشابهة، وتقدر تعدّل ميزانية أي مرحلة لاحقًا. المصاريف المسجلة في هذا النموذج تجريبية.</div>`}
- return `<div class="onb">${dots}<div class="q">${q}</div><div class="grow">${body}</div>
- <div class="foot"><button class="btn" onclick="S.onb.step--;render()">رجوع</button><button class="btn pri" style="flex:1" onclick="${o.step===4?'finishOnb(true)':'S.onb.step++;render()'}">${next}</button></div></div>`;
+  body=`<div class="card"><div class="row between"><span class="muted">${o.plan} · ${fmt(o.area)} م²</span><b>${sar(o.budget)}</b></div><div style="display:flex;height:12px;border-radius:8px;overflow:hidden;gap:2px;margin-top:12px">${STAGE_TPL.map((t,i)=>`<i style="flex:${t[2]};background:${cols[i%5]}"></i>`).join('')}</div></div>
+  <div class="list">${STAGE_TPL.map((t,i)=>`<div class="item" style="padding:9px 14px"><span class="small muted num" style="width:18px">${i+1}</span><div class="grow"><div class="t" style="font-size:13.5px">${t[0]}</div></div><span class="amt small">${sar(Math.round(o.budget*t[2]/500)*500)}</span></div>`).join('')}</div>
+  <div class="list"><button class="chk ${o.fresh?'on':''}" onclick="S.onb.fresh=!S.onb.fresh;render()"><span class="box">${ic('check',14,3)}</span><span>ابدأ بدفتر فاضي (بدون بيانات المثال)</span></button></div>
+  <div class="small muted">التوزيع مبني على متوسط بيوت مشابهة، وتقدر تعدّل ميزانية أي مرحلة لاحقًا.</div>`}
+ return `<div class="onb">${dots}<div class="q">${q}</div><div class="grow">${body}</div><div class="foot"><button class="btn" onclick="S.onb.step--;render()">رجوع</button><button class="btn pri" style="flex:1" onclick="${o.step===4?'finishOnb(true)':'S.onb.step++;render()'}">${next}</button></div></div>`;
 }
 function finishOnb(apply){
  const o=S.onb;
- if(apply){P.budget=o.budget||1;P.area=o.area||1;P.finApproved=o.hasFin?o.fin:0;P.self=Math.max(o.budget-P.finApproved,0);P.finDisbursed=Math.min(P.finDisbursed,P.finApproved);
-  STAGES.forEach((st,i)=>st.budget=Math.round(o.budget*W[i]/500)*500);}
- try{localStorage.setItem('db-onb','1')}catch(e){}
- S.onb=null;S.tab='home';render();if(apply)toast('مشروعك جاهز');
+ if(apply){if(o.fresh)DB=emptyDB(o);else{DB.project=Object.assign(DB.project,{plan:o.plan,area:o.area,budget:o.budget,self:Math.max(o.budget-(o.hasFin?o.fin:0),0)});DB.fin.has=o.hasFin;DB.fin.approved=o.hasFin?o.fin:0;DB.stages.forEach((s,i)=>{if(STAGE_TPL[i])s.budget=Math.round(o.budget*STAGE_TPL[i][2]/500)*500})}persist()}
+ try{localStorage.setItem('db-onb2','1')}catch(e){}
+ S.onb=null;S.tab='home';S.stack=[];render();if(apply)toast(o.fresh?'دفترك جاهز. ابدأ بأول مصروف من زر +':'تم تحديث المشروع');
 }
 
-/* ============ التنقل ============ */
-const ROOT={ask:scrAsk,materials:scrMaterials,home:scrHome,expenses:scrExpenses,stages:scrStages,journal:scrJournal,more:scrMore,contractors:scrContractors,workers:scrWorkers,finance:scrFinance,gov:scrGov,design:scrDesign,docs:scrDocs,defects:scrDefects,agree:scrAgree,memory:scrMemory,key:scrKey};
+/* ================= التنقل والعرض ================= */
+const ROOT={home:scrHome,expenses:scrExpenses,stages:scrStages,journal:scrJournal,more:scrMore,ask:scrAsk,materials:scrMaterials,reminders:scrReminders,contractors:scrContractors,workers:scrWorkers,finance:scrFinance,gov:scrGov,design:scrDesign,docs:scrDocs,defects:scrDefects,agree:scrAgree,memory:scrMemory,key:scrKey};
 function go(k,p){
- if(S.device==='ipad'){
-  if(k==='contractor'){S.tab='contractors';S.sel=p;S.stack=[];return render()}
-  if(k==='stage'){S.stack=[[k,p]];return render()}
-  S.tab=k;S.stack=[];return render();
- }
- S.stack.push([k,p]);render();document.querySelector('.scroll')?.scrollTo(0,0);
+ if(S.device==='ipad'){if(k==='contractor'){S.tab='contractors';S.sel=p;S.stack=[];return render()}if(k==='stage'){S.stack=[[k,p]];return render()}S.tab=k;S.stack=[];return render()}
+ S.stack.push([k,p]);render();const sc=document.querySelector('#device .scroll');if(sc)sc.scrollTop=0;
 }
 function goBack(){S.stack.pop();render()}
 function tabTo(t){S.tab=t;S.stack=[];render()}
-function cycle(wi,di){const o=['f','h',''];const a=WORKERS[wi].a;a[di]=o[(o.indexOf(a[di])+1)%3];render()}
-let lapseTimer=null;
-function playLapse(){clearInterval(lapseTimer);S.week=1;render();lapseTimer=setInterval(()=>{if(S.jseg!=='lapse'){clearInterval(lapseTimer);return}S.week++;render();if(S.week>=44)clearInterval(lapseTimer)},160)}
 let toastT=null;
-function toast(m){S.toast=m;render();clearTimeout(toastT);toastT=setTimeout(()=>{S.toast='';render()},2200)}
-
-function current(w){
- const top=S.stack[S.stack.length-1];
- if(top){const [k,p]=top;
-  if(k==='contractor')return scrContractor(p);
-  if(k==='stage')return scrStage(p,w);
-  return ROOT[k](w);}
- return ROOT[S.tab](w);
-}
+function toast(m){S.toast=m;render();clearTimeout(toastT);toastT=setTimeout(()=>{S.toast='';render()},2300)}
+function current(w){const top=S.stack[S.stack.length-1];if(top){const [k,p]=top;if(k==='contractor')return scrContractor(p);if(k==='stage')return scrStage(p);return ROOT[k](w)}return ROOT[S.tab](w)}
 const TABS=[['home','الرئيسية','home'],['expenses','المصروفات','receipt'],['stages','المراحل','layers'],['journal','اليوميات','camera'],['more','المزيد','grid']];
-function statusBar(){return `<div class="status"><span class="num">1:29</span><span class="row" style="gap:5px"><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12"><rect x=".5" y=".5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="15" height="8" rx="1.8" fill="currentColor"/><rect x="22.5" y="4" width="2" height="4" rx="1" fill="currentColor" opacity=".4"/></svg></span></div>`}
-
+function statusBar(){return `<div class="status"><span class="num">${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}</span><span class="row" style="gap:5px"><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12"><rect x=".5" y=".5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="15" height="8" rx="1.8" fill="currentColor"/><rect x="22.5" y="4" width="2" height="4" rx="1" fill="currentColor" opacity=".4"/></svg></span></div>`}
+const overlays=()=>`${S.sheet?sheetHTML():''}${S.form?formHTML():''}${S.onb?onbHTML():''}${S.toast?`<div class="toast">${esc(S.toast)}</div>`:''}`;
+const fab=()=>`<button class="fab" aria-label="إضافة مصروف" onclick="newExpense()">${ic('plus',30,2.4)}</button>`;
 function render(){
  const el=document.getElementById('device');
- const scrollEl=el.querySelector('.scroll');const keep=scrollEl?scrollEl.scrollTop:0;const prevKey=el.dataset.key;
- const key=S.device+S.tab+JSON.stringify(S.stack)+S.jseg+S.room+(S.sheet&&S.sheet.gate?'g':'')+(S.onb?'o'+S.onb.step:'');
+ const sc=el.querySelector('.scroll'),keep=sc?sc.scrollTop:0,prevKey=el.dataset.key,prevO=el.dataset.okey;
+ const sb=el.querySelector('.sheet .body'),keepSb=sb?sb.scrollTop:0;
+ const key=S.device+S.tab+JSON.stringify(S.stack)+S.jseg+S.room+(S.onb?'o'+S.onb.step:'');
+ const okey=(S.form?'f'+S.form.type+S.form.id:'')+(S.sheet?(S.sheet.gate?'g':'s'):'');
+ const ae=document.activeElement,aeId=ae&&ae.id&&el.contains(ae)?ae.id:null,selS=aeId&&ae.selectionStart!=null?[ae.selectionStart,ae.selectionEnd]:null;
  let html;
  if(S.device==='phone'){
-  const isRoot=!S.stack.length;
+  const isRoot=!S.stack.length&&TABS.some(t=>t[0]===S.tab);
   html=`<div class="phone"><div class="island"></div><div class="screen">${statusBar()}${current(false)}
-  ${isRoot?`<nav class="tabbar">${TABS.map(([k,t,i])=>`<button class="tab ${S.tab===k?'on':''}" onclick="tabTo('${k}')">${ic(i,24,S.tab===k?2.1:1.7)}<span>${t}</span></button>`).join('')}</nav><button class="fab" aria-label="إضافة مصروف" onclick="S.sheet={...BLANK,hot:[]};render()">${ic('plus',30,2.4)}</button>`:''}
-  ${S.sheet?sheetHTML():''}${S.onb?onbHTML():''}${S.toast?`<div class="toast">${S.toast}</div>`:''}</div></div>`;
+  ${isRoot?`<nav class="tabbar">${TABS.map(([k,t,i])=>`<button class="tab ${S.tab===k?'on':''}" onclick="tabTo('${k}')">${ic(i,24,S.tab===k?2.1:1.7)}<span>${t}</span></button>`).join('')}</nav>${fab()}`:''}
+  ${overlays()}</div></div>`;
  }else{
   const grp=(t,arr)=>`<div class="grp">${t}</div>`+arr.map(([k,label,i])=>`<button class="sitem ${S.tab===k&&!S.stack.length?'on':''}" onclick="tabTo('${k}')">${ic(i,19)}<span>${label}</span></button>`).join('');
-  html=`<div class="ipad"><div class="screen"><div class="split" style="padding-top:0"><aside class="side"><div style="height:24px"></div><div class="sbrand"><div class="logo" style="width:34px;height:34px;border-radius:9px">${ic('home',18,2)}</div><b>دفتر بيتي</b></div>
+  html=`<div class="ipad"><div class="screen"><div class="split"><aside class="side"><div class="side-top"></div><div class="sbrand"><div class="logo" style="width:34px;height:34px;border-radius:9px">${ic('home',18,2)}</div><b>دفتر بيتي</b></div>
   ${grp('المشروع',[['ask','اسأل دفترك','search'],['home','الرئيسية','home'],['stages','المراحل','layers'],['journal','اليوميات','camera']])}
   ${grp('الفلوس',[['expenses','المصروفات','receipt'],['finance','التمويل','bank'],['materials','المواد والكميات','cube']])}
   ${grp('الناس',[['contractors','المقاولون','helmet'],['workers','العمالة اليومية','users']])}
   ${grp('الأوراق',[['gov','المعاملات الحكومية','stamp'],['docs','المستندات','file'],['agree','الاتفاقات','hand'],['defects','العيوب','alert']])}
-  ${grp('البيت',[['design','اختيارات التصميم','palette'],['key','لحظة المفتاح','key'],['memory','ذاكرة البيت','shield']])}
-  <button class="sitem" onclick="startOnb()" style="margin-top:10px;color:var(--muted)">${ic('home',19)}<span>إعداد المشروع</span></button>
-  </aside><div class="main">${statusBar()}${current(true)}<button class="fab" aria-label="إضافة مصروف" onclick="S.sheet={...BLANK,hot:[]};render()">${ic('plus',30,2.4)}</button></div></div>
-  ${S.sheet?sheetHTML():''}${S.onb?onbHTML():''}${S.toast?`<div class="toast">${S.toast}</div>`:''}</div></div>`;
+  ${grp('البيت',[['design','اختيارات التصميم','palette'],['reminders','التذكيرات','bell'],['key','لحظة المفتاح','key'],['memory','ذاكرة البيت','shield'],['more','الإعدادات','grid']])}
+  </aside><div class="main">${statusBar()}${current(true)}${fab()}</div></div>${overlays()}</div></div>`;
  }
- el.innerHTML=html;el.dataset.key=key;
+ el.innerHTML=html;el.dataset.key=key;el.dataset.okey=okey;
  if(prevKey===key){const s=el.querySelector('.scroll');if(s)s.scrollTop=keep}
+ if(prevO===okey&&okey){const b=el.querySelector('.sheet .body');if(b)b.scrollTop=keepSb}
+ if(aeId){const n=document.getElementById(aeId);if(n){n.focus({preventScroll:true});if(selS&&n.setSelectionRange)try{n.setSelectionRange(...selS)}catch(_){}}}
  initSig();
 }
-function setDevice(d){if(MQ.matches)d='phone';S.device=d;S.stack=[];if(d==='phone'&&!TABS.some(t=>t[0]===S.tab))S.tab='more';document.getElementById('dv-phone').classList.toggle('on',d==='phone');document.getElementById('dv-ipad').classList.toggle('on',d==='ipad');render()}
+function setDevice(d){if(FULL)d=FULL;S.device=d;S.stack=[];if(d==='phone'&&!TABS.some(t=>t[0]===S.tab))S.tab='more';document.getElementById('dv-phone').classList.toggle('on',d==='phone');document.getElementById('dv-ipad').classList.toggle('on',d==='ipad');render()}
 function setTheme(t){const r=document.documentElement;if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);['auto','light','dark'].forEach(x=>document.getElementById('th-'+x).classList.toggle('on',x===t))}
+
+/* ================= وضع التطبيق الكامل ================= */
+function envMode(){
+ const coarse=window.matchMedia('(pointer:coarse)').matches,sw=Math.min(screen.width||9999,screen.height||9999);
+ if(coarse&&sw<600)return 'phone';
+ if(coarse&&sw>=600)return 'ipad';
+ if(window.innerWidth<=600)return 'phone';
+ return null;
+}
+let FULL=envMode();
+function applyFull(){const r=document.documentElement;r.classList.remove('full','full-phone','full-ipad');if(FULL){r.classList.add('full','full-'+FULL);S.device=FULL}}
+applyFull();
+window.addEventListener('resize',()=>{const m=envMode();if(m!==FULL){FULL=m;applyFull();if(!FULL)S.device='phone';render()}});
 if(!ONB_DONE)S.onb=ONB0();
-const MQ=window.matchMedia('(max-width:600px)');
-if(MQ.matches)S.device='phone';
-MQ.addEventListener?.('change',e=>{if(e.matches&&S.device!=='phone')setDevice('phone')});
 render();
+
 </script>
 
 
